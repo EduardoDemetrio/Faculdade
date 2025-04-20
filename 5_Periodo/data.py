@@ -3,7 +3,7 @@ from datetime import datetime, timedelta
 
 def atualizar_prova_da_semana():
     # Lê o conteúdo atual do README
-    with open("README.md", "r", encoding="utf-8") as f:
+    with open(r"5_Periodo\Readme.md", "r", encoding="utf-8") as f:
         readme = f.read()
 
     # Função para extrair os dados dos eventos
@@ -63,8 +63,19 @@ def atualizar_prova_da_semana():
     else:
         texto_prova = "📌 **Nenhum evento acadêmico marcado para esta semana!**"
 
- 
- 
+    # Atualiza o README
+    novo_readme = re.sub(
+        r"<!-- PROVA_DA_SEMANA -->.*?<!-- FIM_PROVA_DA_SEMANA -->",
+        f"<!-- PROVA_DA_SEMANA -->\n{texto_prova}\n<!-- FIM_PROVA_DA_SEMANA -->",
+        readme,
+        flags=re.DOTALL
+    )
+
+    # Salva as alterações
+    with open(r"5_Periodo\Readme.md", "w", encoding="utf-8") as f:
+        f.write(novo_readme)
+
+    print("✅ README atualizado com sucesso!")
     return print(texto_prova)
 
 if __name__ == "__main__":

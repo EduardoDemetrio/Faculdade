@@ -1,7 +1,7 @@
 
 
  <!-- PROVA_DA_SEMANA -->
- 
+📌 **Prova da semana:** Controle Estatístico de Qualidade — 22/04 (Professor: Jorge Festa)
 <!-- FIM_PROVA_DA_SEMANA -->
 
 
