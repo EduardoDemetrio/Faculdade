@@ -73,7 +73,6 @@ if not df_semana.empty:
 else:
     texto_prova = "📌 **Prova da semana:** Nenhuma prova marcada para esta semana!"
 
-print(texto_prova)
 if "<!-- PROVA_DA_SEMANA -->" in readme:
     novo_readme = re.sub(
         r"<!-- PROVA_DA_SEMANA -->.*?<!-- FIM_PROVA_DA_SEMANA -->",
