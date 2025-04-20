@@ -17,5 +17,5 @@
  - Modelo de Regressão Linear - Professor: César - Data: 07/07
 
 <!-- PROVA_DA_SEMANA -->
-📌 **Prova da semana:** Nenhuma prova marcada para esta semana!
+📌 **Prova da semana:** Controle Estatístico de Qualidade — 22/04 (Professor: Jorge Festa)
 <!-- FIM_PROVA_DA_SEMANA -->

@@ -55,10 +55,15 @@ df_eventos = pd.DataFrame(eventos).sort_values("data").reset_index(drop=True)
 
 
 hoje = datetime.now()
-inicio_semana = hoje - timedelta(days=hoje.weekday())  # segunda
-fim_semana = inicio_semana + timedelta(days=6)         # domingo
+if hoje.weekday() >= 5:  
+    inicio_semana = hoje + timedelta(days=(7 - hoje.weekday())) 
+else:
+    inicio_semana = hoje - timedelta(days=hoje.weekday()) 
+fim_semana = inicio_semana + timedelta(days=5)         
 
 df_semana = df_eventos[(df_eventos["data"] >= inicio_semana) & (df_eventos["data"] <= fim_semana)]
+
+
 
 
 # Gera o texto
@@ -68,6 +73,7 @@ if not df_semana.empty:
 else:
     texto_prova = "📌 **Prova da semana:** Nenhuma prova marcada para esta semana!"
 
+print(texto_prova)
 if "<!-- PROVA_DA_SEMANA -->" in readme:
     novo_readme = re.sub(
         r"<!-- PROVA_DA_SEMANA -->.*?<!-- FIM_PROVA_DA_SEMANA -->",

@@ -16,7 +16,8 @@
  - Controle Estatístico de Qualidade - Professor: Jorge Festa - Data: 01/07
  - Modelo de Regressão Linear - Professor: César - Data: 07/07
 
-
+<div class = Atencao>
  <!-- PROVA_DA_SEMANA -->
 📌 **Prova da semana:** 
 <!-- FIM_PROVA_DA_SEMANA -->
+</div>
