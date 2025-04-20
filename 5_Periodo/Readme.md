@@ -18,5 +18,5 @@
 
 
  <!-- PROVA_DA_SEMANA -->
-📌 **Prova da semana:** 
+ 
 <!-- FIM_PROVA_DA_SEMANA -->
