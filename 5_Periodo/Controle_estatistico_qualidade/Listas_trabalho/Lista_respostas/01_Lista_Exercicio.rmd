@@ -1,0 +1,74 @@
+---
+title: "Eduardo Demetrio"
+author: "Controle estatistisco de qualidade"
+date: "`r Sys.Date()`"
+output:
+  html_document:
+    theme: cosmo
+    highlight: tango
+    toc: true
+    toc_depth: 2
+    toc_float: true
+    df_print: paged
+    css: style.css
+
+---
+# Repositório.
+- Teremos também um repositório com todas listas no GitHub.
+[🔗 Repositório no GitHub]()
+
+
+## Questão 1
+<div class="pergunta">
+*É tradicional, no meio industrial, se afirmar que Qualidade e Produtividade são incompatíveis. Você concorda com isto?
+</div>
+
+<div class="resposta">
+<strong>Resposta:</strong> 
+A afirmação de que qualidade e produtividade são incompatíveis é um mito. Na realidade, a busca pela qualidade não sacrifica a produção e sim com a melhoria da qualidade temos um aumento da produtividade, começando pela redução de desperdicios e melhoria da linha de produção sendo assim mais efetiva.
+</div>
+
+
+## Questão 2
+<div class = "pergunta">
+O que é Qualidade?
+</div>
+
+<div class = "resposta">
+Qualidade é um conceito que pode ser abordado de duas perspectivas principais, sendo elas, perspectivas do consumidor, qualidade pelo seu indice de satisfação do produto ou serviço prestado para o mesmo. Associando diversos aspectos com Durabilidade, Desempenhos superiores a outros produtos, status, valores e etc.
+E temos a perspectiva do processo de produção, sendo relacionado a medida pela capacidade de produção de um certo produto ou processo.
+</div>
+
+
+## Questão 3
+<div class = "pergunta">
+Quem dominou o mercado internacional de manufaturados desde o século passado até a crise dos anos 30?
+</div>
+<div class = "resposta">
+Companhias inglesas, reino unido.
+</div>
+
+## Questão 4
+<div class = "pergunta">
+ Qual país teve, na prática, o monopólio dos mercados mundiais nas décadas de 50 e 60?
+</div>
+<div class = "resposta">
+Nas décadas de 1950 e 1960, os Estados Unidos tiveram, na prática, o monopólio dos mercados mundiais de manufaturados.
+</div>
+
+## Questão 5
+<div class = "pergunta">
+A partir do final da década de 60 surgiu uma competição crescente entre as industrias americanas e japonesas (além da européia e às do 3º mundo em menor escala) pelos mercados mundiais, com razoável sucesso para a indústria japonesa. A que se pode atribuir o sucesso das companhias japonesas no mercado internacional?
+</div>
+<div class = "resposta">
+Está relacionado a diversos fatores, mas um dos principais são adaptação das praticas de qualidade e contando com preços reduzidos, contando também com seu contínuo aperfeiçoamento do processo, trazendo tecnologia como auxiliadora da linha de produção.
+</div>
+
+
+## Questão 6
+<div class = "pergunta">
+Uma vez que não há processo de produção perfeito, como é possível o aperfeiçoamento do processo?
+</div>
+<div class = "resposta">
+Primeiro ponto a se destacar nos estudos da materia é que não há processo de produção perfeito, porém com algumas técnicas podemos aperfeiçoar mais esse processos de produção para atingimento de um ótimo estado, métodos como, métodos estatistiscos de controle de qualidade, auxiliando o melhor conhecimento do processo, é possivel melhorar o processo que já é ótimo.
+</div>
