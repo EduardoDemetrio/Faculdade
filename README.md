@@ -1,6 +1,4 @@
-# 📘 Projeto: Faculdade - Estatística/Ciência de dados.
- # 📘 Projeto: Faculdade - Estatística/Ciência de Dados
- 
+# 📘 Faculdade - Estatística/Ciência de dados. 
  <div align="center">
    <img src="https://img.shields.io/badge/Status-Em%20Desenvolvimento-yellow" alt="Status">
    <img src="https://img.shields.io/badge/Área-Estatística%20Computacional-blue" alt="Área">
