@@ -18,5 +18,4 @@
  
  > **Nota:** Este documento e os materiais estão em constante atualização, refletindo o processo contínuo de aprendizado.
  
- > Este documento está em constante atualização e servirá como material de consulta para os estudantes da disciplina.
  <div align="center"> <sub>Criado com ❤️ por Eduardo Demetrio</sub> </div> ```
