@@ -15,6 +15,23 @@ Este repositório reúne atividades práticas, projetos e materiais desenvolvido
 - 🔍 Material de consulta para colegas
 - 📈 Registro da evolução técnica
 
+## ⛓ Estrutura Monorepo
+
+Essa estrutura está arquitetada da seguinte maneira:
+
+faculdade/
+|
+├── README.md
+├── Periodo/
+│   ├── Disciplina/ Estrutura de pasta-Repositório
+│   │   ├── Datasets
+│   │   |   └── Banco de dados
+│   │   ├── documentos
+│   │   |   └── RMD/ txt/ html
+|   |   └── Códigos
+            └── .py/.r
+
+            
 > **Nota:** Este documento e os materiais estão em constante atualização, refletindo o processo contínuo de aprendizado.
 
 <div align="center"> <sub>Criado com ❤️ por Eduardo Demetrio</sub> </div> ```
