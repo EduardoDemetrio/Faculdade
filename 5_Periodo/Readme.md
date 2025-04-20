@@ -1,3 +1,11 @@
+
+
+ <!-- PROVA_DA_SEMANA -->
+ 
+<!-- FIM_PROVA_DA_SEMANA -->
+
+
+
 > ## 🗓️ Provas:
  - Estatistica Computacional - Professor: Paulo Jus. - Data: 11/04
  - Controle Estatístico de Qualidade - Professor: Jorge Festa - Data: 22/04
@@ -15,8 +23,3 @@
 > ## 🗓️ Provas de Exames:
  - Controle Estatístico de Qualidade - Professor: Jorge Festa - Data: 01/07
  - Modelo de Regressão Linear - Professor: César - Data: 07/07
-
-
- <!-- PROVA_DA_SEMANA -->
- 
-<!-- FIM_PROVA_DA_SEMANA -->
