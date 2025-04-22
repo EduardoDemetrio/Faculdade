@@ -6,9 +6,6 @@
  </div>
  
  ## 🧭 Introdução
- 
- Este repositório tem como objetivo reunir atividades práticas desenvolvidas ao longo da graduação, servindo como forma de organização e documentação desse período de aprendizado.
- ---
  Este repositório reúne atividades práticas, projetos e materiais desenvolvidos durante minha graduação em Estatística/Ciência de Dados. Serve como:
  
  - 📚 Organização do conhecimento adquirido
