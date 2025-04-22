@@ -1,0 +1,169 @@
+---
+title: "Eduardo Demetrio"
+author: "Controle estatistisco de qualidade"
+date: "`r Sys.Date()`"
+output:
+  html_document:
+    theme: cosmo
+    highlight: tango
+    toc: true
+    toc_depth: 2
+    toc_float: true
+    df_print: paged
+    css: style.css
+
+---
+# Repositório.
+- Teremos também um repositório com todas listas no GitHub.
+[🔗 Repositório no GitHub](https://github.com/EduardoDemetrio/Faculdade/tree/lista/5_Periodo/Controle_estatistico_qualidade)
+
+# Como será feito
+ - Irei construir um documento com as perguntas e respostas, também enviarei um arquivo em código R que será usado para testes e cálculos mais elaborados.
+
+## Questão 1
+<div class="pergunta">
+Os diâmetros de oito mancais selecionados ao acaso são os seguintes (em mm):
+50,001, 50,002, 49,998, 50,006, 50,005, 49,996, 50,003, 50,004. <br>
+a. Calcule a média amostral <br>
+b. Calcule o desvio-padrão amostral
+</div>
+<div class="resposta">
+<strong>Questão 1-A:</strong> 50.00187 <br>
+<strong>Questão 1-B:</strong> 0.003440826
+</div>
+
+## Questão 2
+<div class="pergunta">
+O tempo de vida até falhar em horas de um componente eletrônico sujeito a um teste de durabilidade acelerado é mostrado abaixo para uma amostra com tamanho n = 40. Para acelerar a falha no teste, as unidades experimentais são testadas sob uma temperatura elevada. <br>
+a. Calcule a média amostral e o desvio-padrão.<br>
+b. Construa o histograma.<br>
+c. Ache a mediana e os quartis
+</div>
+<div class="resposta">
+<strong>Questão 2-A</strong>: média: 130 e desvio: 9.92  <br>
+<strong>Questão 2-B</strong>: Histograma abaixo
+```{r, echo=FALSE}
+tempos <- c(127, 125, 131, 124, 129, 121, 142, 151, 160, 125,
+            124, 123, 120, 119, 128, 133, 137, 124, 142, 123,
+            121, 136, 140, 137, 125, 124, 128, 129, 130, 122,
+            118, 131, 125, 133, 141, 125, 140, 132, 129, 126)
+hist(tempos, 
+     xlab = "Tempo de vida (horas)",
+     ylab = "Frequência",
+     col = "#3f2ebb")
+```
+
+<strong>Questão 2-C</strong>: Mediana: 128 <br>
+Quartil 25%: 124 <br>
+Quartil 75%: 133.75 <br>
+</div>
+
+## Questão 3
+<div class="pergunta">
+Os dados abaixo são leituras do rendimento de um processo químico em dias sucessivos (leia da esquerda para a direita). Faça o histograma dos dados, comente o aspecto do histograma e verifique se o histograma lembra alguma distribuição de probabilidade conhecida.<br>
+</div>
+<div class="resposta">
+Com base no histograma conseguimos levemente ver uma normal, pórem ainda com algumas distorções, como podemos ver nesse gráfico.
+```{r, echo=FALSE}
+rendimento <- c(94.1, 87.3, 94.1, 92.4, 84.6, 85.4, 93.2, 84.1, 92.1, 90.6,
+                83.6, 86.6, 90.6, 90.1, 96.4, 89.1, 85.4, 91.7, 91.4, 95.2,
+                88.2, 88.8, 89.7, 87.5, 88.2, 86.1, 86.4, 86.4, 87.6, 84.2,
+                86.1, 94.3, 85.0, 85.1, 85.1, 85.1, 95.1, 93.2, 84.9, 84.0,
+                89.6, 90.5, 90.0, 86.7, 87.3, 93.7, 90.0, 95.6, 92.4, 83.0,
+                89.6, 87.7, 90.1, 88.3, 87.3, 95.3, 90.3, 90.6, 94.3, 84.1,
+                86.6, 94.1, 93.1, 89.4, 97.3, 83.7, 91.2, 97.8, 94.6, 88.6,
+                96.8, 82.9, 86.1, 93.1, 96.3, 84.1, 94.4, 87.3, 90.4, 86.4,
+                94.7, 82.6, 96.1, 86.4, 89.1, 87.6, 91.1, 83.1, 98.0, 84.5)
+hist(rendimento,
+     breaks = 10,  # Número de intervalos
+     main = "Distribuição do Rendimento do Processo Químico",
+     xlab = "Rendimento (%)",
+     ylab = "Frequência",
+     col = "#3f2ebb",
+     border = "black",
+     xlim = c(80, 100))
+
+curve(dnorm(x, mean = mean(rendimento), sd = sd(rendimento)) * length(rendimento) * diff(hist(rendimento)$breaks)[1],add = TRUE, col = "red", lwd = 2)
+```
+</div>
+
+## Questão 4
+<div class="pergunta">
+Considere o rendimento do processo químico do exercício anterior. Calcule a média amostral e o desvio padrão. <br>
+</div>
+
+<div class="resposta">
+Média amostral: 89.47556 <br>
+desvio: 4.157768
+</div>
+
+## Questão 5
+<div class="pergunta">
+Suponha que dois dados não viciados são lançados e uma variável aleatória observada, digamos X, que corresponde a soma das duas faces superiores. Descreva o espaço amostral do experimento e determine a função de probabilidade da v.a. X <br>
+</div>
+
+<div class="resposta">
+<strong>Espaço amostral:</strong> Dado1xDado2 = {(1,1),(1,2),(1,3),(1,4),(1,5),(1,6),(2,1)....(6,6)}, resultando em 36 resultados possiveis. <br>
+<strong>Função de probabilidade:</strong> (discreta, P(X=x)) <br>  
+<u>n° de combinação <br></u>
+36 (total de resultados possiveis)<br>
+<br>
+consiste na ideia de probabilidade clássica.
+</div>
+
+## Questão 7
+<div class="pergunta">
+Calculadoras eletrônicas são classificadas ao final de um trabalho de inspeção. Três tipos de nãoconformidade podem ocorrer nas calculadoras: crítica, maior e menor. A experiência tem indicado que os defeitos ocorrem da maneira seguinte: <br>
+a. Qual a porcentagem da produção que estão de acordo com as especificações de projeto? Pela figura acima, 96,9% estão de acordo com as especificações do projeto. <br>
+b. Calculadoras que tem defeito crítico ou defeito crítico e outro tipo de defeito devem ser jogados fora. Qual a porcentagem da produção jogada fora? <br>
+c. Calculadoras com defeito maior ou menor ou ambos devem ser consertados. Qual a porcentagem da produção sujeita a retrabalho? <br>
+</div>
+
+<div class="resposta">
+<strong>Questão 7-B </strong> : 0.017
+<strong>Questão 7-C </strong> : 0.016
+</div>
+
+## Questão 8 
+<div class="pergunta">
+A distribuição de probabilidade da v.a. contínua X tem a seguinte função densidade de probabilidade f(x) ke^kx. Ache a valor da constante k e também a média e a variância de X.
+</div>
+
+<div class="resposta">
+Vamos usar a regra da função densidade aonde igualamos a função a 1, calculando a integral, a função assim já está normalizada para qualquer k>0. <br>
+Sua média seria 1/k e variância 1/k^2
+</div>
+
+## Questão 9
+<div class="pergunta">
+A v.a. X assume os valores 1, 2, ou 3 com probabilidades (1+3k)/3, (1+2k)/3 e (0,5+5k)/3, respectivamente.
+a. Determine o valor adequado de k. <br>
+b. Determine a média e a variância de X.<br>
+c. Determine a função distribuição acumulada de X.<br>
+</div>
+<div class="resposta">
+<strong> Questão 9-A </strong> Valores de K são [0.3833;  0.3667;  0.25] <br>
+<strong> Questão 9-B </strong> A média: 1.8667 e variância: 0.6156 <br>
+<strong> Questão 9-C </strong> Sua DA: [0.3833;  0.75; 1]
+</div>
+
+## Questão 10 
+<div class="pergunta">
+A distribuição de probabilidade de uma v.a. discreta é: p(x)=kr^x 0<r<1 Ache o valor adequado de k sabendo-se que o contradomínio de x é 0, 1, 2, .....
+</div>
+
+<div class="resposta">
+O valor adequado de K é k=1-r
+</div>
+
+## Questão 11 
+<div class="pergunta">
+Uma fábrica de calculadoras eletrônicas oferece garantia de um ano. Se a calculadora falha por qualquer razão neste período, ela é substituída. O tempo de falha é modelado pela seguinte distribuição de probabilidade f(x) 0,125e^-0,125x . x>0
+a.  Qual a porcentagem de calculadoras que falham no período da garantia?
+b. O custo de fabricação da calculadora é $50 e o lucro é de $25. Qual é o efeito da garantia de substituição sobre o lucro?
+</div>
+
+<div class="resposta">
+<strong> Questao 11-A </strong> Sua porcentagem de falha na gatantia consistem em 11,75% <br>
+<strong> Questao 11-B </strong> Seu lucro esperado por unidade está em $19.12
+</div>

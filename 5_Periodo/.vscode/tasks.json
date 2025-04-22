@@ -7,7 +7,7 @@
         "command": "Rscript",
         "args": [
           "-e",
-          "rmarkdown::render(\"C:/Users/edude/OneDrive/Área de Trabalho/Códigos/Faculdade/5_Periodo/Controle_estatistico_qualidade/Listas_trabalho/Lista_respostas/01_Lista_Exercicio.rmd\", output_file = \"C:/Users/edude/OneDrive/Área de Trabalho/Códigos/Faculdade/5_Periodo/Controle_estatistico_qualidade/Listas_trabalho/Lista_respostas/01_Lista_Exercicio.html\"); shell.exec(\"C:/Users/edude/OneDrive/Área de Trabalho/Códigos/Faculdade/5_Periodo/Controle_estatistico_qualidade/Listas_trabalho/Lista_respostas/01_Lista_Exercicio.html\")"
+          "rmarkdown::render(\"C:/Users/edude/OneDrive/Área de Trabalho/Códigos/Faculdade/5_Periodo/Controle_estatistico_qualidade/Listas_trabalho/Lista_respostas/02_Lista_Exercicio.rmd\", output_file = \"C:/Users/edude/OneDrive/Área de Trabalho/Códigos/Faculdade/5_Periodo/Controle_estatistico_qualidade/Listas_trabalho/Lista_respostas/02_Lista_Exercicio.html\"); shell.exec(\"C:/Users/edude/OneDrive/Área de Trabalho/Códigos/Faculdade/5_Periodo/Controle_estatistico_qualidade/Listas_trabalho/Lista_respostas/02_Lista_Exercicio.html\")"
         ],
         "group": {
           "kind": "build",
