@@ -72,3 +72,163 @@ Uma vez que não há processo de produção perfeito, como é possível o aperfe
 <div class = "resposta">
 Primeiro ponto a se destacar nos estudos da materia é que não há processo de produção perfeito, porém com algumas técnicas podemos aperfeiçoar mais esse processos de produção para atingimento de um ótimo estado, métodos como, métodos estatistiscos de controle de qualidade, auxiliando o melhor conhecimento do processo, é possivel melhorar o processo que já é ótimo.
 </div>
+
+
+## Questão 7
+<div class = "pergunta">
+Você considera os Métodos estatísticos instrumentos indicados para manter um certo nível de qualidade no processo (ou para assegurar um nível máximo de defeituosos)? porque?
+</div>
+
+<div class = "resposta">
+Não, os métodos estatísticos não devem ser usados apenas para manter um nível de qualidade ou limitar defeitos. Eles são ferramentas para aperfeiçoar o processo, identificando causas de variabilidade e eliminando desperdícios, como demonstrado no caso da Nashua Corporation e na indústria japonesa. A qualidade surge da melhoria contínua, não da inspeção passiva.
+</div>
+
+## Questão 8
+<div class = "pergunta">
+Qual a finalidade fundamental do Controle de Qualidade numa empresa?
+</div>
+<div class = "resposta">
+A finalidade fundamental do Controle de Qualidade é aperfeiçoar o processo produtivo, aumentando a produtividade e a competitividade por meio da redução de desperdícios, melhoria contínua e uso de métodos estatísticos — não apenas inspecionar defeitos.
+</div>
+
+## Questão 9
+<div class = "pergunta">
+Como todo processo tem variabilidade (podendo ser para mais ou para menos que um certo nível), então basta o operador fazer os ajustes necessários na maquina que o problema da qualidade fica resolvido. você concorda com isto? O que se deve fazer para controlar um processo?
+</div>
+<div class = "resposta">
+Não concordo com ajustes manuais, pois com esses ajustes aumentam a variabilidade do processo, como no caso citado no texto base. Formas de controlar o processo deveria ser usando métodos estatísticos para monitorar vaiações e invervir apenas no caso de descontrole.
+</div>
+
+## Questão 10
+<div class = "pergunta">
+Quando os métodos estatísticos foram introduzidos no Japão?
+</div>
+<div class = "resposta">
+Foram introduzidos no Japão em 1947, sendo consolidado após as conferência de Deming em 1950.
+</div>
+
+## Questão 11
+<div class = "pergunta">
+Qual o problema fundamental de uma empresa industrial para assegurar a sua posição no mercado?
+</div>
+<div class = "resposta">
+Problema central seria manter/melhorar sua competitividade através de aperfeiçoamento continuo dos processos, aumento sustentável da produtividade e garantia de qualidade dos produtos.
+</div>
+
+## Questão 12
+<div class = "pergunta">
+Qual a única maneira de se alcançar um aumento substancial na produtividade?
+</div>
+<div class = "resposta">
+A única forma de aumentar substancialmente a produtividade é através do aperfeiçoamento contínuo do processo produtivo, conforme defendido nos 14 Pontos de Deming.
+</div>
+
+## Questão 13
+<div class = "pergunta">
+Você acha que lucro a curto prazo se constitua num índice de competência?
+</div>
+<div class = "resposta">
+Não, lucro a curto prazo não é índice de competência. O texto enfatiza que a verdadeira competência empresarial se mede pela capacidade de inovar e manter a empresa competitiva a longo prazo, através de melhorias contínuas no processo produtivo e a importancia de sustentabilidade a longo prazo.
+</div>
+
+## Questão 14
+<div class = "pergunta">
+O primeiro princípio de Deming afirma que a empresa deve "criar constância de propósitos para a melhoria do produto e do serviço". Para que se deve fazer isto? </div>
+
+<div class = "resposta">
+Garantir a sobrevivência e competitividade da empresa a longo prazo, através de planejamento estratégico continuo, inovaçãoem produtos/serviços e investimento em qualidade e produtividade.
+</div>
+
+## Questão 15
+<div class = "pergunta">
+O segundo princípio de Deming manda que se "adote a nova filosofia", o que você entende por isto? </div>
+
+<div class = "resposta">
+Rejeitar práticas ultrapassadas, um exemplo focar apenas em produção em massa. Abraçar a cultura de excelência, um exemplo melhoria contínua dos processos e uso de métodos estatísticos. Com isso abandonando velhos padrões de qualidade e adotar essa filosofia de melhoria.
+</div>
+
+
+## Questão 16
+<div class = "pergunta">
+O que você acha da inspeção em massa? </div>
+
+<div class = "resposta">
+ineficiente, ultrapassada e custosa, pois não detecta defeitos no momento, não melhora processos e fera desperdício de recursos.
+</div>
+
+## Questão 17
+<div class = "pergunta">
+Você acha que é sempre muito bom se comprar pelo menor preço? Porque? </div>
+<div class = "resposta">
+Não, comparar pelo menor preço é prejudicial. Pois compromete a qualidade, aumenta custos indiretos e inviabiliza parcerias sustentáveis com fornecedores, gerando assim custos ocultos.
+</div>
+
+## Questão 18
+<div class = "pergunta">
+Porque se deve procurar melhorar o sistema de produção e do serviço constantemente? </div>
+<div class = "resposta">
+Melhorar constantemente o sistema é vital para eliminar desperdícios e manter a competitividade 
+</div>
+
+## Questão 19
+<div class = "pergunta">
+Uma empresa deve manter um programa de treinamento para os seus operários? Porque? </div>
+<div class = "resposta">
+Sim deve manter o programa de treinamentos, para reduzir erros e defeitos, aumentar produtividade/eficiências.
+</div>
+
+## Questão 20
+<div class = "pergunta">
+Qual o papel da Administração, chefiar ou liderar os trabalhadores, porque? </div>
+<div class = "resposta">
+Liderar, pois liderança promove engajamento, facilita comunicação de problemas e alinha equipe com o objetivo de qualidade.
+</div>
+
+## Questão 21
+<div class = "pergunta">
+Porque o trabalhador deve fazer as suas tarefas sem medo? Você concorda com isto? Porque? </div>
+<div class = "resposta">
+Ambiente sem medo aumenta produtividade e qualidade, pois estimula comunicação aberta.
+</div>
+
+## Questão 22
+<div class = "pergunta">
+Em muitas companhias os Departamentos funcionam como entidades independentes. Isto é benéfico para a empresa? Porque? </div>
+<div class = "resposta">
+Departamentos isolados criam falhas de comunicação e prejudicam a qualidade.
+</div>
+
+## Questão 23
+<div class = "pergunta">
+O que você acha das metas quantitativas (objetivos numéricos)?</div>
+<div class = "resposta">
+Metas numéricas sem melhorias reais no processo são contraproducentes, focando em apenas valores patrimoniais para companhia e não focando em processos.
+</div>
+
+## Questão 24
+<div class = "pergunta">
+Um operário que se orgulha do seu trabalho dá o melhor de si para a empresa. Você concorda com isto? </div>
+
+<div class = "resposta">
+Concordo, satisfação profissional, trás engajamento e motiva para um bom desempenho. Com isso melhorando qualidade, produtividade e redução de supervisão de trabalho.
+</div>
+
+## Questão 25
+<div class = "pergunta">
+Como os processos de produção mudam rapidamente, a empresa deve se preparar constantemente para transformações. Como isto deve ser feito? </div>
+<div class = "resposta">
+Empresa com uma cultura muito focada em aprendizado organizacional, planejamentos estratégico e flexivéis e um programa de treinamento continuo, capacitando sempre a equipe com novas metodologias/tecnologias.
+</div>
+
+## Questão 26
+<div class = "pergunta">
+Faça um resumo do chamado ciclo de Shewhart </div>
+<div class = "resposta">
+O Ciclo PDCA (Plan-Do-Check-Act), também conhecido como Ciclo de Shewhart, representa a espinha dorsal da gestão moderna da qualidade. Este método iterativo de quatro etapas não é apenas uma ferramenta, mas uma filosofia de melhoria contínua que revolucionou a administração industrial.
+Na primeira etapa, o Planejamento (Plan), estabelecemos objetivos claros baseados em dados concretos. Como demonstrado no caso da Nashua Corporation, essa fase crítica envolve a coleta e análise estatística de informações para identificar as verdadeiras causas dos problemas. Não se trata de suposições, mas de evidências.
+A Execução (Do) coloca o plano em ação de forma controlada. O exemplo do papel para cópias ilustra perfeitamente essa etapa: ajustes graduais foram implementados, sempre monitorados para evitar os "superajustes" que antes prejudicavam o processo. Aqui, a teoria transforma-se em prática mensurável.
+A Verificação (Check) é onde a ciência encontra os resultados. Através de métodos estatísticos, comparamos o desempenho atual com as metas estabelecidas. Na Nashua, essa análise revelou que poderiam reduzir significativamente a cobertura química sem comprometer a qualidade - uma descoberta que gerou economia anual de US$800 mil.
+Por fim, a Ação (Act) consolida as melhorias ou reinicia o ciclo com novos aprendizados. Esta etapa garante que os ganhos sejam permanentes e não apenas temporários. Como defendido por Deming, é a perpetuação desse ciclo que diferencia empresas competitivas das obsoletas.
+O PDCA se destaca por sua universalidade. Seja nos Círculos de Qualidade japoneses ou na indústria ocidental, sua aplicação sistemática transforma problemas em oportunidades. Mais que um método, é uma mentalidade que substitui a ineficiente inspeção em massa por uma abordagem preventiva e baseada em dados.
+A lição é clara: no mundo da qualidade, a melhoria contínua não é opcional. O PDCA fornece o caminho estruturado para alcançá-la, provando que, quando bem aplicado, pode gerar resultados tangíveis e sustentáveis para qualquer organização comprometida com a excelência.
+</div>
