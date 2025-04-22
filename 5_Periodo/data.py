@@ -38,11 +38,11 @@ def atualizar_prova_da_semana():
 
     # Define o período da semana (segunda a sexta)
     hoje = datetime.now()
-    if hoje.weekday() >= 5:  # Sábado ou domingo
-        inicio_semana = hoje + timedelta(days=(7 - hoje.weekday()))  # Próxima segunda
+    if hoje.weekday() >= 5:  
+        inicio_semana = hoje + timedelta(days=(7 - hoje.weekday()))  
     else:
         inicio_semana = hoje - timedelta(days=hoje.weekday())  # Segunda da semana atual
-    fim_semana = inicio_semana + timedelta(days=4)  # Sexta-feira
+    fim_semana = inicio_semana + timedelta(days=6)  
 
     # Filtra eventos da semana
     eventos_semana = [
@@ -50,16 +50,14 @@ def atualizar_prova_da_semana():
         if inicio_semana.date() <= e["data"].date() <= fim_semana.date()
     ]
 
-    # Ordena por data e pega o primeiro evento (mais próximo)
+    # Ordena eventos por data
     eventos_semana.sort(key=lambda x: x["data"])
-    proximo_evento = eventos_semana[0] if eventos_semana else None
 
-    # Gera o texto para a prova da semana
-    if proximo_evento:
-        texto_prova = (
-            f"📌 **{proximo_evento['tipo']} da semana:** {proximo_evento['disciplina']} — "
-            f"{proximo_evento['data'].strftime('%d/%m')} (Professor: {proximo_evento['professor']})"
-        )
+    # Gera o texto com todos os eventos da semana
+    if eventos_semana:
+        texto_prova = "📌 **Eventos da semana:**\n"
+        for e in eventos_semana:
+            texto_prova += f"- {e['tipo']}: {e['disciplina']} — {e['data'].strftime('%d/%m')} (Professor: {e['professor']})\n"
     else:
         texto_prova = "📌 **Nenhum evento acadêmico marcado para esta semana!**"
 
