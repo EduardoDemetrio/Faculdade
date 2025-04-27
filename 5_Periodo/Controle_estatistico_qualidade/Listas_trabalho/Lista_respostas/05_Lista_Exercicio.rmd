@@ -1,0 +1,371 @@
+---
+title: "Eduardo Demetrio"
+author: "Controle estatistisco de qualidade"
+date: "`r Sys.Date()`"
+output:
+  html_document:
+    theme: cosmo
+    highlight: tango
+    toc: true
+    toc_depth: 2
+    toc_float: true
+    df_print: paged
+    css: style.css
+
+---
+# Repositório.
+- Teremos também um repositório com todas listas no GitHub.
+[🔗 Repositório no GitHub](https://github.com/EduardoDemetrio/Faculdade/tree/lista/5_Periodo/Controle_estatistico_qualidade)
+
+# Como será feito
+ - Irei construir um documento com as perguntas e respostas, também enviarei um arquivo em código R que será usado para testes e cálculos mais elaborados.
+
+Questão 1
+<div class = "pergunta"> Discuta a relação entre um gráfico de controle e um teste estatístico de hipóteses. </div> <div class = "resposta"> Um gráfico de controle pode ser entendido como uma sequência de testes de hipóteses aplicados ao longo do tempo. Ambos compartilham a mesma estrutura hipotética:
+Hipótese nula (H₀): Processo está sob controle (μ = μ₀)
+
+Hipótese alternativa (H₁): Processo está fora de controle (μ ≠ μ₀)
+
+Os limites de controle no gráfico equivalem às regiões críticas do teste de hipótese. A principal diferença reside na aplicação: enquanto o teste de hipótese é pontual, o gráfico de controle realiza monitoramento contínuo, permitindo detectar mudanças ao longo do tempo e distinguir entre variação comum e especial.
+
+</div>
+Questão 2
+<div class = "pergunta"> Discuta os erros do tipo I e do tipo II relativos ao gráfico de controle. Em termos de operação do processo, quais implicações práticas esses dois tipos de erros têm? </div> <div class = "resposta"> **Erro Tipo I (α - Falso alarme):** - Ocorre quando o gráfico indica uma condição fora de controle quando o processo está estável - **Implicações operacionais:** - Paradas desnecessárias da produção - Investigações infrutíferas - Custos adicionais sem benefício real - Desmoralização da equipe
+Erro Tipo II (β - Falha em detectar):
+
+Ocorre quando o gráfico não sinaliza uma mudança real no processo
+
+Implicações operacionais:
+
+Continuidade na produção de itens não conformes
+
+Retrabalho ou descarte de produtos
+
+Perda de qualidade percebida pelo cliente
+
+Potenciais recalls ou reparos no campo
+
+O balanceamento entre α e β é crucial no projeto do gráfico, devendo considerar os custos relativos de cada tipo de erro.
+
+</div>
+Questão 3
+<div class = "pergunta"> Discuta a lógica subjacente ao uso dos limites três sigmas nos gráficos de controle de Shewhart. Como o gráfico responderá se forem escolhidos limites mais estreitos? E se forem escolhidos limites mais amplos? </div> <div class = "resposta"> **Lógica dos 3-sigma:** Baseia-se nas propriedades da distribuição normal, onde: - μ ± 3σ abrange ≈99.73% dos dados - Probabilidade de pontos além dos limites: ≈0.27% (α≈0.0027) - Equilibra sensibilidade e falsos alarmes
+Limites mais estreitos (ex: 2-sigma):
+
+Aumenta α (≈4.55% de falsos alarmes)
+
+Detecta mudanças menores mais rapidamente
+
+Maior sensibilidade, mas custo operacional elevado
+
+Risco de "superajuste" do processo
+
+Limites mais amplos (ex: 4-sigma):
+
+Reduz α (≈0.006% de falsos alarmes)
+
+Exige mudanças maiores para detecção
+
+Menos interrupções, mas maior risco de produzir defeitos
+
+Pode mascarar problemas emergentes
+
+</div>
+Questão 4
+<div class = "pergunta"> O que são limites de alerta em gráficos de controle? Como podem ser usados? </div> <div class = "resposta"> **Definição:** Linhas adicionais tipicamente posicionadas em μ ± 2σ/√n (para gráficos de médias), entre a linha central e os limites de controle.
+Aplicações práticas:
+
+Sinalização precoce: Alertam sobre tendências antes que pontos ultrapassem os limites de controle
+
+Regras suplementares:
+
+2 de 3 pontos consecutivos na zona de alerta indicam possível descontrole
+
+4 de 5 pontos além de 1-sigma sugerem mudança na média
+
+Estratificação de zonas:
+
+Zona C (μ ± 1σ): variação comum esperada
+
+Zona B (1σ a 2σ): atenção moderada
+
+Zona A (2σ a 3σ): atenção crítica
+
+Redução de erros Tipo II: Permitem ações preventivas antes que problemas se agravem
+
+Monitoramento de padrões não aleatórios: Identificam estratificação, mistura ou tendências
+
+</div>
+Questão 5
+<div class = "pergunta"> Discuta o conceito de subgrupo racional. Que papel ele desempenha no delineamento de gráficos de controle? </div> <div class = "resposta"> **Conceito fundamental:** Subgrupo racional é uma amostra selecionada de forma que: - A variação **dentro** do subgrupo represente apenas variação comum (aleatória) - A variação **entre** subgrupos capture variação especial (atribuível)
+Papel crítico no delineamento:
+
+Detecção eficaz: Maximiza a probabilidade de que causas especiais apareçam como variação entre subgrupos
+
+Estruturação adequada:
+
+Subgrupos homogêneos internamente
+
+Heterogeneidade controlada entre subgrupos
+
+Exemplos de formação:
+
+Peças consecutivas da mesma máquina (subgrupo)
+
+Lotes de diferentes turnos (entre subgrupos)
+
+Consequências de má formação:
+
+Se causas especiais ocorrerem dentro de subgrupos → Diluição do sinal
+
+Se variação comum aparecer entre subgrupos → Falsos alarmes
+
+Base estatística: Fundamenta a estimativa de σ (via amplitude média ou desvio padrão)
+
+</div>
+Questão 6
+<div class = "pergunta"> Ao tomar amostras ou subgrupos de um processo, você desejaria que ocorressem causas atribuíveis dentro dos subgrupos ou entre eles? Justifique. </div> <div class = "resposta"> **Desejamos que ocorram entre subgrupos**, por três razões fundamentais:
+Princípio do subgrupo racional:
+
+Variação dentro: deve conter apenas causas comuns
+
+Variação entre: deve refletir causas especiais
+
+Se causas atribuíveis aparecerem dentro, tornam-se "invisíveis" ao gráfico
+
+Detectabilidade:
+
+Causas entre subgrupos → Aumentam a variabilidade entre médias → Pontos no gráfico tendem a sair dos limites
+
+Causas dentro subgrupos → Aumentam R ou S → Detectáveis apenas em gráficos de dispersão
+
+Exemplo prático:
+
+Se um problema ocorre entre turnos (causa especial), deve aparecer como diferença entre subgrupos de turnos distintos
+
+Se o problema ocorre aleatoriamente dentro de turnos, fica "escondido" na variação interna
+
+Conclusão: A estratégia de amostragem deve ser planejada para que fontes de variação atribuível apareçam como diferenças entre subgrupos.
+
+</div>
+Questão 7
+<div class = "pergunta"> Qual informação é fornecida pela curva característica de operação de um gráfico de controle? </div> <div class = "resposta"> A Curva Característica de Operação (CO) fornece informações cruciais sobre o **poder de detecção** do gráfico:
+Eixo X: Magnitude do deslocamento (em σ ou % da média)
+
+Eixo Y: Probabilidade de não detectar (β) ou de detectar (1-β) a mudança
+
+Informações específicas:
+
+Probabilidade de alarme falso (quando δ=0)
+
+Sensibilidade para diferentes tamanhos de mudança
+
+CMS esperado para cada cenário
+
+Eficiência relativa de diferentes projetos (n, h)
+
+Aplicações:
+
+Projeto do gráfico: Selecionar n e h que forneçam β aceitável
+
+Interpretação de resultados: Entender probabilidades pós-sinalização
+
+Comparação entre gráficos: Avaliar desempenho relativo
+
+Análise econômica: Balancear custos de detecção vs. não detecção
+
+Exemplo: Uma CO pode mostrar que para n=5, a probabilidade de detectar um deslocamento de 1.5σ na primeira amostra é 60%.
+
+</div>
+Questão 8
+<div class = "pergunta"> O que é o comprimento de sequência? Qual a sua distribuição? Como podemos usá-lo para avaliar o desempenho de um gráfico de controle? </div> <div class = "resposta"> **Definição:** Comprimento de Sequência (RL - Run Length) é o número de amostras coletadas até que um gráfico de controle sinalize um alarme.
+Distribuição:
+
+Sob controle: Distribuição geométrica com p = α
+
+P(RL=k) = (1-α)^(k-1) * α
+
+Média: 1/α (≈370 para limites 3σ)
+
+Fora de controle: Distribuição geométrica com p = 1-β
+
+P(RL=k) = β^(k-1) * (1-β)
+
+Média: 1/(1-β)
+
+Avaliação de desempenho:
+
+Sob controle: RL grande é desejável (poucos falsos alarmes)
+
+Fora de controle: RL pequeno indica boa sensibilidade
+
+Comparação entre gráficos: Menor RL para mesma mudança → Mais eficiente
+
+Análise de percentis: P(RL≤k) = 1 - (1-p)^k
+
+Projeto econômico: Minimizar custo total considerando RL esperado
+
+Exemplo: Um gráfico com RL médio de 20 para δ=1σ detecta mudanças mais rápido que um com RL=30, sendo preferível se os custos justificarem.
+
+</div>
+Questão 9
+<div class = "pergunta"> O que é o comprimento médio de sequência? Qual o seu significado para um processo operando sob controle? E para um processo fora de controle? </div> <div class = "resposta"> **Definição:** Comprimento Médio de Sequência (CMS - ARL: Average Run Length) é o número esperado de amostras até um alarme.
+Processo sob controle:
+
+CMS = 1/α
+
+Para limites 3σ: α≈0.0027 → CMS≈370
+
+Interpretação: Espera-se um falso alarme a cada 370 amostras
+
+Importância: Mede a frequência de intervenções desnecessárias
+
+Processo fora de controle (com deslocamento δ):
+
+CMS = 1/(1-β)
+
+Onde β é a probabilidade de não detectar δ
+
+Interpretação: Tempo médio para detectar a mudança
+
+Exemplo: Se 1-β=0.5 → CMS=2 (detecta em média na 2ª amostra)
+
+Relações importantes:
+
+CMS = 1/p, onde p é probabilidade de sinalização
+
+Gráficos eficientes têm:
+
+Alto CMS sob controle
+
+Baixo CMS para mudanças relevantes
+
+Trade-off fundamental no projeto de gráficos
+
+</div>
+Questão 10
+<div class = "pergunta"> Quais as duas fases de um gráfico de controle? Quais os principais objetivos de cada uma delas? </div> <div class = "resposta"> **Fase I - Estabelecimento do Gráfico:** - **Objetivo principal:** Verificar a estabilidade do processo durante coleta inicial - **Atividades-chave:** 1. Coletar 20-30 subgrupos racionais 2. Calcular limites tentativos 3. Identificar e remover causas especiais (pontos fora dos limites) 4. Recalcular limites com dados "limpos" 5. Validar suposições (normalidade, independência) - **Resultado:** Limites de controle confiáveis para monitoramento futuro
+Fase II - Monitoramento Contínuo:
+
+Objetivo principal: Detectar mudanças no processo em tempo real
+
+Atividades-chave:
+
+Coletar novos subgrupos periodicamente
+
+Plotar estatísticas no gráfico estabelecido
+
+Aplicar regras de controle (além de pontos fora dos limites)
+
+Investigar causas para pontos/patrões especiais
+
+Atualizar limites se houver mudança permanente válida
+
+Resultado: Processo mantido sob controle estatístico
+
+Transição crítica: Os limites da Fase I tornam-se referência para a Fase II, sem recálculo a menos que o processo mude intencionalmente.
+
+</div>
+
+
+
+Questão 11
+<div class = "pergunta"> Como os custos de amostragem, os custos da produção de um número excessivo de unidades defeituosas e os custos de investigação de causas atribuíveis influenciam na escolha dos parâmetros de um gráfico de controle? </div> <div class = "resposta"> **Modelo de custo total:** Minimizar CT = C_amostragem + C_defeituosas + C_investigação
+1. Custos de amostragem (C_a):
+
+Depende de n (tamanho amostral) e h (intervalo)
+
+Favorece:
+
+n pequeno (menos medições)
+
+h grande (amostras menos frequentes)
+
+Exemplo: C_a = c1*n/h (c1 = custo por item amostrado)
+
+2. Custos de unidades defeituosas (C_d):
+
+Aumenta com tempo de produção fora de controle
+
+Favorece:
+
+n grande (maior poder de detecção)
+
+h pequeno (detecção mais rápida)
+
+Depende de:
+
+Taxa de defeitos sob/fora controle
+
+Tempo médio para detecção (CMS)
+
+3. Custos de investigação (C_i):
+
+Associado a falsos alarmes (Erro Tipo I)
+
+Favorece:
+
+α pequeno (menos investigações desnecessárias)
+
+Limites mais amplos (ex: 3.5σ em vez de 3σ)
+
+Inclui custos de:
+
+Parada da produção
+
+Análise de causa-raiz
+
+Ajustes desnecessários
+
+Balanceamento ótimo:
+
+Encontrar n, h e k (limites) que minimizem CT
+
+Solução típica envolve:
+
+Modelar relações entre parâmetros e custos
+
+Considerar restrições operacionais
+
+Usar simulação ou otimização matemática
+
+Validar economicamente a solução
+
+Exemplo prático: Processos de alto custo de defeitos tendem a usar n maiores e h menores, mesmo com maior C_a.
+
+</div>
+Questão 12
+<div class = "pergunta"> Um processo de moldagem usa um molde com cinco cavidades para uma peça usada em uma montagem automotiva. A espessura das paredes da peça é a característica crítica da qualidade. Foi sugerido o gráfico x̄ para monitorar esse processo e o uso, como subgrupo ou amostra, de todas as cinco peças resultantes de uma única "saída" da máquina. O que você acha dessa estratégia de amostragem? </div> <div class = "resposta"> **A estratégia é adequada e recomendada** pelas seguintes razões:
+Formação de subgrupos racionais:
+
+Variação dentro do subgrupo (5 peças do mesmo ciclo): captura variação entre cavidades (variação comum inerente ao processo)
+
+Variação entre subgrupos (diferentes ciclos): detecta mudanças temporais (possíveis causas especiais)
+
+Vantagens específicas:
+
+Se houver problema em um ciclo específico (ex: temperatura inadequada), afetará todas as 5 peças → aparecerá como diferença entre subgrupos
+
+Permite distinguir entre:
+
+Problemas sistemáticos (diferenças entre cavidades)
+
+Problemas temporais (variação entre ciclos)
+
+Alternativas não recomendadas:
+
+Subgrupos com peças de diferentes ciclos: mascara variação entre tempos
+
+Gráficos individuais: perde informação da correlação entre cavidades
+
+Implementação sugerida:
+
+Gráfico x̄ para médias entre cavidades
+
+Gráfico R ou S para variabilidade dentro molde
+
+Análise combinada para diagnóstico completo
+
+Conclusão: A abordagem proposta segue os princípios do subgrupo racional e é estatisticamente fundamentada para este cenário.
+
+</div>

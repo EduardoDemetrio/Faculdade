@@ -1,0 +1,247 @@
+---
+title: "Eduardo Demetrio"
+author: "Controle estatistisco de qualidade"
+date: "`r Sys.Date()`"
+output:
+  html_document:
+    theme: cosmo
+    highlight: tango
+    toc: true
+    toc_depth: 2
+    toc_float: true
+    df_print: paged
+    css: style.css
+
+---
+# Repositório.
+- Teremos também um repositório com todas listas no GitHub.
+[🔗 Repositório no GitHub](https://github.com/EduardoDemetrio/Faculdade/tree/lista/5_Periodo/Controle_estatistico_qualidade)
+
+# Como será feito
+ - Irei construir um documento com as perguntas e respostas, também enviarei um arquivo em código R que será usado para testes e cálculos mais elaborados.
+
+
+## Questão 1 A
+
+<div class ="pergunta">
+Suponha que 5 questões sejam retiradas com reposição (ou seja uma mesma questão pode ser retirada mais de uma vez) de um banco de 10 questões das quais o indivíduo sabe responder 5. Qual a probabilidade de ele acertar 2 ou mais questões?
+</div>
+
+<div class ="resposta">
+a. Binomial: Probabilidade de acertar 2 ou mais em 5 questões (sabe 5 de 10)
+```{r, echo=FALSE}
+n <- 5
+p <- 5/10
+prob_a <- 1 - pbinom(1, size = n, prob = p)
+cat(prob_a)
+```
+</div>
+
+## Questão 1 B
+<div class ="pergunta">
+Idem ao item anterior, porém supondo agora que as questões são retiradas sem reposição
+</div>
+<div class="resposta">
+b. Hipergeométrica: Mesmo cenário mas sem reposição
+Parâmetros: m (sucessos no população), n (fracassos), k (tamanho da amostra)
+
+```{r, echo=FALSE}
+m <- 5  # questões que sabe
+n <- 5  # questões que não sabe
+k <- 5  # questões sorteadas
+prob_b <- 1 - phyper(1, m, n, k)
+prob_b
+```
+</div>
+
+## Questão 1 C
+<div class ="pergunta">
+Supondo novamente reposição das questões, o candidato responde até errar pela primeira vez. Qual a probabilidade de acerta no máximo 2 questões antes de errar (ou seja, no máximo 3 tentativas)?
+</div>
+
+<div class="resposta">
+c. Geométrica: Probabilidade de acertar no máximo 2 antes do primeiro erro
+```{r, echo=FALSE}
+p <- 5/10  # probabilidade de acerto
+prob_c <- pgeom(2, prob = 1-p)  # P(X ≤ 2)
+prob_c
+```
+</div>
+
+## Questão 1 D
+<div class ="pergunta">
+Idem anterior supondo que responde até errar pela terceira vez (ou seja, no máximo 5 tentativas)
+</div>
+
+<div class="resposta">
+d. Binomial Negativa: Probabilidade de no máximo 5 tentativas para 3 erros
+Queremos P(X ≤ 5) onde X é o número de tentativas para 3 erros
+```{r, echo=FALSE}
+r <- 3   # número de erros desejados
+p <- 5/10 # probabilidade de acerto
+prob_d <- pnbinom(5 - r, size = r, prob = 1 - p)
+prob_d
+```
+</div>
+
+
+## Questão 1 E
+<div class ="pergunta">
+Considere agora que o candidato fez vários testes simulados com 10 questões e registrou uma média de 6 acertos por teste. Qual a probabilidade de que no teste oficial (10 questões) ele tenha no máximo 5 acertos?
+</div>
+
+<div class="resposta">
+e. Poisson: No máximo 5 acertos em 10 questões com média 6
+```{r, echo=FALSE}
+lambda <- 6
+prob_e <- ppois(5, lambda)
+prob_e
+```
+</div>
+
+## Questão 2 A
+<div class ="pergunta">
+A probabilidade de a vida útil não chegar a 3 meses é
+</div>
+
+<div class="resposta">
+Converter 3 meses para anos: 3/12 = 0.25
+```{r, echo=FALSE}
+Fa <- function(x) x - (1/3)*x^3
+prob_2a <- Fa(0.25)
+prob_2a
+```
+</div>
+
+## Questão 2 B
+<div class ="pergunta">
+A probabilidade de a vida útil ser superior a 6 meses é
+</div>
+<div class="resposta">
+6 meses = 0.5 anos
+```{r, echo=FALSE}
+prob_2b <- 1 - Fa(0.5)
+prob_2b
+```
+</div>
+
+## Questão 2 C
+<div class ="pergunta">
+A probabilidade de a duração estar entre 4 e 9 meses é
+</div>
+
+<div class="resposta">
+4 meses = 1/3 anos, 9 meses = 0.75 anos
+```{r, echo=FALSE}
+prob_2c <- Fa(0.75) - Fa(1/3)
+prob_2c
+```
+</div>
+
+## Questão 2 D
+<div class ="pergunta">
+Sabendo que a trava está funcionando a 3 meses, a probabilidade de a vida útil ser inferior a 6 meses é
+</div>
+<div class="resposta">
+Probabilidade condicional: [F(0.5) - F(0.25)] / [1 - F(0.25)]
+```{r, echo=FALSE}
+numerador <- Fa(0.5) - Fa(0.25)
+denominador <- 1 - Fa(0.25)
+prob_2d <- numerador / denominador
+prob_2d
+```
+</div>
+
+## Questão 2 E
+<div class ="pergunta">
+A probabilidade de durar mais que 9 meses sendo que já funciona há 6 meses é:
+</div>
+<div class="resposta">
+```{r, echo=FALSE}
+numerador <- 1 - Fa(0.75)
+denominador <- 1 - Fa(0.5)
+prob_2e <- numerador / denominador
+prob_2e
+```
+</div>
+
+## Questão 2 F
+<div class ="pergunta">
+Sabe-se que uma unidade durou menos que 9 meses. Qual a probabilidade que tenha durado ao menos 3 meses?
+</div>
+<div class="resposta">
+```{r, echo=FALSE}
+numerador <- Fa(0.75) - Fa(0.25)
+denominador <- Fa(0.75)
+prob_2f <- numerador / denominador
+prob_2f
+```
+</div>
+
+
+## Questão 4 A
+<div class ="pergunta">
+Ache a probabilidade que um adulto, selecionado aleatoriamente, tenha QI menor do que 130
+</div>
+<div class="resposta">
+```{r, echo=FALSE}
+prob_4a <- pnorm(130, mean = 100, sd = 15)
+prob_4a
+```
+</div>
+
+
+## Questão 4 B
+<div class ="pergunta">
+Ache a probabilidade que um adulto, selecionado aleatoriamente, tenha QI maior do que 131,5 (que é a exigência para ser um membro da sociedade Mensa).
+</div>
+<div class="resposta">
+```{r, echo=FALSE}
+prob_4b <- 1 - pnorm(131.5, mean = 100, sd = 15)
+prob_4b
+```
+</div>
+
+## Questão 4 C
+<div class ="pergunta">
+Ache a probabilidade que um adulto, selecionado aleatoriamente, tenha QI entre 90 e 110. (considerado como faixa normal)
+</div>
+<div class="resposta">
+```{r, echo=FALSE}
+prob_4c <- pnorm(110, mean = 100, sd = 15) - pnorm(90, mean = 100, sd = 15)
+prob_4c
+```
+</div>
+
+## Questão 4 D
+<div class ="pergunta">
+Ache a probabilidade que um adulto, selecionado aleatoriamente, tenha QI entre 110 e 120. (considerado como faixa normal brilhante).
+</div>
+<div class="resposta">
+```{r, echo=FALSE}
+prob_4d <- pnorm(120, mean = 100, sd = 15) - pnorm(110, mean = 100, sd = 15)
+prob_4d
+```
+</div>
+
+## Questão 4 E
+<div class ="pergunta">
+Ache o 25º percentil (Primeiro Quartil), que é o escore de QI que separa os 25% inferiores dos 75% superiores
+</div>
+<div class="resposta">
+```{r, echo=FALSE}
+q25 <- qnorm(0.25, mean = 100, sd = 15)
+q25
+```
+</div>
+
+## Questão 4 F
+<div class ="pergunta">
+Ache o 75º percentil (Terceiro Quartil), que é o escore de QI que separa os 75% inferiores dos 25% superiores.
+</div>
+<div class="resposta">
+```{r, echo=FALSE}
+q75 <- qnorm(0.75, mean = 100, sd = 15)
+q75
+```
+</div>

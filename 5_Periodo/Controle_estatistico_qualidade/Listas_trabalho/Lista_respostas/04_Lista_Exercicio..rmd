@@ -1,0 +1,378 @@
+---
+title: "Eduardo Demetrio"
+author: "Controle estatistisco de qualidade"
+date: "`r Sys.Date()`"
+output:
+  html_document:
+    theme: cosmo
+    highlight: tango
+    toc: true
+    toc_depth: 2
+    toc_float: true
+    df_print: paged
+    css: style.css
+
+---
+# Repositório.
+- Teremos também um repositório com todas listas no GitHub.
+[🔗 Repositório no GitHub](https://github.com/EduardoDemetrio/Faculdade/tree/lista/5_Periodo/Controle_estatistico_qualidade)
+
+# Como será feito
+ - Irei construir um documento com as perguntas e respostas, também enviarei um arquivo em código R que será usado para testes e cálculos mais elaborados.
+
+
+## Questão 1
+
+<div class ="pergunta">
+Uma máquina automática de encher pacotes de café enche-os segundo uma distribuição normal, com média µ e variância 400 g². A máquina foi regulada para µ = 500 g. Colheu-se uma amostra de 16 pacotes com média x̄ = 492 g. Você pararia a produção para verificar se o mostrador está na posição correta? (Teste bilateral, α = 0.05)
+</div>
+
+<div class ="resposta">
+
+```{r, echo=FALSE}
+# Dados
+mu0 <- 500
+sigma2 <- 400
+n <- 16
+xbar <- 492
+alpha <- 0.05
+
+# Cálculo do teste Z
+z <- (xbar - mu0) / sqrt(sigma2/n)
+z_critico <- qnorm(1 - alpha/2)
+
+# Valor-p
+p_value <- 2 * (1 - pnorm(abs(z)))
+
+# Resultados
+list(
+  Estatistica_Teste = z,
+  Valor_Critico = z_critico,
+  Valor_p = p_value,
+  Decisao = ifelse(abs(z) > z_critico, "Rejeitar H0", "Não rejeitar H0")
+)
+```
+</div>
+
+
+## Questão 2
+
+<div class ="pergunta">
+Uma companhia de cigarros afirma que o índice médio de nicotina está abaixo de 23 mg. Uma amostra de 6 cigarros apresentou: 27, 24, 21, 25, 26, 22 mg. Sabe-se que σ² = 4,86 mg². Teste a afirmação ao nível de 10%.
+</div>
+
+<div class ="resposta">
+
+```{r, echo=FALSE}
+# Dados
+dados <- c(27, 24, 21, 25, 26, 22)
+mu0 <- 23
+sigma2 <- 4.86
+n <- length(dados)
+xbar <- mean(dados)
+alpha <- 0.10
+
+# Teste Z unilateral
+z <- (xbar - mu0) / sqrt(sigma2/n)
+z_critico <- qnorm(1 - alpha)
+
+# Valor-p
+p_value <- 1 - pnorm(z)
+
+# Resultados
+list(
+  Media_Amostral = xbar,
+  Estatistica_Teste = z,
+  Valor_Critico = z_critico,
+  Valor_p = p_value,
+  Decisao = ifelse(z > z_critico, "Rejeitar H0", "Não rejeitar H0")
+)
+```
+</div>
+
+## Questão 3
+
+<div class ="pergunta">
+Um fabricante afirma que seus cigarros contém não mais que 30 mg de nicotina. Uma amostra de 25 cigarros fornece média 31,5 mg e desvio padrão 3 mg. Teste ao nível de 5%.
+</div>
+
+<div class ="resposta">
+```{r, echo=FALSE}
+        mu0 <- 30
+        n <- 25
+        xbar <- 31.5
+        s <- 3
+        alpha <- 0.05
+
+        # Teste t unilateral
+        t <- (xbar - mu0) / (s/sqrt(n))
+        t_critico <- qt(1 - alpha, df = n-1)
+
+        # Valor-p
+        p_value <- 1 - pt(t, df = n-1)
+
+        # Resultados
+        list(
+          Estatistica_Teste = t,
+          Valor_Critico = t_critico,
+          Valor_p = p_value,
+          Decisao = ifelse(t > t_critico, "Rejeitar H0", "Não rejeitar H0")
+        )
+```
+</div>
+
+## Questão 4
+
+<div class ="pergunta">
+Duas máquinas A e B empacotam café com σ = 10 g para ambas. Amostras: nA = 25, x̄A = 502,74 g; nB = 16, x̄B = 496,60 g. Teste se as médias são diferentes (α = 0,05).
+</div>
+<div class ="resposta">
+```{r, echo=FALSE}
+# Dados
+xbarA <- 502.74
+xbarB <- 496.60
+sigma <- 10
+nA <- 25
+nB <- 16
+alpha <- 0.05
+
+# Teste Z bilateral
+z <- (xbarA - xbarB) / sqrt(sigma^2/nA + sigma^2/nB)
+z_critico <- qnorm(1 - alpha/2)
+
+# Valor-p
+p_value <- 2 * (1 - pnorm(abs(z)))
+
+# Resultados
+list(
+  Estatistica_Teste = z,
+  Valor_Critico = z_critico,
+  Valor_p = p_value,
+  Decisao = ifelse(abs(z) > z_critico, "Rejeitar H0", "Não rejeitar H0")
+)
+```
+</div>
+
+## Questão 5
+
+<div class ="pergunta">
+Duas técnicas de vendas (A e B) foram testadas. Resultados: <br>
+Técnica A: n=12, média=68, variância=50 <br>
+Técnica B: n=15, média=76, variância=75 <br>
+Teste se há diferença ao nível de 5%.</div>
+
+<div class ="resposta">
+
+```{r, echo=FALSE}
+# Dados
+nA <- 12; xbarA <- 68; varA <- 50
+nB <- 15; xbarB <- 76; varB <- 75
+alpha <- 0.05
+
+# Variância ponderada
+sp2 <- ((nA-1)*varA + (nB-1)*varB)/(nA + nB - 2)
+
+# Teste t bilateral
+t <- (xbarA - xbarB) / sqrt(sp2*(1/nA + 1/nB))
+t_critico <- qt(1 - alpha/2, df = nA + nB - 2)
+
+# Valor-p
+p_value <- 2 * (1 - pt(abs(t), df = nA + nB - 2))
+
+# Resultados
+list(
+  Variancia_Ponderada = sp2,
+  Estatistica_Teste = t,
+  Valor_Critico = t_critico,
+  Valor_p = p_value,
+  Decisao = ifelse(abs(t) > t_critico, "Rejeitar H0", "Não rejeitar H0")
+)
+```
+</div>
+
+## Questão 6
+
+<div class ="pergunta">
+Cinco operadores realizaram uma tarefa em máquinas de marcas A e B. Tempos: <br>
+TA: 80, 72, 65, 78, 85<br>
+TB: 75, 70, 60, 72, 78<br>
+Teste se a máquina A demora mais (α = 0,10).</div>
+
+
+<div class ="resposta">
+
+```{r, echo=FALSE}
+# Dados
+A <- c(80, 72, 65, 78, 85)
+B <- c(75, 70, 60, 72, 78)
+alpha <- 0.10
+
+# Diferenças
+d <- A - B
+
+# Teste t unilateral
+n <- length(d)
+dbar <- mean(d)
+sd <- sd(d)
+t <- dbar / (sd/sqrt(n))
+t_critico <- qt(1 - alpha, df = n-1)
+
+# Valor-p
+p_value <- 1 - pt(t, df = n-1)
+
+# Resultados
+list(
+  Media_Diferencas = dbar,
+  Desvio_Padrao_Diferencas = sd,
+  Estatistica_Teste = t,
+  Valor_Critico = t_critico,
+  Valor_p = p_value,
+  Decisao = ifelse(t > t_critico, "Rejeitar H0", "Não rejeitar H0")
+)
+```
+</div>
+
+## Questão 7
+
+<div class ="pergunta">
+Uma máquina de café deveria ter σ = 10g. Uma amostra de 16 pacotes apresentou s² = 169g². A máquina está desregulada? (α = 0,05).</div>
+
+<div class ="resposta">
+
+```{r, echo=FALSE}
+# Dados
+sigma0 <- 10
+n <- 16
+s2 <- 169
+alpha <- 0.05
+
+# Teste Qui-quadrado
+chi2 <- (n-1)*s2/sigma0^2
+chi2_critico_inf <- qchisq(alpha/2, df = n-1)
+chi2_critico_sup <- qchisq(1 - alpha/2, df = n-1)
+
+# Valor-p
+p_value <- 2 * min(pchisq(chi2, df = n-1), 1 - pchisq(chi2, df = n-1))
+
+# Resultados
+list(
+  Estatistica_Teste = chi2,
+  Valores_Criticos = c(chi2_critico_inf, chi2_critico_sup),
+  Valor_p = p_value,
+  Decisao = ifelse(chi2 < chi2_critico_inf | chi2 > chi2_critico_sup, 
+                  "Rejeitar H0", "Não rejeitar H0")
+)
+```
+</div>
+
+## Questão 8
+
+<div class ="pergunta">
+Duas máquinas produzem peças com resistências: <br>
+TA: 145, 127, 136, 142, 141, 137<br>
+TB: 143, 128, 132, 138, 142, 132<br>
+Teste se a homogeneidade é a mesma (α = 0,05).</div>
+
+<div class ="resposta">
+
+```{r, echo=FALSE}
+# Dados
+A <- c(145, 127, 136, 142, 141, 137)
+B <- c(143, 128, 132, 138, 142, 132)
+alpha <- 0.05
+
+# Teste F
+varA <- var(A)
+varB <- var(B)
+f <- varA/varB
+f_critico_inf <- qf(alpha/2, df1 = length(A)-1, df2 = length(B)-1)
+f_critico_sup <- qf(1 - alpha/2, df1 = length(A)-1, df2 = length(B)-1)
+
+# Valor-p
+p_value <- 2 * min(pf(f, df1 = length(A)-1, df2 = length(B)-1),
+                  1 - pf(f, df1 = length(A)-1, df2 = length(B)-1))
+
+# Resultados
+list(
+  Variancia_A = varA,
+  Variancia_B = varB,
+  Estatistica_Teste = f,
+  Valores_Criticos = c(f_critico_inf, f_critico_sup),
+  Valor_p = p_value,
+  Decisao = ifelse(f < f_critico_inf | f > f_critico_sup, 
+                  "Rejeitar H0", "Não rejeitar H0")
+)
+```
+</div>
+
+## Questão 9
+
+<div class ="pergunta">
+Uma TV afirma que 60% dos televisores estavam ligados em seu programa. Uma pesquisa com 200 famílias encontrou 104 respostas afirmativas. Teste a afirmação (α = 0,05).</div>
+
+
+<div class ="resposta">
+
+```{r, echo=FALSE}
+# Dados
+p0 <- 0.60
+n <- 200
+x <- 104
+phat <- x/n
+alpha <- 0.05
+
+# Teste Z bilateral
+z <- (phat - p0) / sqrt(p0*(1-p0)/n)
+z_critico <- qnorm(1 - alpha/2)
+
+# Valor-p
+p_value <- 2 * (1 - pnorm(abs(z)))
+
+# Resultados
+list(
+  Proporcao_Amostral = phat,
+  Estatistica_Teste = z,
+  Valor_Critico = z_critico,
+  Valor_p = p_value,
+  Decisao = ifelse(abs(z) > z_critico, "Rejeitar H0", "Não rejeitar H0")
+)
+```
+</div>
+
+## Questão 10 
+
+<div class ="pergunta">
+Em uma pesquisa, 32/80 homens e 26/50 mulheres apreciam certa revista. Teste se a apreciação é igual entre gêneros (α = 0,05).</div>
+
+
+<div class ="resposta">
+
+```{r, echo=FALSE}
+# Dados
+x1 <- 32; n1 <- 80
+x2 <- 26; n2 <- 50
+alpha <- 0.05
+
+# Proporções
+phat1 <- x1/n1
+phat2 <- x2/n2
+phat <- (x1 + x2)/(n1 + n2)
+
+# Teste Z bilateral
+z <- (phat1 - phat2) / sqrt(phat*(1-phat)*(1/n1 + 1/n2))
+z_critico <- qnorm(1 - alpha/2)
+
+# Valor-p
+p_value <- 2 * (1 - pnorm(abs(z)))
+
+# Resultados
+list(
+  Proporcao_Homens = phat1,
+  Proporcao_Mulheres = phat2,
+  Estatistica_Teste = z,
+  Valor_Critico = z_critico,
+  Valor_p = p_value,
+  Decisao = ifelse(abs(z) > z_critico, "Rejeitar H0", "Não rejeitar H0")
+)
+```
+</div>

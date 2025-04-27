@@ -1,0 +1,20 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+      {
+        "label": "Knit RMarkdown and Save to Folder",
+        "type": "process",
+        "command": "Rscript",
+        "args": [
+          "-e",
+          "rmarkdown::render(\"C:/Users/edude/OneDrive/Área de Trabalho/Códigos/Faculdade/5_Periodo/Controle_estatistico_qualidade/Listas_trabalho/Lista_respostas/05_Lista_Exercicio.rmd\", output_file = \"C:/Users/edude/OneDrive/Área de Trabalho/Códigos/Faculdade/5_Periodo/Controle_estatistico_qualidade/Listas_trabalho/Lista_respostas/05_Lista_Exercicio.html\"); shell.exec(\"C:/Users/edude/OneDrive/Área de Trabalho/Códigos/Faculdade/5_Periodo/Controle_estatistico_qualidade/Listas_trabalho/Lista_respostas/05_Lista_Exercicio.html\")"
+        ],
+        "group": {
+          "kind": "build",
+          "isDefault": true
+        },
+        "problemMatcher": []
+      }
+    ]
+  }
+  
