@@ -1,0 +1,145 @@
+---
+title: "Eduardo Demetrio"
+author: "Controle estatistisco de qualidade"
+date: "`r Sys.Date()`"
+output:
+  html_document:
+    theme: cosmo
+    highlight: tango
+    toc: true
+    toc_depth: 2
+    toc_float: true
+    df_print: paged
+    css: style.css
+
+---
+# Repositório.
+- Teremos também um repositório com todas listas no GitHub.
+[🔗 Repositório no GitHub](https://github.com/EduardoDemetrio/Faculdade/tree/lista/5_Periodo/Controle_estatistico_qualidade)
+
+# Como será feito
+ - Irei construir um documento com as perguntas e respostas, também enviarei um arquivo em código R que será usado para testes e cálculos mais elaborados.
+
+
+## Questão 1
+
+<div class ="pergunta">
+Uma população consiste nos valores 1, 2 e 3. Complete na tabela abaixo todas as diferentes amostras possíveis de tamanho n=2 aleatoriamente retiradas com reposição da população, identifique a distribuição amostral específica da média. Também ache a média dessa distribuição amostral. A média amostral atinge o alvo da média populacional? As proporções amostrais atingem o alvo da proporção populacional?
+</div>
+
+<div class ="resposta">
+```{r, echo=FALSE}
+# Definindo a população
+populacao <- c(1, 2, 3)
+
+# Calculando parâmetros populacionais
+media_pop <- mean(populacao)
+var_pop <- var(populacao) * (length(populacao)-1)/length(populacao) # Variância populacional
+sd_pop <- sqrt(var_pop)
+prop_impares_pop <- mean(populacao %% 2 == 1)
+
+# Gerando todas amostras possíveis de tamanho n=2 com reposição
+amostras_n2 <- expand.grid(populacao, populacao)
+amostras_n2 <- as.matrix(amostras_n2)
+
+# Calculando estatísticas para cada amostra
+medias_n2 <- apply(amostras_n2, 1, mean)
+medianas_n2 <- apply(amostras_n2, 1, median)
+amplitude_n2 <- apply(amostras_n2, 1, function(x) max(x) - min(x))
+variancias_n2 <- apply(amostras_n2, 1, var)
+desvios_n2 <- sqrt(variancias_n2)
+prop_impares_n2 <- apply(amostras_n2, 1, function(x) mean(x %% 2 == 1))
+
+# Criando tabela de resultados
+tabela_n2 <- data.frame(
+  Amostra = apply(amostras_n2, 1, paste, collapse = ","),
+  Média = medias_n2,
+  Mediana = medianas_n2,
+  Amplitude = amplitude_n2,
+  Variância = variancias_n2,
+  Desvio_Padrão = desvios_n2,
+  Proporção_Ímpares = prop_impares_n2,
+  Probabilidade = 1/nrow(amostras_n2)
+)
+
+# Média das estatísticas amostrais
+media_medias_n2 <- mean(medias_n2)
+media_medianas_n2 <- mean(medianas_n2)
+media_amplitude_n2 <- mean(amplitude_n2)
+media_variancias_n2 <- mean(variancias_n2)
+media_desvios_n2 <- mean(desvios_n2)
+media_prop_impares_n2 <- mean(prop_impares_n2)
+
+# Resultados
+list(
+  Tabela_Amostras = tabela_n2,
+  Média_das_Estatísticas = data.frame(
+    Estatística = c("Média", "Mediana", "Amplitude", "Variância", "Desvio_Padrão", "Proporção_Ímpares"),
+    Valor = c(media_medias_n2, media_medianas_n2, media_amplitude_n2, 
+              media_variancias_n2, media_desvios_n2, media_prop_impares_n2)
+  ),
+  Parâmetros_Populacionais = data.frame(
+    Parâmetro = c("Média", "Variância", "Desvio_Padrão", "Proporção_Ímpares"),
+    Valor = c(media_pop, var_pop, sd_pop, prop_impares_pop)
+  ),
+  Conclusão = "A média amostral é um estimador não-viesado da média populacional, pois a média das médias amostrais (2) é igual à média populacional (2). O mesmo ocorre com a proporção de números ímpares."
+)
+```
+</div>
+
+## Questão 2
+
+<div class ="pergunta">
+Repita o problema e complete na tabela abaixo todas as diferentes amostras possíveis de tamanho n=3 aleatoriamente retiradas com reposição da população, identifique a distribuição amostral específica da média. Também ache a média dessa distribuição amostral. A média amostral atinge o alvo da média populacional? As proporções amostrais atingem o alvo da proporção populacional?
+</div>
+
+<div class ="resposta">
+```{r, echo=FALSE}
+# Gerando todas amostras possíveis de tamanho n=3 com reposição
+amostras_n3 <- expand.grid(populacao, populacao, populacao)
+amostras_n3 <- as.matrix(amostras_n3)
+
+# Calculando estatísticas para cada amostra
+medias_n3 <- apply(amostras_n3, 1, mean)
+medianas_n3 <- apply(amostras_n3, 1, median)
+amplitude_n3 <- apply(amostras_n3, 1, function(x) max(x) - min(x))
+variancias_n3 <- apply(amostras_n3, 1, var)
+desvios_n3 <- sqrt(variancias_n3)
+prop_impares_n3 <- apply(amostras_n3, 1, function(x) mean(x %% 2 == 1))
+
+# Criando tabela de resultados
+tabela_n3 <- data.frame(
+  Amostra = apply(amostras_n3, 1, paste, collapse = ","),
+  Média = medias_n3,
+  Mediana = medianas_n3,
+  Amplitude = amplitude_n3,
+  Variância = variancias_n3,
+  Desvio_Padrão = desvios_n3,
+  Proporção_Ímpares = prop_impares_n3,
+  Probabilidade = 1/nrow(amostras_n3)
+)
+
+# Média das estatísticas amostrais
+media_medias_n3 <- mean(medias_n3)
+media_medianas_n3 <- mean(medianas_n3)
+media_amplitude_n3 <- mean(amplitude_n3)
+media_variancias_n3 <- mean(variancias_n3)
+media_desvios_n3 <- mean(desvios_n3)
+media_prop_impares_n3 <- mean(prop_impares_n3)
+
+# Resultados
+list(
+  Tabela_Amostras = head(tabela_n3, 10), # Mostrando apenas as 10 primeiras por questão de espaço
+  Média_das_Estatísticas = data.frame(
+    Estatística = c("Média", "Mediana", "Amplitude", "Variância", "Desvio_Padrão", "Proporção_Ímpares"),
+    Valor = c(media_medias_n3, media_medianas_n3, media_amplitude_n3, 
+              media_variancias_n3, media_desvios_n3, media_prop_impares_n3)
+  ),
+  Parâmetros_Populacionais = data.frame(
+    Parâmetro = c("Média", "Variância", "Desvio_Padrão", "Proporção_Ímpares"),
+    Valor = c(media_pop, var_pop, sd_pop, prop_impares_pop)
+  ),
+  Conclusão = "Para n=3, a média amostral continua sendo um estimador não-viesado da média populacional, pois a média das médias amostrais (2) é igual à média populacional (2). A proporção de números ímpares também atinge o alvo populacional."
+)
+```
+</div>
