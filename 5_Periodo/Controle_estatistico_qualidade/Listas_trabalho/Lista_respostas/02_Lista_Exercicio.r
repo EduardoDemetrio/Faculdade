@@ -93,3 +93,55 @@ lucro_sem_falha <- 25
 lucro_com_falha <- -25
 lucro_esperado <- lucro_sem_falha * (1 - prob_falha) + lucro_com_falha * prob_falha
 cat("Lucro esperado por unidade: $", round(lucro_esperado, 2), "\n")
+
+
+## Questão 12
+# Dados
+volumes <- c(10.05, 10.03, 10.02, 10.04, 10.05, 10.01, 10.02, 10.02, 10.03, 10.01)
+
+# Medidas resumo
+cat("Média:", mean(volumes), "\nMediana:", median(volumes), "\nModa:", names(sort(table(volumes), decreasing = TRUE))[1])
+cat("\nDesvio-padrão:", round(sd(volumes), 4), "\nVariância:", round(var(volumes), 4), "\nAmplitude:", diff(range(volumes)))
+
+# Boxplot
+boxplot(volumes, horizontal = TRUE, col = "lightblue", xlab = "Volume (unidades)")
+
+# Histograma
+hist(volumes, breaks = 5, col = "orange", xlab = "Volume (unidades)", ylab = "Frequência")
+
+
+## Questão 13
+
+# Probabilidade P(X = 0)
+prob_0 <- choose(5, 0) * choose(95, 10) / choose(100, 10)
+
+# Probabilidade P(X = 1)
+prob_1 <- choose(5, 1) * choose(95, 9) / choose(100, 10)
+
+# Probabilidade total P(X <= 1)
+prob_total <- prob_0 + prob_1
+
+cat("Probabilidade de 0 defeituosos:", round(prob_0, 4), "\n",
+    "Probabilidade de 1 defeituoso:", round(prob_1, 4), "\n",
+    "Probabilidade total (no máximo 1 defeituoso):", round(prob_total, 4))
+
+
+## Questão 15
+
+# Parâmetros
+media <- 40
+desvio <- 2
+limite <- 35
+
+# Cálculo da probabilidade
+prob <- 1 - pnorm(limite, media, desvio)
+cat("Probabilidade (X ≥ 35):", round(prob * 100, 2), "%")
+
+# Gráfico
+curve(dnorm(x, media, desvio), from = 30, to = 50,
+      xlab = "Resistência (X)", ylab = "Densidade")
+abline(v = limite, col = "red", lty = 2)
+polygon(c(limite, seq(limite, 50, length = 100), 50),
+        c(0, dnorm(seq(limite, 50, length = 100), media, desvio), 0),
+        col = "lightblue")
+text(limite, 0.02, "X ≥ 35", pos = 4, col = "red")

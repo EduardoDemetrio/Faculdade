@@ -167,3 +167,376 @@ b. O custo de fabricação da calculadora é $50 e o lucro é de $25. Qual é o 
 <strong> Questao 11-A </strong> Sua porcentagem de falha na gatantia consistem em 11,75% <br>
 <strong> Questao 11-B </strong> Seu lucro esperado por unidade está em $19.12
 </div>
+
+
+## Questão 12 
+<div class="pergunta">
+A variabilidade do volume engarrafado de uma bebida está sendo analisada. Uma amostra com tamanho n = 10 foi tomada do processo. Os volumes medidos e os resultados são os seguintes, na unidade adequada:<br>
+10,05 10,03 10,02 10,04 10,05 10,01 10,02 10,02 10,03 10,01 <br>
+Descreva a amostra.
+</div>
+
+<div class='resposta'>
+Média: 10.028 <br>
+Mediana: 10.025 <br>
+Desvio-padrão: 0.0148 <br>
+Variância: 2e-04 <br>
+
+Consistência: Processo preciso (baixa variabilidade). <br>
+Viés: Leve tendência a encher acima do alvo (média 10.028). <br>
+Ação recomendada: Ajustar a calibração da máquina para reduzir o viés, mantendo a precisão.
+</div>
+
+## Questão 13
+<div class="pergunta">
+Seja a v.a. X que representa o número de itens defeituosos presentes em uma amostra de tamanho n=10, tomada de um lote que possui 100 itens, inclusive 5 defeituosos. A amostra é tomada sem reposição. 
+Calcule a probabilidade de aparecer na amostra no máximo 1 dos defeituosos.
+</div>
+
+<div class="resposta">
+Probabilidade de 0 defeituosos: 0.5838. Aproximadamente 58.38% de chance de não haver defeituosos na amostra.<br>
+Probabilidade de 1 defeituoso: 0.3394. Aproximadamente 33.94% de chance de haver exatamente 1 defeituoso. <br>
+Probabilidade total (no máximo 1 defeituoso): 0.9231. 92.31% de chance de a amostra ter no máximo 1 item defeituoso.
+</div>
+
+## Questão 14
+<div class="pergunta">
+Em um processo de produção de tecido aparecem determinado defeito com uma média de 4 defeitos por unidade de comprimento. Calcule probabilidade de em uma unidade de comprimento selecionada ao caso ocorrer no máximo 2 defeitos.
+</div>
+
+<div class="resposta">
+P(X=0): 0.0183  <br>
+P(X=1): 0.0733  <br>
+P(X=2): 0.1465  <br>
+P(X ≤ 2): 0.2381
+</div>
+
+## Questão 15
+<div class="pergunta">
+A resistência a tração é uma característica muito importante do papel usada para fazer sacolas paracarregar mantimentos. Supondo que a v.a. X represente esta força e que ela tem uma distribuição N(µ=40,σ2=4) para determinado tipo de papel e que a alça dessa sacola requer que a força de resistência seja de pelo menos 35 unidades, calcule a probabilidade de que uma sacola produzida com este papel atinja ou exceda a especificação.
+</div>
+
+<div class="resposta">
+Probabilidade (X ≥ 35): 0.9938 ou 99.38%  <br>
+Alta probabilidade (99.38%) de atender à especificação mínima de 35 unidades.
+</div>
+
+## Questão 16
+<div class="pergunta">
+O diâmetro do pino de metal usado em uma unidade de "disk-drive" é normalmente distribuída com média de 0,2508 e desvio-padrão de 0,0005 unidades. A especificação de projeto do pino estabeleceu que o diâmetro deve ficar entre 0,2500 +/- 0,0015 unidades. Determine a fração de defeituosos produzidos de acordo com a especificação.
+</div>
+<div class="resposta"> 
+Defeitos por baixo: 0 %  <br>
+Defeitos por alta: 8.08 %  <br>
+Total de defeituosos: 8.08 %
+</div>
+
+## Questão 17
+<div class="pergunta">
+Muitos experimentos são tais que os resultados possíveis apresentam ou não uma determinada característica. Uma moeda é lançada: o resultado é "cara", ou não é; um dado é lançado: ou ocorre face 5, ou não (ocorrendo, então, uma das faces 1, 2, 3, 4 ou 6); uma pessoa é escolhida, ao acaso, entre os moradores de uma cidade e pergunta-se se ela diz "sim" ou "não" a um projeto da prefeitura. Estes experimentos resultam numa variável aleatória de Bernoulli e também são chamados "ensaios Bernoulli". A função de probabilidade discreta que uma variável aleatória, digamos, X assume é dada pela função de probabilidade: <br>
+a. Encontre a E(X) <br>
+b. Encontre a Var(X) <br>
+c. Encontre a função geratriz de momentos, Mx(t), da variável aleatória X <br>
+d. Através da função geratriz de momentos, encontre a média e a variância da variável aleatória X.<br>
+</div>
+
+<div class="resposta">
+Teórico - E(X): 0.3 Var(X): 0.21  <br>
+Amostral - E(X): 0.300 Var(X): 0.210
+</div>
+
+
+## Questão 18
+<div class="pergunta">
+Um lote é constituído de M peças das quais D(D<=M) defeituosas. Uma amostra aleatória de n peças é selecionada deste lote sem reposição, e o número de peças desta amostra com defeitos, digamos x é observada. Então x é uma variável aleatória com distribuição de probabilidade Hipergeométrica conforme
+a. Encontre E(X)
+b. Encontre Var(X).
+</div>
+
+<div class="resposta">
+E(X): 2 <br>  
+Var(X): 1.4545
+</div>
+
+## Questão 24
+<div class="pergunta">
+A Urna I contém 2 (duas) bolas brancas e 3 (três) pretas; a Urna II contém 4 (quatro) bolas brancas e 1 (uma) preta; a Urna III contém 3 (três) bolas brancas e 4 (quatro) pretas. Escolhe-se uma Urna ao acaso e dela extrai-se uma bola, que tem cor branca. Qual a probabilidade de ter sido escolhida a Urna I.
+</div>
+<div class="resposta">
+Probabilidade de ser a Urna I dado B: 0.2456 ou 24.56%
+</div>
+
+## Questão 27
+<div class="pergunta">
+Se X1,X2, ..., Xn são variáveis aleatórias independentes, cada Xi com a mesma média µ e mesma variância o2. <br>
+Calcule a E(x) e a Var(x), onde X = 1/n Somatorio xi
+</div>
+
+<div class='resposta'>
+E(X̄) simulado: 50.00  <br>
+Var(X̄) simulada: 2.51
+</div>
+
+
+## Questão 28
+<div class="pergunta">
+Joga-se uma moeda três vezes. Se X é uma variável aleatória que representa o número de caras
+a. construa uma tabela da distribuição de probabilidade de X.
+b. faça o gráfico da distribuição de probabilidade de X,
+c. determine a função distribuição (acumulada) de X,
+d. faça o gráfico da função distribuição (acumulada) de X,
+e. determine a média e a variância de X.
+</div>
+<div class ='resposta'>
+```{r, echo=FALSE}
+# Parâmetros
+k <- 0:3
+prob <- dbinom(k, size = 3, prob = 0.5)
+
+# Tabela de probabilidade
+tabela <- data.frame(X = k, Probabilidade = prob)
+print(tabela)
+
+# Gráfico da distribuição
+barplot(prob, names.arg = k, col = "#3f2ebb",
+        xlab = "Número de Caras (X)", ylab = "Probabilidade")
+
+# FDA
+fda <- pbinom(k, size = 3, prob = 0.5)
+
+# Gráfico da FDA
+plot(stepfun(k, c(0, fda)), pch = 19, col = "#3f2ebb",
+     xlab = "X", ylab = "FDA")
+
+# Média e variância
+media <- 3 * 0.5
+variancia <- 3 * 0.5 * 0.5
+cat("Média:", media, "\nVariância:", variancia)
+```
+</div>
+
+## Questão 29
+<div class="pergunta">
+Uma urna contém 5 bolas brancas e 3 pretas. Extraem-se duas bolas aleatoriamente, sem reposição. Seja X o número de bolas brancas. 
+a. determine a distribuição de probabilidade de X 
+b. faça o gráfico da distribuição de probabilidade de X
+c. determine a função distribuição (acumulada) de X, 
+d. faça o gráfico da função distribuição (acumulada) de X,
+e. determine a média e a variância de X.
+</div>
+
+<div class="resposta">
+```{r, echo=FALSE}
+# Parâmetros
+k <- 0:2
+prob <- c(choose(5,0)*choose(3,2)/choose(8,2),
+          choose(5,1)*choose(3,1)/choose(8,2),
+          choose(5,2)*choose(3,0)/choose(8,2))
+
+# Tabela de probabilidade
+tabela <- data.frame(X = k, Probabilidade = round(prob, 4))
+print(tabela)
+
+# Gráfico da distribuição
+barplot(prob, names.arg = k, col = "#3f2ebb",
+        xlab = "Número de Bolas Brancas (X)", ylab = "Probabilidade")
+
+# FDA
+fda <- c(0, cumsum(prob))
+
+# Gráfico da FDA
+plot(stepfun(k, fda), pch = 19, col = "#3f2ebb",
+     xlab = "X", ylab = "Probabilidade Acumulada")
+
+# Média e variância teóricas
+media <- 2 * (5/8)
+variancia <- 2 * (5/8) * (3/8) * (6/7)
+cat("Média:", media, "\nVariância:", round(variancia, 4))
+```
+</div>
+
+## Questão 30
+<div class="pergunta">
+Uma urna contém 5 bolas brancas e 3 pretas. Extraem-se duas bolas aleatoriamente, com reposição. Seja X o número de bolas brancas. 
+a. determine a distribuição de probabilidade de X 
+b. faça o gráfico da distribuição de probabilidade de X
+c. determine a função distribuição (acumulada) de X, 
+d. faça o gráfico da função distribuição (acumulada) de X,
+e. determine a média e a variância de X.
+</div>
+
+<div class="resposta">
+```{r, echo=FALSE}
+# Parâmetros
+k <- 0:2
+prob <- dbinom(k, size = 2, prob = 5/8)
+
+# Tabela de probabilidade
+tabela <- data.frame(X = k, Probabilidade = round(prob, 4))
+print(tabela)
+
+# Gráfico da distribuição
+barplot(prob, names.arg = k, col = "#3f2ebb",
+        xlab = "Número de Bolas Brancas (X)", ylab = "Probabilidade")
+
+# FDA
+fda <- pbinom(k, size = 2, prob = 5/8)
+
+# Gráfico da FDA
+plot(stepfun(k, c(0, fda)), pch = 19, col = "#3f2ebb",
+     xlab = "X", ylab = "Probabilidade Acumulada")
+
+# Média e variância teóricas
+media <- 2 * (5/8)
+variancia <- 2 * (5/8) * (3/8)
+cat("Média:", media, "\nVariância:", round(variancia, 4))
+```
+</div>
+
+## Questão 31
+<div class="pergunta">
+Seja Z uma variável aleatória que represente o número de caras menos o número de coroas em duas jogadas de uma moeda “honesta”.
+a. determine a distribuição de probabilidade de X 
+b. faça o gráfico da distribuição de probabilidade de X
+c. determine a função distribuição (acumulada) de X, 
+d. faça o gráfico da função distribuição (acumulada) de X,
+e. determine a média e a variância de X.
+</div>
+
+<div class="resposta">
+```{r, echo=FALSE}
+# Valores de Z e probabilidades
+z <- c(-2, 0, 2)
+prob <- c(0.25, 0.5, 0.25)
+
+# Tabela de distribuição
+tabela <- data.frame(Z = z, Probabilidade = prob)
+print(tabela)
+
+# Gráfico da distribuição
+barplot(prob, names.arg = z, col = "#3f2ebb",
+        xlab = "Z", ylab = "Probabilidade")
+
+# FDA
+fda <- c(0, cumsum(prob))
+
+# Gráfico da FDA
+plot(stepfun(z, fda), pch = 19, col = "#3f2ebb",
+     xlab = "Z", ylab = "Probabilidade Acumulada")
+
+# Média e variância
+media <- sum(z * prob)
+variancia <- sum(z^2 * prob) - media^2
+cat("Média:", media, "\nVariância:", variancia)
+```
+</div>
+
+## Questão 32
+<div class="pergunta">
+Seja X uma variável aleatória que represente o número de ases em uma extração aleatória de 4 cartas de um baralho usual de 52 cartas. 
+a. determine a distribuição de probabilidade de X 
+b. faça o gráfico da distribuição de probabilidade de X
+c. determine a função distribuição (acumulada) de X, 
+d. faça o gráfico da função distribuição (acumulada) de X,
+e. determine a média e a variância de X.
+</div>
+
+<div class="resposta">
+```{r, echo=FALSE}
+# Parâmetros
+k <- 0:4
+prob <- dhyper(k, m = 4, n = 48, k = 4)
+
+# Tabela de probabilidade
+tabela <- data.frame(X = k, Probabilidade = round(prob, 4))
+print(tabela)
+
+# Gráfico da distribuição
+barplot(prob, names.arg = k, col = "#3f2ebb",
+        xlab = "Número de Ases (X)", ylab = "Probabilidade")
+
+# FDA
+fda <- phyper(k, m = 4, n = 48, k = 4)
+
+# Gráfico da FDA
+plot(stepfun(k, c(0, fda)), pch = 19, col = "#3f2ebb",
+     xlab = "X", ylab = "Probabilidade Acumulada")
+
+# Média e variância teóricas
+media <- 4 * (4 / 52)
+variancia <- 4 * (4/52) * (48/52) * (48/51)
+cat("Média:", round(media, 4), "\nVariância:", round(variancia, 4))
+```
+</div>
+
+
+## Questão 33
+<div class="pergunta">
+A função densidade de probabilidade da variável aleatória contínua X é 
+a. determine a constante c de modo que a função acima seja uma densidade,
+b. calcule P(1 <= X <= 2)
+c. determine a função distribuição (acumulada) da variável aleatória, 
+d. encontre a média da variável aleatória X
+e. encontre a variância da variável aleatória X.
+</div>
+
+<div class="resposta">
+c <- 1/9 <br>
+P(1 ≤ X ≤ 2): 0.2592593 (≈ 0.2593)  <br>
+F(1.5): 0.125  <br>
+Média: 2.25   <br>
+Variância: 0.3375 (≈ 0.3375) <br>
+</div>
+
+## Questão 34
+<div class="pergunta">
+Seja X uma variável aleatória com densidade:
+a. Determine o valor da constante c
+b. Ache o valor lambda tal que Fx(lambda) = 0,25. (lambda é o primeiro quartil da distribuição de X)
+</div>
+
+<div class="resposta">
+Primeiro quartil (α): -0.7937  <br>
+F(α) deve ser 0.25: 0.25
+</div>
+
+
+## Questão 35
+<div class="pergunta">
+Suponha que a variável aleatória X tenha a seguinte densidade “triangular”: <br>
+a. Calcule E(X) <br>
+b. Var(X)
+</div>
+
+<div class="resposta">
+E(X): 0   <br>
+Var(X): 0.1666667 (≈ 0.1667)
+</div>
+
+## Questão 36
+
+<div class = "resposta">
+```{r, echo=FALSE}
+# Parâmetros
+b <- 2
+c <- 3
+
+# Densidade teórica de Y
+f_Y_teorica <- function(y) {
+  (1/b) * dunif((y - c)/b, min = 0, max = 1)
+}
+
+# Simulação empírica
+set.seed(123)
+X <- runif(10000, 0, 1)
+Y <- b * X + c
+
+# Plot comparativo
+hist(Y, breaks = 30, probability = TRUE, col = "#3f2ebb",
+     main = "Densidade de Y = 2X + 3",
+     xlab = "y", ylab = "Densidade")
+curve(f_Y_teorica(x), from = 3, to = 5, col = "red", lwd = 2, add = TRUE)
+legend("topright", legend = c("Simulação", "Teórica"), 
+       col = c("#3f2ebb", "red"), lwd = 2)
+```
+</div>
