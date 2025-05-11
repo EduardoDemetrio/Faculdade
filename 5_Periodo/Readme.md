@@ -30,8 +30,6 @@
 
 
  <!-- PROVA_DA_SEMANA -->
-📌 **Eventos da semana:**
-- Prova: Controle Estatístico de Qualidade — 22/04 (Professor: Jorge Festa)
-- Trabalho: Controle Estatístico de Qualidade — 27/04 (Professor: Jorge Festa)
-
+📌 **Nenhum evento acadêmico marcado para esta semana!**
 <!-- FIM_PROVA_DA_SEMANA -->
+
