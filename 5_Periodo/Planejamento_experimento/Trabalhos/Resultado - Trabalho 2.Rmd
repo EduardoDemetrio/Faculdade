@@ -1,0 +1,307 @@
+---
+title: "Projeto e Análise de Experimento com Helicópteros de Papel: Avaliação de Fatores e Variabilidade"
+author: "Eduardo Demetrio | Gustavo Lima | João Moro | Vitor Zambaldi"
+date:  "Data de execução do experimento: 07/05/2025"
+output:
+  html_document:
+    toc: true
+    toc_depth: 2
+    toc_float: true
+    df_print: paged
+    css: estilo.css
+---
+<div class="pergunta">## Questão 1 
+Descreva a unidade experimental.
+</div>
+
+<div class="resposta">
+<p><strong><u>Resposta:</u></strong></p>
+No contexto deste experimento, a unidade experimental é <strong>um helicóptero de papel</strong>.  
+</div>
+
+<div class="pergunta">## Questão 2
+Defina os conceitos de réplicas e duplicatas. Explique a diferença entre réplicas e duplicatas para esta situação.
+</div>
+
+<div class="resposta">
+<strong><u> Resposta: </strong></u> <br>
+
+<h5><strong> Réplicas </h5></strong>
+<p>- Réplicas são **repetições independentes de um mesmo tratamento** em diferentes unidades experimentais. O objetivo das réplicas é estimar a  variabilidade experimental e melhorar a precisão da comparação entre tratamentos. </p>
+
+<h5><strong> Duplicatas </h5></strong> 
+<p>- Duplicatas, por outro lado, são **medidas repetidas na mesma unidade experimental** ou condições idênticas, sem alteração entre as execuções. Elas são usadas para verificar a repetibilidade do sistema de medição e não para estimar a variabilidade do processo. </p>
+
+<h5><strong> Diferença entre Réplicas e Duplicatas neste experimento com helicópteros de papel:</h5> </strong>
+<p>- <strong>Réplicas</strong>: fabricar e lançar **vários helicópteros diferentes com o mesmo comprimento de asa**, cronometrando o tempo de voo de cada um. Assim, há variação natural entre as unidades (helicópteros) mesmo sob o mesmo tratamento, o que permite avaliar a variabilidade experimental. </p>
+
+<p>- <strong>Duplicatas </strong>: lançar **o mesmo helicóptero duas vezes seguidas sob as mesmas condições** e medir o tempo de voo em ambas as ocasiões. Isso não ajuda a estimar a variabilidade entre unidades experimentais, mas sim a verificar se o sistema de medição (cronômetro, operador, ambiente) é consistente. </p>
+
+<p>Para este estudo, o ideal e estatisticamente correto é trabalhar com **réplicas** e não duplicatas, pois o interesse está em avaliar como diferentes comprimentos de asa afetam o tempo de voo em unidades experimentais independentes. </p>
+
+</div>
+<div class="pergunta">## Questão 3 
+Descreva o fator de tratamento.
+</div>
+<div class="resposta">
+<strong><u> Resposta: </strong></u> <br>
+O fator de tratamento é o <strong>comprimento da asa dos helicópteros de papel </strong>.
+
+<p>Esse fator possui quatro níveis : </p>
+
+<p>- 4,00 polegadas</p>
+
+<p>- 4,75 polegadas</p>
+
+<p>- 5,50 polegadas</p>
+
+<p>- 6,00 polegadas</p>
+
+Cada nível corresponde a um comprimento específico das asas dos helicópteros, sendo aplicado durante a confecção de cada unidade experimental.
+
+O objetivo do experimento é investigar se o comprimento da asa (fator de tratamento) influencia significativamente o tempo de voo dos helicópteros.
+
+</div>
+<div class="pergunta">## Questão 4
+Descreva quaisquer variáveis ocultas que possam afetar os resultados dos experimentos.
+</div>
+<div class="resposta">
+<strong><u> Resposta: </strong></u> <br>
+Variáveis ocultas (também chamadas de variáveis de confusão ou fatores não controlados) são aquelas que não fazem parte do projeto experimental, mas que podem influenciar a variável de resposta, introduzindo viés ou aumentando a variabilidade dos resultados.
+
+<h5><strong> Possíveis variáveis ocultas neste experimento: </h5></strong>
+
+<p>- <strong>Altura de lançamento</strong>: pequenas variações na altura de onde o helicóptero é solto podem afetar o tempo de voo. </p>
+  
+<p>- <strong>Correntes de ar ou vento</strong>: movimentos de ar no ambiente (mesmo em local fechado) podem alterar a trajetória e o tempo de descida do helicóptero.</p>
+  
+<p>- <strong>Forma de lançamento</strong>: a maneira como o helicóptero é solto (posição inicial, inclinação ou força aplicada) pode afetar seu comportamento no ar.</p>
+  
+<p>- <strong>Precisão da cronometragem</strong>: variações no tempo de reação da pessoa que aciona o cronômetro ao iniciar e parar a medição.</p>
+  
+</div>
+
+<div class="pergunta">## Questão 5
+Explique por que a randomização seria importante.
+</div>
+
+<div class="resposta">
+<strong><u> Resposta: </strong></u> <br>
+A randomização é uma técnica que consiste em **aleatorizar a ordem de aplicação dos tratamentos nas unidades experimentais**.  
+
+<h5><strong>Importância da randomização:</h5></strong>
+
+<p>- <strong>Elimina ou reduz o efeito de variáveis ocultas</strong>: ao aleatorizar a ordem dos lançamentos e a atribuição dos tratamentos, diminui-se a chance de que fatores não controlados (como correntes de ar, cansaço do operador ou variações na altura de lançamento) afetem sistematicamente determinados tratamentos. </p>
+
+<p>- <strong>Garante independência das observações</strong>: ao randomizar, asseguramos que os resultados de uma unidade experimental não influenciem os resultados de outra. </p>
+
+<h5><strong> No contexto deste experimento:</h5></strong>
+
+Deve-se randomizar a ordem dos lançamentos dos helicópteros com diferentes comprimentos de asa. Assim, por exemplo, não se corre o risco de lançar todos os helicópteros de 6” seguidos (que poderiam coincidir com uma corrente), o que poderia distorcer os resultados.
+</div>
+
+<div class="pergunta">## Questão 6
+Crie uma lista aleatória de experimentos para examinar quatro comprimentos de asa de 4”,4,75”, 5,5” e 6” com oito experimentos replicados em cada nível.
+</div>
+
+<div class="resposta">
+<strong>Esses são nossos dados estruturais dos helicópteros criados para o experimento: </strong>
+</div>
+
+<div class="table-responsive">
+<table class="table">
+  <thead>
+    <tr>
+      <th>tratamento</th>
+      <th>tamanho base</th>
+      <th>Tamanho dobra</th>
+      <th>tamanho asa</th>
+      <th>Dobra 1</th>
+      <th>Dobra 2</th>
+      <th>Largura</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr><td>H1</td><td>10</td><td>2</td><td>18</td><td>3.921568627</td><td>1.633986928</td><td>10.7</td></tr>
+    <tr><td>H2</td><td>12</td><td>2</td><td>16</td><td>4.705882353</td><td>1.960784314</td><td>10.7</td></tr>
+    <tr><td>H3</td><td>14</td><td>2</td><td>14</td><td>5.490196078</td><td>2.287581699</td><td>10.7</td></tr>
+    <tr><td>H4</td><td>15.3</td><td>2</td><td>12.7</td><td>6</td><td>2.5</td><td>10.7</td></tr>
+  </tbody>
+</table>
+</div>
+
+<div class="resposta">
+<strong>Esses são os dados dos lançamentos realizados aleatórios: </strong>
+</div>
+
+<div class="table-responsive">
+<table class="table">
+  <thead>
+    <tr>
+      <th>Experimento</th>
+      <th>Tratamento</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr><td>1</td><td>H2 (4.75")</td></tr>
+    <tr><td>2</td><td>H3 (5.5")</td></tr>
+    <tr><td>3</td><td>H1 (4")</td></tr>
+    <tr><td>4</td><td>H1 (4")</td></tr>
+    <tr><td>5</td><td>H4 (6")</td></tr>
+    <tr><td>6</td><td>H4 (6")</td></tr>
+    <tr><td>7</td><td>H3 (5.5")</td></tr>
+    <tr><td>8</td><td>H4 (6")</td></tr>
+    <tr><td>9</td><td>H4 (6")</td></tr>
+    <tr><td>10</td><td>H4 (6")</td></tr>
+    <tr><td>11</td><td>H2 (4.75")</td></tr>
+    <tr><td>12</td><td>H2 (4.75")</td></tr>
+    <tr><td>13</td><td>H2 (4.75")</td></tr>
+    <tr><td>14</td><td>H1 (4")</td></tr>
+    <tr><td>15</td><td>H3 (5.5")</td></tr>
+    <tr><td>16</td><td>H3 (5.5")</td></tr>
+    <tr><td>17</td><td>H1 (4")</td></tr>
+    <tr><td>18</td><td>H1 (4")</td></tr>
+    <tr><td>19</td><td>H2 (4.75")</td><tr>
+    <tr><td>20</td><td>H3 (5.5")</td></tr>
+  </tbody>
+</table>
+</div>
+
+<div class="pergunta">## Questão 7 
+Realize os experimentos e colete os dados.
+</div>
+
+<div class="resposta">
+<strong>Esses são os dados finais do experimento: </strong></div>
+
+<div class="table-responsive">
+<table class="table">
+  <thead>
+    <tr>
+      <th>Experimento</th>
+      <th>Tratamento</th>
+      <th>Tempo (s)</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr><td>1</td><td>H2 (4.75")</td><td>3.87</td></tr>
+    <tr><td>2</td><td>H3 (5.5")</td><td>3.40</td></tr>
+    <tr><td>3</td><td>H1 (4")</td><td>4.89</td></tr>
+    <tr><td>4</td><td>H1 (4")</td><td>3.98</td></tr>
+    <tr><td>5</td><td>H4 (6")</td><td>2.77</td></tr>
+    <tr><td>6</td><td>H4 (6")</td><td>3.10</td></tr>
+    <tr><td>7</td><td>H3 (5.5")</td><td>3.07</td></tr>
+    <tr><td>8</td><td>H4 (6")</td><td>3.18</td></tr>
+    <tr><td>9</td><td>H4 (6")</td><td>2.65</td></tr>
+    <tr><td>10</td><td>H4 (6")</td><td>2.82</td></tr>
+    <tr><td>11</td><td>H2 (4.75")</td><td>4.27</td></tr>
+    <tr><td>12</td><td>H2 (4.75")</td><td>4.22</td></tr>
+    <tr><td>13</td><td>H2 (4.75")</td><td>3.53</td></tr>
+    <tr><td>14</td><td>H1 (4")</td><td>3.68</td></tr>
+    <tr><td>15</td><td>H3 (5.5")</td><td>3.46</td></tr>
+    <tr><td>16</td><td>H3 (5.5")</td><td>3.40</td></tr>
+    <tr><td>17</td><td>H1 (4")</td><td>4.42</td></tr>
+    <tr><td>18</td><td>H1 (4")</td><td>3.43</td></tr>
+    <tr><td>19</td><td>H2 (4.75")</td><td>3.60</td></tr>
+    <tr><td>20</td><td>H3 (5.5")</td><td>3.13</td></tr>
+  </tbody>
+</table>
+</div>
+
+
+<div class="pergunta">## Questão 8 
+Realize uma análise de variancia com seus dados.
+</div>
+
+
+<div class="resposta">
+<strong>Esses é o valor da nossa análise de variancia: </strong></div>
+
+
+<div class="table-responsive">
+<table class="table-anova">
+  <thead>
+    <tr>
+      <th></th>
+      <th>Df</th>
+      <th>Sum Sq</th>
+      <th>Mean Sq</th>
+      <th>F value</th>
+      <th>Pr(&gt;F)</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>tratamento</strong></td>
+      <td>3</td>
+      <td>4.429</td>
+      <td>1.4762</td>
+      <td>10.92</td>
+      <td>0.000377 ***</td>
+    </tr>
+    <tr>
+      <td><strong>Residuals</strong></td>
+      <td>16</td>
+      <td>2.162</td>
+      <td>0.1352</td>
+      <td></td>
+      <td></td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<div class="pergunta">## Questão 9 
+Verifique as premissas de igualdade de variancia e normalidade com gráficos residuais
+</div>
+
+<div class="resposta">
+<strong> Histograma dos Residuos: </strong></div>
+```{r, echo=FALSE}
+tratamento <- c(rep("H1",5), rep("H2",5), rep("H3",5), rep("H4",5))
+tempo <- c(3.43,3.68,3.98,4.42,4.89,
+           3.53,3.60,3.87,4.22,4.27,
+           3.07,3.13,3.40,3.40,3.46,
+           2.65,2.77,2.82,3.10,3.18)
+
+dados <- data.frame(tratamento, tempo)
+
+# ANOVA
+anova_result <- aov(tempo ~ tratamento, data = dados)
+# Obter resíduos
+residuos <- residuals(anova_result)
+
+hist(residuos, main="Histograma dos Resíduos", xlab="Resíduos")
+```
+
+<div class="resposta">
+<strong> Verificando normalidade com QQ Plot </strong></div>
+```{r, echo=FALSE}
+qqnorm(residuos)
+qqline(residuos, col="red")
+```
+<div class="resposta">
+<strong> Teste Shapiro-Wilk para normalidade </strong></div>
+```{r, echo=FALSE}
+shapiro.test(residuos)
+```
+<div class="resposta">
+<strong>Gráfico de Resíduos vs Valores Ajustados (para homogeneidade de variâncias) </strong></div>
+```{r, echo=FALSE}
+plot(fitted(anova_result), residuos,
+     main="Resíduos vs Valores Ajustados",
+     xlab="Valores Ajustados", ylab="Resíduos")
+abline(h=0, col="red")
+```
+<div class="resposta">
+<strong>Teste de homogeneidade de variâncias (Teste de Bartlett)</strong></div>
+```{r, echo=FALSE}
+bartlett.test(tempo ~ tratamento, data = dados)
+```
+
+---
+
+---
+
+
+
