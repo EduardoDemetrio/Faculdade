@@ -1,8 +1,11 @@
 
 
- <!-- PROVA_DA_SEMANA -->
-📌 **Nenhum evento acadêmico marcado para esta semana!**
-<!-- FIM_PROVA_DA_SEMANA -->
+> ## Matérias do período :
+- Estatistica Computacional II
+- Estatistica e planejamento de experimento.
+- Modelos de Regressão Linear
+- Controle Estatístico de Qualidade 
+- Estatística Não Paramétrica
 
 
 
@@ -19,7 +22,14 @@
 > ## 🗓️ Entrega de trabalhos:
  - Estatística Não Paramétrica - Professor: Lucambio - Data: 14/04
  - Estatistica e planejamento de experimento. - Professora: Fernanda - Data: 19/05
+ - Controle Estatístico de Qualidade - Professor: Jorge Festa - Data: 27/04
 
 > ## 🗓️ Provas de Exames:
  - Controle Estatístico de Qualidade - Professor: Jorge Festa - Data: 01/07
  - Modelo de Regressão Linear - Professor: César - Data: 07/07
+
+
+ <!-- PROVA_DA_SEMANA -->
+📌 **Nenhum evento acadêmico marcado para esta semana!**
+<!-- FIM_PROVA_DA_SEMANA -->
+
