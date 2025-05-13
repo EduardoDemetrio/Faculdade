@@ -1,0 +1,68 @@
+# Introdução
+
+Esse documento tem como objetivo, documentar as aulas da disciplina **(CE312 - Estatística computacional 2)** com foco em ser um material de auxilio e organização dos alunos.
+
+# Como funciona a materia:
+
+Na turma matriculada no primeiro semestre de 2025. Turma orquestrada pelo o professor Paulo Justiniano Ribeiro Junior.
+
+Professor que tem como referência todo seu conhecimento na linguagem R e Estatística.
+
+## Horários
+
+-   Segunda, 20:45 - 22:15, Lab-1/2 (andar térreo, prédio do DINF)
+-   Sexta, 19:00 - 20:30, Lab-B (andar térreo, prédio exatas)
+
+## Métodos de avaliação
+
+-   Provas: 2 provas
+-   Trabalho: 1 trabalho
+
+## Objetivo da disciplina
+
+-   Revisão e conceitos da linguagem R
+    1.  Objetos, classes e métodos
+    2.  Algoritmos e programação funcional
+    3.  Vetorização
+    4.  Documentos dinâmicos
+-   Simulação (Monte Carlo) em problemas de probabilidade e estatística
+-   Revisão de princípios de inferência estatística e ilustrações computacionais
+-   Simulações como instrumento para inferência e para avaliar procedimentos
+-   Métodos para geração de números aleatórios
+    1.  Geração de números uniformes
+    2.  Método da transformação integral da probabilidade
+    3.  Métodos baseados em relações entre variáveis aleatórias
+    4.  Método da aceitação e rejeição
+-   Métodos estatísticos computacionalmente intensivos
+    1.  Integração de Monte Carlo
+    2.  Métodos de Monte Carlo em inferência estatística
+    3.  Métodos de reamostragem: jackknife e bootstrap
+    4.  Aplicação de métodos de reamostragem
+    5.  Testes de permutação
+    6.  Métodos de Monte Carlo via Cadeias de Markov (MCMC)
+
+## Objetivo do aluno
+
+-   Reforçar e aprofundar o aprendizado na linguagem R.
+-   Aplicar conhecimentos estatísticos na prática, utilizando a linguagem R para desenvolvimento de soluções.
+-   Criar um material contínuo e acessível sobre a disciplina, servindo como apoio para consultas futuras, utilizando Rmarkdown.
+
+## Como será feito o documento:
+
+Vamos descrever pontos de aula com um (P ou Aula) antes da escrita, ou (Conceitos, Ressalvas, lembretes ou anotações) que vão ser retiradas das aulas presenciais. Vamos também referenciar os códigos e para casos com mais explicações, enfasês, iremos colocar no próprio arquivo markdown.
+
+# Revisão e conceitos da linguagem R
+
+Materia totalmente computacional, conforme o nome da disciplina então o inicio foi direto com uma lista de códigos para relembrar conceitos iniciais da linguagem e descrever o que o código faz.
+
+```{r, echo=TRUE}
+# Ainda não foi feita a lista
+```
+
+## Listas de práticas:
+
+```{r}
+# Carregar e executar o código do arquivo R
+("Lista1.R")
+("Lista2.R")
+```

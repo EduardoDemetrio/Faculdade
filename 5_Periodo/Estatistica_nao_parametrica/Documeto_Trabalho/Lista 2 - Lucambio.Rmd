@@ -1,0 +1,388 @@
+---
+title: "Trabalho 2 - Estatstica nao-parametrica "
+author: "Eduardo Demetrio "
+output:
+  html_document:
+    toc: true
+    toc_depth: 2
+    toc_float: true
+    df_print: paged
+    css: style.css
+---
+<br>
+Para não poluir o material, vou compartilhar junto um código em R que possa ser usado para teste dos códigos que foram usados na análise das questões. 
+
+<div class="pergunta">
+## Questão 1 
+Os dados estão contidos no arquivo DietDepression.csv são referentes ao estudo sobre a intervenção diabética e seus efeitos nos sintomas de depressão em estudantes universitários e estão disponibilizados da seguinte forma:
+</div>
+
+<div class="resposta">
+```{r load_data, echo=FALSE}
+dados <- read.csv2("http://leg.ufpr.br/~lucambio/CE313/20241S/DietDepression.csv")
+head(dados, 5)
+``` 
+</div>
+
+<div class="pergunta">
+1- A. Existem diferenças entre as formas de medir a depressão CESD e DASS? Em geral e entre os grupos?
+</div>
+
+<div class="resposta">
+<p><strong><u>Resposta questão 1 - A:</u></strong></p>
+### Análise em Geral
+Vamos iniciar verificando a normalidade das variaveis a partir do teste de Shapiro - Wilk
+```{r}
+shapiro.test(dados$CESDDiff)
+shapiro.test(dados$DASSDiff)
+```  
+E a partir desses testes conseguimos dizer que as distribuições das mudanças de depressão medidas pelas escalas CESD e DASS não seguem uma distribuição normal.
+E assim vamos usar o teste de Wilcoxon, que mais se adequa a testes não paramétricos.
+
+```{r}
+wilcox.test(dados$CESDDiff, dados$DASSDiff, paired = TRUE)
+```  
+
+Com o resultado do nosso teste, não há evidência estatística suficiente para afirmar que existe diferença entre as mudanças de depressão medidas pelas escalas CESD e DASS, de forma geral.
+
+### Análise Em Grupo
+Agora, vamos comparar as escalas CESD e DASS dentro de cada grupo experimental (Controle e Dieta), tanto no início do estudo quanto na variação dos escores ao longo dos 21 dias de intervenção.
+Para isso, utilizamos o teste de Wilcoxon para amostras pareadas, apropriado dado que ambas as variáveis não seguem distribuição normal (conforme verificado anteriormente pelos testes de Shapiro-Wilk). As análises foram realizadas separadamente para os grupos Controle e Dieta.
+Em todos os casos analisados — tanto na comparação entre os escores iniciais (CESD1 vs DASS1) quanto nas variações observadas (CESDDiff vs DASSDiff) — não foram encontradas diferenças estatisticamente significativas entre as escalas (valores de p > 0.05). Isso indica que, dentro de cada grupo, as escalas CESD e DASS avaliaram de maneira semelhante os sintomas de depressão ao longo do período estudado.
+Dessa forma, podemos concluir que as duas escalas de mensuração produzem resultados equivalentes na amostra analisada, tanto de forma global quanto estratificada por grupo experimental.
+</div>
+
+<div class="pergunta">
+1- B. As mudanças no IMC são aleatórias ou não? Em geral e entre os grupos? Existem diferenças entre os valores dos IMC entre os grupos?
+</div>
+
+<div class="resposta">
+<p><strong><u>Resposta questão 1 - B:</u></strong></p>
+
+Vamos verificar se as mudanças d IMC são aleatória ou não em <strong> em geral </strong>
+```{r}
+wilcox.test(dados$BMIDiff, mu = 0)
+``` 
+Com a análise do noss p valor, não há evidência estatística de que as variações no IMC podem ser atribuídas ao acaso. Considerando assim possibilidade de alaetoriedade.
+<br>
+Vamos verificar se as mudanças de IMC são aleatória ou não em <strong> em grupos </strong>
+
+```{r}
+wilcox.test(BMIDiff ~ 1, data = subset(dados, Group == "Control"), mu = 0)
+wilcox.test(BMIDiff ~ 1, data = subset(dados, Group == "Diet"), mu = 0)
+``` 
+A análise das mudanças no IMC (BMIDiff) por grupo revelou que, no grupo Controle, as variações foram compatíveis com aleatoriedade (p = 0.6664), indicando ausência de mudança sistemática. No entanto, no grupo Dieta, houve uma diferença estatisticamente significativa (p = 0.0441), sugerindo que a intervenção dietética teve efeito mensurável sobre o IMC dos participantes.
+
+Para verificar se existem diferenças entre os valores de IMC entre os grupos, podemos comparar os valores iniciais e finais.
+
+```{r}
+wilcox.test(dados$BMI1 ~ dados$Group)
+wilcox.test(dados$BMI21 ~ dados$Group)
+wilcox.test(BMIDiff ~ Group, data = dados)
+``` 
+Para verificar a comparabilidade inicial, aplicou-se o teste de soma de postos de Wilcoxon ao IMC basal (BMI1) dos grupos Controle e Dieta. Não se observou diferença significativa no IMC inicial entre os grupos (W = 721,5; p = 0,8487), indicando homogeneidade basal.
+Em seguida, ao comparar o IMC final (BMI2), o teste também não detectou diferença estatisticamente significativa entre Controle e Dieta (W = 755; p = 0,5852), sugerindo que, ao término do estudo, os dois grupos apresentaram valores de IMC semelhantes.
+Por fim, a análise da variação de IMC (BMIDiff = BMI2–BMI1) mostrou uma tendência de maior redução no grupo Dieta, mas sem atingir significância ao nível de 5% (W = 535; p = 0,075).
+
+
+
+<div class="pergunta">
+## Questão 2 
+Este estudo examina a distribuição da variável Perimeter no arquivo Beans_Dataset.csv, com foco em avaliar sua normalidade. A análise é realizada tanto de forma global quanto estratificada pelas categorias presentes na variável Class, permitindo comparar o comportamento da distribuição entre as subamostras.
+</div>
+
+<div class="resposta">
+Vamos carregar os dados e avaliar.
+</div>
+```{r}
+beans <- read.csv("http://leg.ufpr.br/~lucambio/CE313/20241S/Beans_Dataset.csv")
+head(beans,5)
+```
+
+<div class="pergunta">
+2- A. Queremos verficar se a distribuicao da variavel Perimeter e normal, de maneira global e considerando as sub-amostras de Perimeter, segundo as diferentes categorias em Class
+</div>
+<div class="resposta">
+Vamos analisar utilizando o teste de shapiro wilk, porém como ele suporta só 5000 então vamos testar com uma subamostras aleatórias.
+</div>
+```{r, echo=FALSE}
+set.seed(123)
+samp_global <- sample(beans$Perimeter, size=5000, replace=FALSE)
+shapiro.test(samp_global)
+```
+Com essa subamostras conseguimos analisar que não pode ser considerada normal. Como também conseguimos observar nos gráficos.
+```{r setup,echo=FALSE}
+hist(beans$Perimeter, breaks=50,
+     main="Histograma de Perimeter (global)",
+     xlab="Perimeter")
+qqnorm(beans$Perimeter, main="QQ‐Plot de Perimeter (global)")
+qqline(beans$Perimeter)
+```
+
+<div class="pergunta">
+2-B
+</div>
+
+<div class="resposta">
+Vamos analisar utilizando o teste de shapiro wilk, porém como ele suporta só 5000 então vamos testar com uma subamostras aleatórias.
+</div>
+
+
+(i) Seleção de Sub-Amostras com Reposição (com KS Test)
+Selecionar uma quantidade grande B de sub-amostras com reposição, digamos B = 10000, de tamanho 100 cada uma e verificar a bondade de ajuste à normalidade de cada sub-amostra utilizando o teste de Kolmogorov-Smirnov.
+```{r, echo=FALSE}
+options(warn=-1) # Suprime todos os warnings
+B <- 10000
+sample_size <- 100
+p_values <- numeric(B)
+
+for (i in 1:B) {
+  sub_sample <- sample(beans$Perimeter, sample_size, replace = TRUE)
+  ks_test <- ks.test(sub_sample, "pnorm", mean = mean(sub_sample), sd = sd(sub_sample))
+  p_values[i] <- ks_test$p.value
+}
+
+# Contar o número de amostras não conformes com a distribuição normal (p < 0.05)
+non_conforming <- sum(p_values < 0.05)
+cat(paste("Número de sub-amostras não conformes:", non_conforming, "\n"))
+
+# Avaliar a proporção de amostras não conformes
+proportion_non_conforming <- non_conforming / B
+cat(paste("Proporção de sub-amostras não conformes:", proportion_non_conforming, "\n"))
+```
+(ii) Utilização de Testes de Bondade de Ajuste para Amostras Grandes
+Utilizar testes de bondade de ajuste desenvolvidos para amostras grandes, como o teste proposto por J. M. VAN ZYL (2016).
+```{r, echo=FALSE}
+# Função para padronizar os dados
+scale_data <- function(x) {
+  (x - mean(x)) / sd(x)
+}
+
+# Padronizar os dados
+z <- scale_data(beans$Perimeter)
+
+# Função para calcular a função característica empírica
+Recf <- function(t, x) {
+  n <- length(x)
+  sum(exp(1i * t * x)) / n
+}
+
+# Avaliar a função característica empírica
+phi_S <- Recf(1, z)
+
+# Calcular a estatística de teste
+nu_n <- log(abs(phi_S / exp(-1/2)))
+
+# Calcular o valor do teste
+test_statistic <- abs(4.8158 * sqrt(length(z)) * nu_n)
+
+# Definir o nível de significância
+alpha <- 0.05
+
+# Calcular o valor crítico
+z_critical <- qnorm(1 - alpha/2)
+
+# Verificar se rejeitamos a normalidade
+if (test_statistic > z_critical) {
+  cat("Rejeitamos a normalidade com base no teste para amostras grandes.\n")
+} else {
+  cat("Não rejeitamos a normalidade com base no teste para amostras grandes.\n")
+}
+```
+
+<div class="pergunta">
+## Questão 3
+Obetivo do exercicio identificar dois níveis de erosão em altimetria do Primeiro Planalto Paranaense.
+</div>
+
+<div class="resposta">
+Vamos verificar os dados
+
+```{r, echo=FALSE}
+options(warn=-1) 
+
+library(ggplot2)
+library(mixtools)
+library(dplyr)
+
+altimetria <- read.csv(
+  "http://leg.ufpr.br/~lucambio/CE313/20241S/Altimetria.csv",
+  sep = ";", header = TRUE
+)
+
+# 3. Construir vetor de altitudes ponderado pela frequência (máx. 10 000 pontos)
+set.seed(123)
+total_freq <- sum(altimetria$Freq)
+n_sample   <- min(total_freq, 10000)
+altitudes  <- sample(
+  altimetria$Altitude,
+  size    = n_sample,
+  replace = TRUE,
+  prob    = altimetria$Freq
+)
+
+# 4. Análise exploratória: histograma + curva de densidade
+df_alt <- data.frame(Altitude = altitudes)
+ggplot(df_alt, aes(x = Altitude)) +
+  geom_histogram(aes(y = ..density..), bins = 30, color = "black", fill = "lightgray") +
+  geom_density() +
+  labs(
+    title = "Distribuição de Altitudes (amostragem ponderada)",
+    x     = "Altitude (m)",
+    y     = "Densidade"
+  )
+
+# 5. Ajuste de mistura de 2 distribuições normais
+mix2 <- normalmixEM(
+  altitudes,
+  k       = 2,
+  maxit   = 1000,
+  epsilon = 1e-8,
+  verb    = FALSE
+)
+
+# 6. Parâmetros estimados
+params <- tibble::tibble(
+  Componente = factor(1:2),
+  Media      = mix2$mu,
+  Desvio     = mix2$sigma,
+  Proporcao  = mix2$lambda
+)
+print(params)
+
+# 7. Gráfico com as curvas de densidade das componentes sobre o histograma
+ggplot(df_alt, aes(x = Altitude)) +
+  geom_histogram(aes(y = ..density..), bins = 30, color = "black", fill = "lightgray") +
+  stat_function(fun = function(x) mix2$lambda[1] * dnorm(x, mix2$mu[1], mix2$sigma[1])) +
+  stat_function(fun = function(x) mix2$lambda[2] * dnorm(x, mix2$mu[2], mix2$sigma[2])) +
+  labs(
+    title = "Mistura de 2 Gaussianas Ajustada",
+    x     = "Altitude (m)",
+    y     = "Densidade"
+  )
+```
+
+O ajuste de mistura de duas gaussianas às altitudes revelou claramente dois “patamares” no relevo. 
+A Componente 1 tem média de 125 m (σ = 55,1 m) e representa 64,6 % das observações, enquanto a Componente 2 tem média de 313 m (σ = 49,3 m) e corresponde aos restantes 35,4 %. O desvio‐padrão de cada componente mostra que, embora haja dispersão local, esses dois níveis são bem definidos. Em termos práticos, isso indica um nível de erosão mais intenso em torno de 125 m e um nível menos erodido em torno de 313 m, com proporções de área (ou frequência de pontos) compatíveis com 64,6 % e 35,4 %, respetivamente. Essa estrutura bimodal confirma a existência de dois estágios altitudinais no terreno, como já sugerido pelo histograma multimodal e pelo exame de densidade.
+
+</div>
+
+
+<div class="pergunta">
+## Questão 4
+Bondade de ajuste da distribuição Bootstrap de ξₙ
+</div>
+```{r, echo=FALSE}
+
+# 1. Parâmetros
+n     <- 50       # tamanho da amostra
+theta <- 1        # valor de θ
+B     <- 20000    # número de réplicas bootstrap
+set.seed(123)     # reprodutibilidade
+
+# 2. Amostra original e pivot
+X   <- runif(n, 0, theta)
+X_n <- max(X)
+xi_n <- function(X_max, theta, n) {
+  n * (theta - X_max) / theta
+}
+
+# 3. Bootstrap vetorizado de ξₙ*
+X_star_max <- replicate(
+  B,
+  max(sample(X, n, replace = TRUE))
+)
+xi_star <- xi_n(X_star_max, theta, n)
+
+# 4. Teste de Kolmogorov–Smirnov contra Exp(1)
+ks_res <- ks.test(xi_star, "pexp", rate = 1)
+print(ks_res)
+
+# 5. Visualização: histograma + densidade teórica
+hist(xi_star,
+     freq   = FALSE,
+     breaks = 50,
+     main   = expression("Distribuição Bootstrap de " * xi^"*"[n] * " vs Exp(1)"),
+     xlab   = expression(xi^"*"[n]))
+curve(dexp(x, rate = 1),
+      from = 0, to = max(xi_star),
+      col  = "red",
+      lwd  = 2,
+      add  = TRUE)
+legend("topright",
+       legend = c("Bootstrap", "Exp(1)"),
+       col    = c("black", "red"),
+       lty    = 1)
+```
+
+Conclusão que temos a partir dos teste e gráficos é que a distribuição bootstrap de ξ*ₙ não se ajusta à Exp(1) para n = 50 (massa pontual enorme em zero e poucos valores discretos espalhados). Essa discrepância reflete a convergência extremamente lenta da estatística pivotal ao limite exponencial quando n é “médio” e a distribuição original não é unimodal.
+
+
+<div class="pergunta">
+## Questão 5
+Aleatoriedade dos NAs em temperature e quality
+</div>
+
+```{r, echo=FALSE}
+options(warn=-1) 
+# 1. Carregar dados e inspecionar estrutura
+data.pizza <- read.csv(
+  "http://leg.ufpr.br/~lucambio/CE313/20241S/Data-pizza.csv",
+  sep = ",", header = TRUE
+)
+str(data.pizza)
+
+# 2. Criar indicadores de NA
+data.pizza$na_temp <- ifelse(is.na(data.pizza$temperature), 1, 0)
+data.pizza$na_qual <- ifelse(is.na(data.pizza$quality),     1, 0)
+
+# 3. Análise global de missingness
+library(dplyr)
+data.pizza %>% 
+  summarize(
+    prop_na_temp = mean(na_temp),
+    prop_na_qual = mean(na_qual)
+  ) %>% 
+  print()
+
+# teste de independência entre os dois indicadores (global)
+chi_global <- chisq.test(
+  table(data.pizza$na_temp, data.pizza$na_qual)
+)
+print(chi_global)
+
+# 4. Missingness por região (area)
+data.pizza %>% 
+  group_by(area) %>% 
+  summarize(
+    prop_na_temp = mean(na_temp),
+    prop_na_qual = mean(na_qual),
+    n            = n()
+  ) %>% 
+  print()
+
+# teste qui-quadrado para cada variável vs. area
+for(var in c("na_temp","na_qual")){
+  cat("\n--- Teste por area para", var, "---\n")
+  tbl  <- table(data.pizza$area, data.pizza[[var]])
+  print(chisq.test(tbl))
+}
+
+# 5. Missingness por operador
+data.pizza %>% 
+  group_by(operator) %>% 
+  summarize(
+    prop_na_temp = mean(na_temp),
+    prop_na_qual = mean(na_qual),
+    n            = n()
+  ) %>% 
+  print()
+
+# teste qui-quadrado para cada variável vs. operator
+for(var in c("na_temp","na_qual")){
+  cat("\n--- Teste por operator para", var, "---\n")
+  tbl  <- table(data.pizza$operator, data.pizza[[var]])
+  print(chisq.test(tbl))
+}
+```
+Na variável quality, 16,6 % dos registros estão ausentes e essas faltas ocorrem de forma totalmente aleatória em relação à região e ao operador (MCAR). Já para temperature, apenas 3,2 % dos dados faltam, mas há um viés regional: Westminster apresenta taxa de missing significativamente maior do que Brent ou Camden, embora não haja associação com o operador nem com a falta em quality. Na prática, isso sugere que as ausências de temperature devem ser investigadas ou imputadas de acordo com a área, enquanto as ausências de quality podem ser tratadas como aleatórias, usando casos completos ou uma imputação simples.
