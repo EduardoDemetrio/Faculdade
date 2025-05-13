@@ -258,11 +258,8 @@ Verifique as premissas de igualdade de variancia e normalidade com gráficos res
 <div class="resposta">
 <strong> Histograma dos Residuos: </strong></div>
 ```{r, echo=FALSE}
-tratamento <- c(rep("H1",5), rep("H2",5), rep("H3",5), rep("H4",5))
-tempo <- c(3.43,3.68,3.98,4.42,4.89,
-           3.53,3.60,3.87,4.22,4.27,
-           3.07,3.13,3.40,3.40,3.46,
-           2.65,2.77,2.82,3.10,3.18)
+tratamento <- c("H2", "H3", "H1", "H1", "H4","H4", "H3", "H4", "H4", "H4","H2", "H2", "H2", "H1","H3", "H3", "H1", "H1", "H2", "H3")
+tempo <- c(3.87, 3.40, 4.89, 3.98, 2.77,3.10, 3.07, 3.18, 2.65, 2.82,4.27, 4.22, 3.53, 3.68,3.46, 3.40, 4.42, 3.43, 3.60, 3.13)
 
 dados <- data.frame(tratamento, tempo)
 
@@ -288,10 +285,12 @@ shapiro.test(residuos)
 <div class="resposta">
 <strong>Gráfico de Resíduos vs Valores Ajustados (para homogeneidade de variâncias) </strong></div>
 ```{r, echo=FALSE}
-plot(fitted(anova_result), residuos,
-     main="Resíduos vs Valores Ajustados",
-     xlab="Valores Ajustados", ylab="Resíduos")
-abline(h=0, col="red")
+plot(anova_result$residuals,
+     type = "p",                   
+     main = "Resíduos vs Ordem",
+     ylab = "Resíduos",
+     xlab = "Índice (Ordem dos dados)")
+abline(h = 0, col = "red", lty = 2)
 ```
 <div class="resposta">
 <strong>Teste de homogeneidade de variâncias (Teste de Bartlett)</strong></div>

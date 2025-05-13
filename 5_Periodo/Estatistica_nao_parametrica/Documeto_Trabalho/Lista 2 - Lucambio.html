@@ -3106,12 +3106,16 @@ original não é unimodal.</p>
 ## 
 ## data:  tbl
 ## X-squared = 2.1339, df = 2, p-value = 0.3441</code></pre>
-<p>Os NA em quality podem ser considerados aleatórios (MCAR), pois não
-variam nem por região nem por operador. Já os NA em temperature não são
-MCAR: ocorrem com maior frequência em Westminster e, portanto, podem
-estar sendo omitidos propositalmente ou sistematicamente naquela área —
-o que aponta para potencial viés na medição/registro de temperatura e
-exige investigação ou correção antes de análises subsequentes.</p>
+<p>Na variável quality, 16,6 % dos registros estão ausentes e essas
+faltas ocorrem de forma totalmente aleatória em relação à região e ao
+operador (MCAR). Já para temperature, apenas 3,2 % dos dados faltam, mas
+há um viés regional: Westminster apresenta taxa de missing
+significativamente maior do que Brent ou Camden, embora não haja
+associação com o operador nem com a falta em quality. Na prática, isso
+sugere que as ausências de temperature devem ser investigadas ou
+imputadas de acordo com a área, enquanto as ausências de quality podem
+ser tratadas como aleatórias, usando casos completos ou uma imputação
+simples.</p>
 </div>
 
 
