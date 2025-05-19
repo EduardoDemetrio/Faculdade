@@ -1,20 +1,19 @@
 {
-    "version": "2.0.0",
-    "tasks": [
-      {
-        "label": "Knit RMarkdown and Save to Folder",
-        "type": "process",
-        "command": "Rscript",
-        "args": [
-          "-e",
-          "rmarkdown::render(\"C:/Users/edude/OneDrive/Área de Trabalho/Códigos/Faculdade/5_Periodo/Estatistica_nao_parametrica/Documeto_Trabalho/Lista 2 - Lucambio.rmd\", output_file = \"C:/Users/edude/OneDrive/Área de Trabalho/Códigos/Faculdade/5_Periodo/Estatistica_nao_parametrica/Documeto_Trabalho/Lista 2 - Lucambio.html\"); shell.exec(\"C:/Users/edude/OneDrive/Área de Trabalho/Códigos/Faculdade/5_Periodo/Estatistica_nao_parametrica/Documeto_Trabalho/Lista 2 - Lucambio.html\")"
-        ],
-        "group": {
-          "kind": "build",
-          "isDefault": true
-        },
-        "problemMatcher": []
-      }
-    ]
-  }
-  
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Knit RMarkdown and Save to Folder",
+      "type": "process",
+      "command": "Rscript",
+      "args": [
+        "-e",
+        "rmarkdown::render(\"C:/Users/edude/OneDrive/Área de Trabalho/Códigos/Faculdade/5_Periodo/Planejamento_experimento/Trabalhos/Resultado - Trabalho 2.Rmd\", output_file = \"C:/Users/edude/OneDrive/Área de Trabalho/Códigos/Faculdade/5_Periodo/Planejamento_experimento/Trabalhos/Resultado - Trabalho 2.html\"); shell.exec(\"C:/Users/edude/OneDrive/Área de Trabalho/Códigos/Faculdade/5_Periodo/Planejamento_experimento/Trabalhos/Resultado - Trabalho 2.html\")"
+      ],
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      },
+      "problemMatcher": []
+    }
+  ]
+}

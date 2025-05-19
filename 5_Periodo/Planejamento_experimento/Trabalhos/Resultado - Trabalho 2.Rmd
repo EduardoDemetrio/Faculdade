@@ -16,7 +16,7 @@ Descreva a unidade experimental.
 
 <div class="resposta">
 <p><strong><u>Resposta:</u></strong></p>
-No contexto deste experimento, a unidade experimental é <strong>um helicóptero de papel</strong>.  
+No contexto do experimento, a unidade experimental é <strong>um helicóptero de papel</strong>.  
 </div>
 
 <div class="pergunta">## Questão 2
@@ -33,11 +33,11 @@ Defina os conceitos de réplicas e duplicatas. Explique a diferença entre répl
 <p>- Duplicatas, por outro lado, são **medidas repetidas na mesma unidade experimental** ou condições idênticas, sem alteração entre as execuções. Elas são usadas para verificar a repetibilidade do sistema de medição e não para estimar a variabilidade do processo. </p>
 
 <h5><strong> Diferença entre Réplicas e Duplicatas neste experimento com helicópteros de papel:</h5> </strong>
-<p>- <strong>Réplicas</strong>: fabricar e lançar **vários helicópteros diferentes com o mesmo comprimento de asa**, cronometrando o tempo de voo de cada um. Assim, há variação natural entre as unidades (helicópteros) mesmo sob o mesmo tratamento, o que permite avaliar a variabilidade experimental. </p>
+<p>- <strong>Réplicas</strong>: moldar e lançar vários helicópteros diferentes com o mesmo comprimento de asa, cronometrando o tempo de voo de cada um. Assim, há variação natural entre as unidades (helicópteros) mesmo sob o mesmo tratamento, o que permite avaliar a variabilidade experimental.</p>
 
 <p>- <strong>Duplicatas </strong>: lançar **o mesmo helicóptero duas vezes seguidas sob as mesmas condições** e medir o tempo de voo em ambas as ocasiões. Isso não ajuda a estimar a variabilidade entre unidades experimentais, mas sim a verificar se o sistema de medição (cronômetro, operador, ambiente) é consistente. </p>
 
-<p>Para este estudo, o ideal e estatisticamente correto é trabalhar com **réplicas** e não duplicatas, pois o interesse está em avaliar como diferentes comprimentos de asa afetam o tempo de voo em unidades experimentais independentes. </p>
+<p>Para este estudo, o ideal é trabalhar com réplicas e não duplicatas, pois o interesse está em avaliar como diferentes comprimentos de asa afetam o tempo de voo em unidades experimentais. </p>
 
 </div>
 <div class="pergunta">## Questão 3 
@@ -67,18 +67,8 @@ Descreva quaisquer variáveis ocultas que possam afetar os resultados dos experi
 </div>
 <div class="resposta">
 <strong><u> Resposta: </strong></u> <br>
-Variáveis ocultas (também chamadas de variáveis de confusão ou fatores não controlados) são aquelas que não fazem parte do projeto experimental, mas que podem influenciar a variável de resposta, introduzindo viés ou aumentando a variabilidade dos resultados.
-
-<h5><strong> Possíveis variáveis ocultas neste experimento: </h5></strong>
-
-<p>- <strong>Altura de lançamento</strong>: pequenas variações na altura de onde o helicóptero é solto podem afetar o tempo de voo. </p>
-  
-<p>- <strong>Correntes de ar ou vento</strong>: movimentos de ar no ambiente (mesmo em local fechado) podem alterar a trajetória e o tempo de descida do helicóptero.</p>
-  
-<p>- <strong>Forma de lançamento</strong>: a maneira como o helicóptero é solto (posição inicial, inclinação ou força aplicada) pode afetar seu comportamento no ar.</p>
-  
-<p>- <strong>Precisão da cronometragem</strong>: variações no tempo de reação da pessoa que aciona o cronômetro ao iniciar e parar a medição.</p>
-  
+Variáveis ocultas são aquelas variáveis que não fazem parte do projeto experimental, mas que podem influenciar a variável de resposta, com um aumento de viés ou na variação não captada pela modelagem.
+Alguns exemplos de variáveis ocultas no experimento: vento durante o lançamento / Altura de lançamento / Forma de lançamento
 </div>
 
 <div class="pergunta">## Questão 5
@@ -97,7 +87,7 @@ A randomização é uma técnica que consiste em **aleatorizar a ordem de aplica
 
 <h5><strong> No contexto deste experimento:</h5></strong>
 
-Deve-se randomizar a ordem dos lançamentos dos helicópteros com diferentes comprimentos de asa. Assim, por exemplo, não se corre o risco de lançar todos os helicópteros de 6” seguidos (que poderiam coincidir com uma corrente), o que poderia distorcer os resultados.
+Deve-se randomizar a ordem dos lançamentos dos helicópteros com diferentes comprimentos de asa. Assim, por exemplo, não se corre o risco de lançar todos os helicópteros de 6” seguidos que poderiam coincidir com fator de variável oculta momentâneo que poderia distorcer os resultados. 
 </div>
 
 <div class="pergunta">## Questão 6
@@ -215,7 +205,7 @@ Realize uma análise de variancia com seus dados.
 
 
 <div class="resposta">
-<strong>Esses é o valor da nossa análise de variancia: </strong></div>
+<strong>Com base no resultado da tabela ANOVA, considerando um teste de hipótese em que H0 corresponde à afirmação de que não há diferença significativa no tempo de voo em função das diferentes medidas, e H1 indica que pelo menos uma medida resulta em um tempo de voo distinto, podemos concluir que, ao nível de significância de 5%, há evidências significativas para rejeitar H0. Pelo menos uma das medidas apresenta diferença significativa em relação às demais. </strong></div>
 
 
 <div class="table-responsive">
@@ -250,6 +240,68 @@ Realize uma análise de variancia com seus dados.
   </tbody>
 </table>
 </div>
+
+<div class="resposta">
+Com base nos resultados do teste de tukey, temos que H1 = H2 / H3 = H2 / H3 = H4 (Considerando alpha padrão de 5%). Entretanto, se considerassemos um alpha de 10%, teriamos como resultado H1 = H2 e H3 = H4. Com isso, podemos concluir que Asas maiores tem diferença positiva significativamento no tempo de voo se comparada com asas menores.
+</div>
+<div class="table-responsive">
+<table class="table-anova">
+  <thead>
+    <tr>
+      <th></th>
+      <th>diff</th>
+      <th>lwr</th>
+      <th>upr</th>
+      <th>p adj</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>H2-H1</strong></td>
+      <td>-0.182</td>
+      <td>-0.8472225</td>
+      <td>0.48322249</td>
+      <td>0.8611532</td>
+    </tr>
+    <tr>
+      <td><strong>H3-H1</strong></td>
+      <td>-0.788</td>
+      <td>-1.4532225</td>
+      <td>-0.12277751</td>
+      <td>0.0176812</td>
+    </tr>
+    <tr>
+      <td><strong>H4-H1</strong></td>
+      <td>-1.176</td>
+      <td>-1.8412225</td>
+      <td>-0.51077751</td>
+      <td>0.0006080</td>
+    </tr>
+    <tr>
+      <td><strong>H3-H2</strong></td>
+      <td>-0.606</td>
+      <td>-1.2712225</td>
+      <td>0.05922249</td>
+      <td>0.0807552</td>
+    </tr>        
+    <tr>
+      <td><strong>H4-H2</strong></td>
+      <td>-0.994</td>
+      <td>-1.6592225</td>
+      <td>-0.32877751</td>
+      <td>0.0029274</td>
+    </tr>        
+    <tr>
+      <td><strong>H4-H3</strong></td>
+      <td>-0.388</td>
+      <td>-1.0532225</td>
+      <td> 0.27722249</td>
+      <td>0.3710739</td>
+    </tr>                
+  </tbody>
+</table>
+</div>
+
 
 <div class="pergunta">## Questão 9 
 Verifique as premissas de igualdade de variancia e normalidade com gráficos residuais

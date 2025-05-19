@@ -7,7 +7,7 @@ dados <- data.frame(tratamento, tempos)
 
 
 # ANOVA
-anova_result <- aov(tempo ~ tratamento, data = dados)
+anova_result <- aov(tempos ~ tratamento, data = dados)
 # Obter resíduos
 residuos <- residuals(anova_result)
 
@@ -28,3 +28,6 @@ plot(anova_result$residuals,
 abline(h = 0, col = "red", lty = 2)
 
 bartlett.test(tempos ~ tratamento, data = dados)
+
+
+TukeyHSD(anova_result)
