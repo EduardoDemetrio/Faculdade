@@ -1,0 +1,430 @@
+---
+title: "Eduardo Demetrio"
+author: "Controle estatistisco de qualidade"
+date: "`r Sys.Date()`"
+output:
+  html_document:
+    theme: cosmo
+    highlight: tango
+    toc: true
+    toc_depth: 2
+    toc_float: true
+    df_print: paged
+    css: style.css
+
+---
+# Repositório.
+- Teremos também um repositório com todas listas no GitHub.
+[🔗 Repositório no GitHub]()
+
+## Questão 1
+*Um gráfico x é estabelecido com base nos parâmetros µ = 600 e σ = 12, com n = 9, baseado num risco do erro do tipo I (α = 0.01). Quais são os limites de controle?
+```{r, echo=FALSE}
+# Parâmetros
+mu <- 600
+sigma <- 12
+n <- 9
+alpha <- 0.01
+
+# Cálculo do erro padrão da média
+sigma_xbar <- sigma / sqrt(n)
+
+# Valor crítico da normal padrão (para α = 0.01 → 0.005 em cada cauda)
+z_alpha <- qnorm(1 - alpha / 2)
+
+# Limites de controle
+LIC <- mu - z_alpha * sigma_xbar
+LSC <- mu + z_alpha * sigma_xbar
+
+# Resultados
+LIC
+LSC
+
+```
+
+
+## Questão 2
+Gráficos de controle 3-sigma X e S são aplicados para monitorar o controle estatístico de um processo.
+O tamanho amostral é n = 6. Os limites dos gráficos de controle são os seguintes:
+
+a) Estime a média e o desvio padrão do processo; Resposta: µˆ0 = 706; σˆ0 = 1, 7963.
+b) Assuma que a variável monitorada tenha distribuição normal. Se as especificações são 703 e 709, estime a probabilidade de produção fora das especificações; Resposta: PPFE=0,095.
+c) Suponha que a média do processo mude para 707, e o desvio padrão permaneça o mesmo. Qual a probabilidade de um ponto fora dos limites de controle logo na próxima amostra? Resposta:
+p = 0, 05.
+
+```{r, echo=FALSE}
+# Limites do gráfico x-barra
+LIC_x <- 703.80
+LC_x <- 706.00
+LSC_x <- 708.20
+
+# Limites do gráfico s
+LIC_s <- 0.051
+LC_s <- 1.709
+LSC_s <- 3.367
+
+# Tamanho da amostra
+n <- 6
+# Estimativa da média do processo
+mu_0 <- LC_x
+
+# Estimativa do desvio padrão do processo
+# Para gráfico s: LC_s = c4(n) * sigma
+# Tabela de c4 para n = 6: c4 = 0.9213 (Montgomery, 7ª ed.)
+
+c4 <- 0.9213
+sigma_0 <- LC_s / c4
+
+mu_0
+sigma_0
+
+
+# Especificações
+LS <- 709
+LI <- 703
+
+# Cálculo da PPFE
+prob_baixo <- pnorm(LI, mean = mu_0, sd = sigma_0)
+prob_cima  <- 1 - pnorm(LS, mean = mu_0, sd = sigma_0)
+ppfe <- prob_baixo + prob_cima
+
+ppfe
+
+
+# Erro padrão da média
+sigma_xbar <- sigma_0 / sqrt(n)
+
+# Probabilidade de cair abaixo do LIC ou acima do LSC
+p_abaixo <- pnorm(LIC_x, mean = 707, sd = sigma_xbar)
+p_acima <- 1 - pnorm(LSC_x, mean = 707, sd = sigma_xbar)
+p_fora <- p_abaixo + p_acima
+
+p_fora
+
+
+```
+## Questão 3
+Amostras de tamanho n = 5 são extraídas de um processo de manufatura a cada hora. Uma característica da qualidade é medida e x e R são calculados a cada amostra. Após a seleção de 25 amostras,
+foram obtidos:
+a) Determine os limites de controle para os gráficos x e R; Resposta: (LIC = 26.293, LSC = 26.707
+para o gráfico x; LIC = 0, LSC = 0.7611 para o gráfico R).
+b) Assuma que ambos os gráficos exibam controle. Se as especificações são 26.40 ± 0.50, estime a
+probabilidade de produção fora das especificações; Resposta: PPFE = 0.0047;
+c) Se a média do processo fosse 26.40, qual seria a probabilidade de produção fora das especificações?
+Resposta: PPFE = 0.0012.
+```{r, echo=FALSE}
+# Número de amostras
+m <- 25
+
+# Tamanho da amostra
+n <- 5
+
+# Soma das médias e das amplitudes
+soma_xbar <- 662.5
+soma_R <- 9.0
+
+# Médias amostrais
+xbar_medio <- soma_xbar / m
+R_medio <- soma_R / m
+
+xbar_medio
+R_medio
+
+A2 <- 0.577
+D3 <- 0
+D4 <- 2.114
+
+# Limites para gráfico x-barra
+LIC_x <- xbar_medio - A2 * R_medio
+LC_x <- xbar_medio
+LSC_x <- xbar_medio + A2 * R_medio
+
+# Limites para gráfico R
+LIC_R <- D3 * R_medio
+LC_R <- R_medio
+LSC_R <- D4 * R_medio
+
+# Resultados
+LIC_x; LC_x; LSC_x
+LIC_R; LC_R; LSC_R
+
+d2 <- 2.326
+sigma_hat <- R_medio / d2
+
+LI <- 25.90
+LS <- 26.90
+
+prob_baixo <- pnorm(LI, mean = xbar_medio, sd = sigma_hat)
+prob_cima  <- 1 - pnorm(LS, mean = xbar_medio, sd = sigma_hat)
+ppfe <- prob_baixo + prob_cima
+
+ppfe
+
+mu_novo <- 26.40
+
+prob_baixo_2 <- pnorm(LI, mean = mu_novo, sd = sigma_hat)
+prob_cima_2  <- 1 - pnorm(LS, mean = mu_novo, sd = sigma_hat)
+ppfe_novo <- prob_baixo_2 + prob_cima_2
+
+ppfe_novo
+
+
+```
+## Questão 4
+Os dados aprsentados na sequência referem-se aos desvios das espessuras de moldes metálicos em relação à espessura nominal (determinada no projeto), verificados em 30 amostras de tamanho n = 6.
+As primeiras m = 20 amostras compõem a fase 1 do controle do processo, utilizadas na estimação dos parâmetros e determinação dos limites dos gráficos de controle. As demais amostras foram selecionadas para fins de monitoramento, compondo a segunda fase.
+
+a) Forneça estimativas não viciadas para a média e o desvio padrão do processo (baseadas nas amplitudes e nos desvios padrões amostrais);
+b) Determine os limites de controle e de alerta para os gráficos x e R; o mesmo para o par de gráficos x e S;
+c) Escolha um par de gráficos, a seu critério. Esboce o par de gráficos usando os resultados da primeira fase. Há algum indicativo de descontrole?
+d) Adicione aos gráficos do item anterior os resultados das dez amostras da segunda fase. Há algum indicativo de descontrole? Verifique a ocorrência de alguma das regras sensibilizantes.
+e) O gerente da empresa solicitou a você um relatório da análise, descrevendo, brevemente, a metodologia utilizada, a construção dos gráficos, os principais resultados e suas recomendações. Providencie o relatório.
+
+``` {r, echo=FALSE}
+dados <- data.frame(
+  amostra = 1:30,
+  media = c(0.0143, 0.0183, -0.0278, 0.0112, -0.0040, -0.0078, 0.0042, -0.0077, 0.0003, 0.0050,
+            0.0153, -0.0025, 0.0007, -0.0177, -0.0165, -0.0113, -0.0188, 0.0242, 0.0010,-0.0332,
+            -0.0420, 0.0223, -0.0103, -0.0048, 0.0025, -0.0357, 0.0562, 0.0117, 0.0580, 0.0687),
+  R = c(0.119, 0.114, 0.156, 0.167, 0.158, 0.128, 0.215, 0.102, 0.198, 0.148,
+        0.070, 0.104, 0.090, 0.172, 0.067, 0.118, 0.119, 0.113, 0.159, 0.209,
+        0.087, 0.168, 0.152, 0.157, 0.230, 0.215, 0.227, 0.215, 0.413, 0.110),
+  S = c(0.0441, 0.0374, 0.0538, 0.0612, 0.0557, 0.0453, 0.0846, 0.0399, 0.0668, 0.0587,
+        0.0257, 0.0354, 0.0382, 0.0597, 0.0265, 0.0469, 0.0526, 0.0394, 0.0537, 0.0762,
+        0.0301, 0.0637, 0.0568, 0.0565, 0.0818, 0.0817, 0.0840, 0.0880, 0.1640, 0.0472)
+)
+fase1 <- dados[1:20, ]
+fase2 <- dados[21:30, ]
+
+# Estimativas com base na Fase 1
+xbar_barra <- mean(fase1$media)
+R_barra <- mean(fase1$R)
+S_barra <- mean(fase1$S)
+
+# Constantes para n = 6 (Montgomery)
+d2 <- 2.534
+c4 <- 0.9213
+
+# Estimativas de sigma
+sigma_R <- R_barra / d2
+sigma_S <- S_barra / c4
+
+xbar_barra
+sigma_R
+sigma_S
+ # Constantes para n = 6
+A2 <- 0.483
+D3 <- 0.000
+D4 <- 2.114
+A3 <- 0.729
+B3 <- 0.03
+B4 <- 1.97
+
+# Limites para gráfico x-R
+LIC_x_R <- xbar_barra - A2 * R_barra
+LC_x_R  <- xbar_barra
+LSC_x_R <- xbar_barra + A2 * R_barra
+
+LIC_R <- D3 * R_barra
+LC_R  <- R_barra
+LSC_R <- D4 * R_barra
+
+# Limites para gráfico x-S
+LIC_x_S <- xbar_barra - A3 * S_barra
+LC_x_S  <- xbar_barra
+LSC_x_S <- xbar_barra + A3 * S_barra
+
+LIC_S <- B3 * S_barra
+LC_S  <- S_barra
+LSC_S <- B4 * S_barra
+
+plot(fase1$media, type = "b", pch = 19, ylim = range(c(LIC_x_R, LSC_x_R)), main = "Gráfico x-barra (Fase 1)",
+     xlab = "Amostra", ylab = "Média")
+abline(h = c(LIC_x_R, LC_x_R, LSC_x_R), col = c("red", "blue", "red"), lty = c(2, 1, 2))
+plot(fase1$R, type = "b", pch = 19, ylim = range(c(LIC_R, LSC_R)), main = "Gráfico R (Fase 1)",
+     xlab = "Amostra", ylab = "Amplitude")
+abline(h = c(LIC_R, LC_R, LSC_R), col = c("red", "blue", "red"), lty = c(2, 1, 2))
+plot(dados$media, type = "b", pch = 19, ylim = range(c(LIC_x_R, LSC_x_R)), main = "Gráfico x-barra (Fase 1 + Fase 2)",
+     xlab = "Amostra", ylab = "Média")
+abline(h = c(LIC_x_R, LC_x_R, LSC_x_R), col = c("red", "blue", "red"), lty = c(2, 1, 2))
+plot(dados$R, type = "b", pch = 19, ylim = range(c(LIC_R, LSC_R)), main = "Gráfico R (Fase 1 + Fase 2)",
+     xlab = "Amostra", ylab = "Amplitude")
+abline(h = c(LIC_R, LC_R, LSC_R), col = c("red", "blue", "red"), lty = c(2, 1, 2))
+cat("**Relatório Final**\n\n")
+cat("Foram utilizados dados de 30 amostras, sendo 20 na Fase 1 e 10 na Fase 2.\n\n")
+cat("Os gráficos de controle \u0078-barra e R foram construídos com base nas estimativas:\n")
+cat(sprintf("- Média do processo estimada: %.4f\n", xbar_barra))
+cat(sprintf("- Desvio padrão estimado por R: %.4f\n", sigma_R))
+cat("Os limites de controle foram calculados utilizando as constantes apropriadas de Montgomery (2016).\n\n")
+cat("A análise gráfica da Fase 1 mostra um processo aparentemente sob controle.\n")
+cat("Na Fase 2, foram identificados possíveis indícios de descontrole em algumas amostras, especialmente pela amplitude elevada na amostra 29.\n")
+cat("Recomenda-se investigar as causas especiais associadas às amostras fora dos limites e aplicar ações corretivas conforme necessário.\n")
+
+
+
+
+```
+## Questão 5
+Uma camada de fio isolante é depositada sobre um substrato usando uma máquina. A característica da qualidade é a espessura da camada de fio (em Angstroms). Na página da disciplina estão disponíveis dados de m = 20 amostras referentes à fase 1 e 10 amostras adicionais para monitoramento, todas com tamanho n = 4 (bases IsolanteF1.csv e IsolanteF2.csv disponíveis na página da disciplina).
+
+```{r, echo=FALSE}
+library(qcc)  
+knitr::opts_chunk$set(echo = FALSE)
+# Substitua pelos caminhos reais se estiver usando fora do ambiente da disciplina
+caminho_f1 <- "C:/Users/edude/OneDrive/Área de Trabalho/Códigos/Faculdade/5_Periodo/Controle_estatistico_qualidade/Listas_trabalho/Lista_respostas/IsolanteF1.csv"
+caminho_f2 <- "C:/Users/edude/OneDrive/Área de Trabalho/Códigos/Faculdade/5_Periodo/Controle_estatistico_qualidade/Listas_trabalho/Lista_respostas/IsolanteF2.csv"
+
+# Leitura dos arquivos
+fase1 <- read.csv2(caminho_f1, header = TRUE)
+fase2 <- read.csv2(caminho_f2, header = TRUE)
+
+head(fase1)
+# Converter dados para matriz (cada linha = uma amostra)
+matriz_f1 <- as.matrix(fase1)
+
+# Criar gráfico de controle x-barra e R
+controle_f1 <- qcc(matriz_f1, type = "xbar", plot = TRUE)
+controle_r <- qcc(matriz_f1, type = "R", plot = TRUE)
+
+# Converter para matriz
+matriz_f2 <- as.matrix(fase2)
+
+# Atualizar o gráfico com novos pontos
+qcc_update <- qcc(matriz_f1, type = "xbar", newdata = matriz_f2)
+
+# Estimar parâmetros do processo com base na Fase 1
+media_proc <- mean(matriz_f1)
+desvio_proc <- sd(as.vector(matriz_f1))  # com todos os dados amostrais
+
+# Calcular PPFE
+ppfe_inf <- pnorm(420, mean = media_proc, sd = desvio_proc)
+ppfe_sup <- 1 - pnorm(480, mean = media_proc, sd = desvio_proc)
+ppfe_total <- ppfe_inf + ppfe_sup
+
+ppfe_total
+
+cat("**Conclusão:**\n\n")
+cat(sprintf("O processo apresenta uma média estimada de %.2f e desvio padrão de %.2f com base na Fase 1.\n", media_proc, desvio_proc))
+cat("A construção dos gráficos de controle indica se há indícios de descontrole durante a Fase 2.\n")
+cat(sprintf("A probabilidade estimada de produção fora das especificações (PPFE) é de aproximadamente %.2f%%.\n", 100 * ppfe_total))
+
+```
+
+
+## Questão 6
+Peças fabricadas por processo de moldagem por injeção são submetidas a um ensaio de resistência à compressão. Vinte amostras de cinco partes cada são coletadas e as resistência à compressão (em psi) são registradas. Adicionalmente, quinze amostras são selecionadas na segunda fase, para monitoramento do processo (bases CompF1.csv e CompF2.csv disponíveis na página da disciplina). Procedacom a construção e análise dos gráficos de controle x e S.
+
+```{r, echo=FALSE}
+library(qcc)  # <- ESSENCIAL para usar qcc()
+knitr::opts_chunk$set(echo = FALSE)
+# Ajuste seu caminho conforme sua máquina
+base_dir <- "C:/Users/edude/OneDrive/Área de Trabalho/Códigos/Faculdade/5_Periodo/Controle_estatistico_qualidade/Listas_trabalho/Lista_respostas"
+
+# Carregar arquivos
+fase1 <- read.csv2(file.path(base_dir, "CompF1.csv"), header = TRUE)
+fase2 <- read.csv2(file.path(base_dir, "CompF2.csv"), header = TRUE)
+
+# Visualizar
+head(fase1)
+
+# Converter em matriz (cada linha = uma amostra)
+matriz_f1 <- as.matrix(fase1)
+
+# Gráfico x-barra com desvio padrão amostral ponderado
+qcc_xs <- qcc(matriz_f1, type = "xbar", std.dev = "UWAVE-SD", plot = TRUE)
+
+# Gráfico S (desvios padrão)
+qcc_s <- qcc(matriz_f1, type = "S", plot = TRUE)
+
+# Converter a fase 2 em matriz
+matriz_f2 <- as.matrix(fase2)
+
+# Atualizar gráfico x-barra com fase 2
+qcc_xs_monitor <- qcc(matriz_f1, type = "xbar", std.dev = "UWAVE-SD", newdata = matriz_f2, plot = TRUE)
+
+
+cat("**Conclusão:**\n\n")
+cat("Os gráficos \u0078-barra e S foram construídos usando as 20 amostras da Fase 1.\n")
+cat("A avaliação dos gráficos mostra se o processo estava sob controle inicialmente.\n")
+cat("Após incluir as 15 amostras da Fase 2, observamos se algum ponto ultrapassa os limites de controle.\n")
+cat("Se sim, isso indica uma possível causa especial e necessidade de investigação do processo.\n")
+```
+
+## Questão 7
+A uniformidade de uma pastilha de silício após reação química é determinada pela medição da espessura em várias posições, expressando a uniformidade como a amplitude das espessuras.
+Parte 1- Dispõe-se das medidas individuais de uniformidade para uma sequência de 30 pastilhas produzidas.
+Parte 2- Tem-se também os dados adicionais sobre 10 pastilhas produzidas. Com base nesses resultados, o processo parece estar sobre controle?
+Parte 3- Suponha que a causa atribuível responsável pelo sinal de descontrole tenha sido identificada e eliminada do processo. O monitoramento do processo teve sequência com a seleção de outras 20 amostras unitárias. Usando os limites de controle estabelecidos na primeira parte do exercício. Quais as suas conclusões?
+Bases past.csv, past2.csv e past3.csv disponíveis na página da disciplina.
+
+
+```{r, echo=FALSE}
+
+library(qcc)  # <- ESSENCIAL para usar qcc()
+knitr::opts_chunk$set(echo = FALSE)
+# Caminho onde estão os arquivos
+base_dir <- "C:/Users/edude/OneDrive/Área de Trabalho/Códigos/Faculdade/5_Periodo/Controle_estatistico_qualidade/Listas_trabalho/Lista_respostas"
+
+# Leitura dos arquivos (dados individuais)
+past1 <- read.csv2(file.path(base_dir, "past.csv"), header = TRUE)
+past2 <- read.csv2(file.path(base_dir, "past2.csv"), header = TRUE)
+past3 <- read.csv2(file.path(base_dir, "past3.csv"), header = TRUE)
+
+# Extrair vetor com os valores (supondo 1 coluna com dados)
+dados1 <- past1[[1]]
+
+# Gráfico de controle para dados individuais
+qcc_x <- qcc(dados1, type = "xbar.one", plot = TRUE)
+
+dados2 <- past2[[1]]
+
+# Adicionar ao gráfico
+qcc_x_monitor <- qcc(dados1, type = "xbar.one", newdata = dados2, plot = TRUE)
+
+dados3 <- past3[[1]]
+
+# Adicionar dados da Parte 3 ao gráfico com os limites da Parte 1
+qcc_x_final <- qcc(dados1, type = "xbar.one", newdata = dados3, plot = TRUE)
+
+cat("**Conclusões da Questão 7:**\n\n")
+cat("**Parte 1:** Os gráficos individuais mostraram os limites de controle com base nas 30 primeiras pastilhas.\n")
+cat("**Parte 2:** Foram avaliadas 10 novas pastilhas. Caso alguma delas tenha ultrapassado os limites, há indício de descontrole.\n")
+cat("**Parte 3:** Após a remoção da causa especial, o processo foi monitorado com 20 novas pastilhas.\n")
+cat("Se todas estiverem dentro dos limites e sem padrão sistemático, o processo está sob controle.\n")
+```
+
+
+## Questão 8
+Considere a construção de gráficos de controle para a resistência à tração de cabos de aço. A fase 1 foi planejada para m = 15 amostras de tamanho n = 6. No entanto, em cinco delas apenas n = 5 cabos estavam disponíveis. Para a segunda fase, tendo em vista a dificuldade em atender o tamanho amostral inicialmente planejado, optou-se por fixar n = 4. A variável analisada foi a carga de ruptura (em kg/mm2). As últimas 10 amostras correspondem à fase 2.
+
+```{r, echo=FALSE}
+library(qcc)  # <- ESSENCIAL para usar qcc()
+knitr::opts_chunk$set(echo = TRUE)
+
+fase1 <- data.frame(
+  A1  = c(194, 200, 200, 197, 203, 186, 210, 206, 201, 202, 205, 188, 207, 200, 198),
+  A2  = c(217, 203, 196, 209, 214, 212, 178, 204, 200, 214, 212, 199, 198, 195, 190),
+  A3  = c(195, 204, 192, 216, 183, 205, 183, 186, 183, 184, 199, 197, 192, 208, 196),
+  A4  = c(201, 193, 188, 211, 206, 195, 221, 193, 191, 199, 198, 209, 203, 199, 191),
+  A5  = c(207, 205, 211, 183, 191, 194, 210, 205, 223, 192, 203, 204, 192, 203, 204),
+  A6  = c(203, 216, 179, 198, NA, 198, 204, NA, 203, NA, 201, NA, 210, NA, 201)
+)
+
+# Fase 2 (10 amostras, n = 4)
+fase2 <- data.frame(
+  A1 = c(198, 177, 227, 197, 188, 177, 196, 167, 199, 190),
+  A2 = c(191, 197, 211, 200, 186, 188, 191, 193, 202, 202),
+  A3 = c(212, 212, 211, 202, 213, 183, 217, 193, 184, 208),
+  A4 = c(177, 211, 203, 230, 212, 182, 186, 204, 181, 219),
+  A5 = rep(NA, 10),
+  A6 = rep(NA, 10)
+)
+qcc_xs <- qcc(fase1, type = "xbar", std.dev = "UWAVE-SD", plot = TRUE)
+qcc_s <- qcc(fase1, type = "S", plot = TRUE)
+qcc_xs_monitor <- qcc(fase1, type = "xbar", std.dev = "UWAVE-SD", newdata = fase2, plot = TRUE)
+cat("**Conclusão:**\n\n")
+cat("Os gráficos \u0078-barra e S foram construídos com base nas 15 amostras da Fase 1, com diferentes tamanhos amostrais (5 ou 6).\n")
+cat("A Fase 2, com amostras de tamanho 4, foi adicionada para monitoramento.\n")
+cat("Se houver pontos fora dos limites ou padrões suspeitos, isso indica descontrole estatístico.\n")
+
+```

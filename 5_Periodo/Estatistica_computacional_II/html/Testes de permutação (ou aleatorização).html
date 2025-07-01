@@ -1,0 +1,1206 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+<meta name="author" content="Fernando P. Mayer" />
+
+
+<title>Testes de permutação (ou aleatorização)</title>
+
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/flatly.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="site_libs/jqueryui-1.13.2/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/textmate.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-66454501-13"></script>
+<script>
+ window.dataLayer = window.dataLayer || [];
+ function gtag(){dataLayer.push(arguments);}
+ gtag('js', new Date());
+
+ gtag('config', 'UA-66454501-13');
+</script>
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+
+
+
+<link rel="stylesheet" href="config/sydney-site.css" type="text/css" />
+<link rel="stylesheet" href="config/sydney-site-fonts.css" type="text/css" />
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+details > summary > p:only-child {
+  display: inline;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+<style type="text/css">
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script type="text/javascript">
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark the anchor link active (and if it's in a dropdown, also mark that active)
+  var dropdown = menuAnchor.closest('li.dropdown');
+  if (window.bootstrap) { // Bootstrap 4+
+    menuAnchor.addClass('active');
+    dropdown.find('> .dropdown-toggle').addClass('active');
+  } else { // Bootstrap 3
+    menuAnchor.parent().addClass('active');
+    dropdown.addClass('active');
+  }
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before, .tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "\e259";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "\e258";
+  font-family: 'Glyphicons Halflings';
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+.tocify-subheader {
+  display: inline;
+}
+.tocify-subheader .tocify-item {
+  font-size: 0.95em;
+}
+
+</style>
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-bs-toggle="collapse" data-target="#navbar" data-bs-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">CE089</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">Home</a>
+</li>
+<li>
+  <a href="aulas.html">Aulas</a>
+</li>
+<li>
+  <a href="referencias.html">Referências</a>
+</li>
+<li>
+  <a href="materiais.html">Materiais</a>
+</li>
+<li>
+  <a href="trabalhos.html">Trabalhos</a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div id="header">
+
+
+
+<h1 class="title toc-ignore">Testes de permutação (ou aleatorização)</h1>
+<h4 class="author">Fernando P. Mayer</h4>
+
+</div>
+
+
+<div id="introdução" class="section level1">
+<h1><span class="header-section-number">1</span> Introdução</h1>
+<p><strong>Justificativas</strong></p>
+<ul>
+<li>Métodos computacionalmente intensivos para inferência estatística são usados quando as abordagens tradicionais não são adequadas.</li>
+<li>Resultados assintóticos em pequenas amostras.</li>
+<li>Violação de pressupostos.</li>
+<li>Não existência de mecanísmos de inferência específicos.</li>
+<li>Tais métodos se baseiam em reamostragem e/ou simulação.</li>
+<li>Podem ser aplicados em muitos contextos.</li>
+</ul>
+<p><strong>Testes de Aleatorização</strong></p>
+<ul>
+<li>Abordagem baseada em permutação das observações (<em>permutation tests</em>).</li>
+<li>São considerados testes <strong>livre de distribuição</strong>.</li>
+<li>Faz suposições sobre o processo gerador dos dados.</li>
+<li>Duas formas de cálculo da estatística de teste:
+<ul>
+<li><strong>Exaustiva</strong>: no conjunto de todos os arranjos possíveis <span class="math inline">\(\rightarrow\)</span> distribuição amostral exata.</li>
+<li><strong>Por reamostragem</strong>: amostra do conjunto completo de arranjos com <strong>reamostragem sem reposição</strong>.</li>
+</ul></li>
+<li>IMPORTANTE: Sob a hipótese nula os dados são <strong>permutáveis</strong>.</li>
+<li>Esse é o principal conceito e requisito dos testes de aleatorização.</li>
+</ul>
+<p><strong>Limitações dos testes de aleatorização</strong></p>
+<ul>
+<li>Só podem ser usados para <strong>hipóteses que envolvam comparações</strong> (trocar observações entre grupos) ou desalinhar registros (como em correlação, por exemplo).</li>
+<li>Portanto, não podem ser usados para testar hipóteses sobre parâmetros individuais.</li>
+<li>O teste de aleatorização exato de Fisher para a média é uma alternativa para testar hipótese sobre a média considerando população simétrica, porém, estritamente não é um teste de aleatorização.</li>
+</ul>
+<p>De acordo com Manly (2006):</p>
+<ul>
+<li>Compara o valor da estatística com aquele obtido da distribuição gerada pela <strong>permutação dos valores observados</strong>.</li>
+<li>São úteis pois permitem o usuário definir a estatística de teste mais apropriada.</li>
+<li><strong>Não necessariamente os resultados podem ser extrapolados para a população</strong>.</li>
+<li>Testes de aleatorização são exatos: fonece um nível de significância que é igual ou inferior ao nível nominal.</li>
+<li>Duas estatísticas são equivalente se elas dão o mesmo nível de significância em testes de aleatorização.</li>
+<li>Testes de aleatorização e tradicionais darão similar nível de significância se as suposições do último forem atendidas.</li>
+</ul>
+</div>
+<div id="exemplos" class="section level1">
+<h1><span class="header-section-number">2</span> Exemplos</h1>
+<div id="exemplos-simples" class="section level2">
+<h2><span class="header-section-number">2.1</span> Exemplos simples</h2>
+<div id="diferença-entre-médias-de-dois-grupos" class="section level3">
+<h3><span class="header-section-number">2.1.1</span> Diferença entre médias de dois grupos</h3>
+<pre class="r"><code>## Dados observados
+x &lt;- c(4.1, 8.3, 2.9, 10.8, 9.5)
+y &lt;- c(3.7, 5.1, 1.0, 7.7, 8.9)
+da &lt;- data.frame(vals = c(x, y),
+                 id = rep(c(&quot;x&quot;, &quot;y&quot;), each = 5))
+da</code></pre>
+<pre><code>#    vals id
+# 1   4.1  x
+# 2   8.3  x
+# 3   2.9  x
+# 4  10.8  x
+# 5   9.5  x
+# 6   3.7  y
+# 7   5.1  y
+# 8   1.0  y
+# 9   7.7  y
+# 10  8.9  y</code></pre>
+<pre class="r"><code>## Compara médias
+with(da, tapply(vals, id, mean))</code></pre>
+<pre><code>#    x    y 
+# 7.12 5.28</code></pre>
+<pre class="r"><code>(obsdiff &lt;- with(da, abs(diff(tapply(vals, id, mean)))))</code></pre>
+<pre><code>#    y 
+# 1.84</code></pre>
+<pre class="r"><code>## Teste-t tradicional
+t.test(vals ~ id, data = da, var.equal = TRUE)</code></pre>
+<pre><code># 
+#   Two Sample t-test
+# 
+# data:  vals by id
+# t = 0.88051, df = 8, p-value = 0.4043
+# alternative hypothesis: true difference in means between group x and group y is not equal to 0
+# 95 percent confidence interval:
+#  -2.978831  6.658831
+# sample estimates:
+# mean in group x mean in group y 
+#            7.12            5.28</code></pre>
+<pre class="r"><code>## Número possível de permutações por grupo
+factorial(length(x))</code></pre>
+<pre><code># [1] 120</code></pre>
+<pre class="r"><code>factorial(length(y))</code></pre>
+<pre><code># [1] 120</code></pre>
+<pre class="r"><code>## A permutação dentro de cada grupo não faz sentido, pois as médias não
+## serão alteradas
+xperm &lt;- gtools::permutations(n = length(x), r = length(x), v = x)
+str(xperm)</code></pre>
+<pre><code>#  num [1:120, 1:5] 2.9 2.9 2.9 2.9 2.9 2.9 2.9 2.9 2.9 2.9 ...</code></pre>
+<pre class="r"><code>sort(x)</code></pre>
+<pre><code># [1]  2.9  4.1  8.3  9.5 10.8</code></pre>
+<pre class="r"><code>head(xperm)</code></pre>
+<pre><code>#      [,1] [,2] [,3] [,4] [,5]
+# [1,]  2.9  4.1  8.3  9.5 10.8
+# [2,]  2.9  4.1  8.3 10.8  9.5
+# [3,]  2.9  4.1  9.5  8.3 10.8
+# [4,]  2.9  4.1  9.5 10.8  8.3
+# [5,]  2.9  4.1 10.8  8.3  9.5
+# [6,]  2.9  4.1 10.8  9.5  8.3</code></pre>
+<pre class="r"><code>tail(xperm)</code></pre>
+<pre><code>#        [,1] [,2] [,3] [,4] [,5]
+# [115,] 10.8  9.5  2.9  4.1  8.3
+# [116,] 10.8  9.5  2.9  8.3  4.1
+# [117,] 10.8  9.5  4.1  2.9  8.3
+# [118,] 10.8  9.5  4.1  8.3  2.9
+# [119,] 10.8  9.5  8.3  2.9  4.1
+# [120,] 10.8  9.5  8.3  4.1  2.9</code></pre>
+<pre class="r"><code>yperm &lt;- gtools::permutations(n = length(y), r = length(y), v = y)
+str(yperm)</code></pre>
+<pre><code>#  num [1:120, 1:5] 1 1 1 1 1 1 1 1 1 1 ...</code></pre>
+<pre class="r"><code>sort(y)</code></pre>
+<pre><code># [1] 1.0 3.7 5.1 7.7 8.9</code></pre>
+<pre class="r"><code>head(yperm)</code></pre>
+<pre><code>#      [,1] [,2] [,3] [,4] [,5]
+# [1,]    1  3.7  5.1  7.7  8.9
+# [2,]    1  3.7  5.1  8.9  7.7
+# [3,]    1  3.7  7.7  5.1  8.9
+# [4,]    1  3.7  7.7  8.9  5.1
+# [5,]    1  3.7  8.9  5.1  7.7
+# [6,]    1  3.7  8.9  7.7  5.1</code></pre>
+<pre class="r"><code>tail(yperm)</code></pre>
+<pre><code>#        [,1] [,2] [,3] [,4] [,5]
+# [115,]  8.9  7.7  1.0  3.7  5.1
+# [116,]  8.9  7.7  1.0  5.1  3.7
+# [117,]  8.9  7.7  3.7  1.0  5.1
+# [118,]  8.9  7.7  3.7  5.1  1.0
+# [119,]  8.9  7.7  5.1  1.0  3.7
+# [120,]  8.9  7.7  5.1  3.7  1.0</code></pre>
+<pre class="r"><code>## Diferença entre médias para todas as permutações
+xydiff &lt;- numeric(nrow(xperm))
+for(i in 1:nrow(xperm)) {
+    xydiff[i] &lt;- mean(xperm[i, ]) - mean(yperm[i, ])
+}
+str(xydiff)</code></pre>
+<pre><code>#  num [1:120] 1.84 1.84 1.84 1.84 1.84 1.84 1.84 1.84 1.84 1.84 ...</code></pre>
+<pre class="r"><code>summary(xydiff)</code></pre>
+<pre><code>#    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+#    1.84    1.84    1.84    1.84    1.84    1.84</code></pre>
+<pre class="r"><code>## Portanto, a permutação deve ser feita entre os grupos, ou seja,
+## alternando todos os valores possíveis entre os dois grupos
+xy &lt;- c(x, y)
+## Número de permutações
+factorial(length(xy))</code></pre>
+<pre><code># [1] 3628800</code></pre>
+<pre class="r"><code>xyperm &lt;- gtools::permutations(n = length(xy), r = length(xy), v = xy)
+str(xyperm)</code></pre>
+<pre><code>#  num [1:3628800, 1:10] 1 1 1 1 1 1 1 1 1 1 ...</code></pre>
+<pre class="r"><code>sort(xy)</code></pre>
+<pre><code>#  [1]  1.0  2.9  3.7  4.1  5.1  7.7  8.3  8.9  9.5 10.8</code></pre>
+<pre class="r"><code>head(xyperm)</code></pre>
+<pre><code>#      [,1] [,2] [,3] [,4] [,5] [,6] [,7] [,8] [,9] [,10]
+# [1,]    1  2.9  3.7  4.1  5.1  7.7  8.3  8.9  9.5  10.8
+# [2,]    1  2.9  3.7  4.1  5.1  7.7  8.3  8.9 10.8   9.5
+# [3,]    1  2.9  3.7  4.1  5.1  7.7  8.3  9.5  8.9  10.8
+# [4,]    1  2.9  3.7  4.1  5.1  7.7  8.3  9.5 10.8   8.9
+# [5,]    1  2.9  3.7  4.1  5.1  7.7  8.3 10.8  8.9   9.5
+# [6,]    1  2.9  3.7  4.1  5.1  7.7  8.3 10.8  9.5   8.9</code></pre>
+<pre class="r"><code>tail(xyperm)</code></pre>
+<pre><code>#            [,1] [,2] [,3] [,4] [,5] [,6] [,7] [,8] [,9] [,10]
+# [3628795,] 10.8  9.5  8.9  8.3  7.7  5.1  4.1  1.0  2.9   3.7
+# [3628796,] 10.8  9.5  8.9  8.3  7.7  5.1  4.1  1.0  3.7   2.9
+# [3628797,] 10.8  9.5  8.9  8.3  7.7  5.1  4.1  2.9  1.0   3.7
+# [3628798,] 10.8  9.5  8.9  8.3  7.7  5.1  4.1  2.9  3.7   1.0
+# [3628799,] 10.8  9.5  8.9  8.3  7.7  5.1  4.1  3.7  1.0   2.9
+# [3628800,] 10.8  9.5  8.9  8.3  7.7  5.1  4.1  3.7  2.9   1.0</code></pre>
+<pre class="r"><code>## Calcula a diferença média para todas as permutações possíveis
+library(future.apply)
+plan(multicore, workers = 4)
+xydiff &lt;- future_apply(matrix(1:nrow(xyperm)), 1, function(i) {
+    mean(xyperm[i, 1:5]) - mean(xyperm[i, 6:10])
+})
+str(xydiff)</code></pre>
+<pre><code>#  num [1:3628800] -5.68 -5.68 -5.68 -5.68 -5.68 -5.68 -5.68 -5.68 -5.68 -5.68 ...</code></pre>
+<pre class="r"><code>summary(xydiff)</code></pre>
+<pre><code>#    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+#   -5.68   -1.45    0.00    0.00    1.45    5.68</code></pre>
+<pre class="r"><code>hist(xydiff)
+abline(v = obsdiff, col = 2)</code></pre>
+<p><img src="figures/12_permutacao/unnamed-chunk-2-1.png" width="80%" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>## P-valor do teste.
+2 * sum(xydiff &gt;= obsdiff)/length(xydiff)</code></pre>
+<pre><code># [1] 0.3888889</code></pre>
+<pre class="r"><code>t.test(vals ~ id, data = da, var.equal = TRUE)$p.value</code></pre>
+<pre><code># [1] 0.404256</code></pre>
+<pre class="r"><code>## Usando pacotes
+library(coin)</code></pre>
+<pre><code># Carregando pacotes exigidos: survival</code></pre>
+<pre><code># 
+# Attaching package: &#39;survival&#39;</code></pre>
+<pre><code># The following object is masked from &#39;package:boot&#39;:
+# 
+#     aml</code></pre>
+<pre><code># The following object is masked from &#39;package:future&#39;:
+# 
+#     cluster</code></pre>
+<pre><code># 
+# Attaching package: &#39;coin&#39;</code></pre>
+<pre><code># The following object is masked _by_ &#39;.GlobalEnv&#39;:
+# 
+#     alpha</code></pre>
+<pre class="r"><code>oneway_test(vals ~ factor(id), data = da)</code></pre>
+<pre><code># 
+#   Asymptotic Two-Sample Fisher-Pitman Permutation Test
+# 
+# data:  vals by factor(id) (x, y)
+# Z = 0.89172, p-value = 0.3725
+# alternative hypothesis: true mu is not equal to 0</code></pre>
+<pre class="r"><code>oneway_test(vals ~ factor(id), data = da,
+            distribution = approximate(nresample = 10000))</code></pre>
+<pre><code># 
+#   Approximative Two-Sample Fisher-Pitman Permutation Test
+# 
+# data:  vals by factor(id) (x, y)
+# Z = 0.89172, p-value = 0.3946
+# alternative hypothesis: true mu is not equal to 0</code></pre>
+<pre class="r"><code>library(perm)
+permTS(vals ~ id, data = da)</code></pre>
+<pre><code># 
+#   Exact Permutation Test (network algorithm)
+# 
+# data:  vals by id
+# p-value = 0.3889
+# alternative hypothesis: true mean id=x - mean id=y is not equal to 0
+# sample estimates:
+# mean id=x - mean id=y 
+#                  1.84</code></pre>
+<p>Mesmo em um caso simples como, esse, onde n = 10, já vimos que o número total de permutações possíveis pode ser muito grande, o que faz com que esse processo fique inviável computacionalmente. A ideia então é fazer um grande número de permutações aleatórias e fazer o mesmo cálculo. Isso pode ser feito retirando-se amostra COM REPOSIÇÃO da amostra conjunta (concatenando os dois grupos) Usando amostras sem reposição</p>
+<pre class="r"><code>N &lt;- 10000
+xydiff &lt;- future_replicate(
+    N, diff(tapply(sample(xy), da$id, mean))
+)
+str(xydiff)</code></pre>
+<pre><code>#  Named num [1:10000] 0.92 -2.52 -2.72 1.24 -1.6 ...
+#  - attr(*, &quot;names&quot;)= chr [1:10000] &quot;y&quot; &quot;y&quot; &quot;y&quot; &quot;y&quot; ...</code></pre>
+<pre class="r"><code>summary(xydiff)</code></pre>
+<pre><code>#      Min.   1st Qu.    Median      Mean   3rd Qu.      Max. 
+# -5.680000 -1.480000  0.000000 -0.001692  1.480000  5.680000</code></pre>
+<pre class="r"><code>hist(xydiff)
+abline(v = obsdiff, col = 2)</code></pre>
+<p><img src="figures/12_permutacao/unnamed-chunk-3-1.png" width="80%" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>## P-valor do teste.
+2 * sum(xydiff &gt;= obsdiff)/length(xydiff)</code></pre>
+<pre><code># [1] 0.3972</code></pre>
+<pre class="r"><code>t.test(vals ~ id, data = da, var.equal = TRUE)$p.value</code></pre>
+<pre><code># [1] 0.404256</code></pre>
+<pre class="r"><code>coin::oneway_test(vals ~ factor(id), data = da)</code></pre>
+<pre><code># 
+#   Asymptotic Two-Sample Fisher-Pitman Permutation Test
+# 
+# data:  vals by factor(id) (x, y)
+# Z = 0.89172, p-value = 0.3725
+# alternative hypothesis: true mu is not equal to 0</code></pre>
+<pre class="r"><code>perm::permTS(vals ~ id, data = da)</code></pre>
+<pre><code># 
+#   Exact Permutation Test (network algorithm)
+# 
+# data:  vals by id
+# p-value = 0.3889
+# alternative hypothesis: true mean id=x - mean id=y is not equal to 0
+# sample estimates:
+# mean id=x - mean id=y 
+#                  1.84</code></pre>
+</div>
+<div id="teste-para-correlação" class="section level3">
+<h3><span class="header-section-number">2.1.2</span> Teste para correlação</h3>
+<p>Usando o mesmo exemplo, mas agora calculando a correlação entre os grupos. NOTE que é necessário usar a correlação (de postos) de Spearman.</p>
+<pre class="r"><code>## Correlações observadas
+cor(x, y, method = &quot;pearson&quot;)</code></pre>
+<pre><code># [1] 0.9228669</code></pre>
+<pre class="r"><code>cor(x, y, method = &quot;kendall&quot;)</code></pre>
+<pre><code># [1] 0.8</code></pre>
+<pre class="r"><code>(obscor &lt;- cor(x, y, method = &quot;spearman&quot;))</code></pre>
+<pre><code># [1] 0.9</code></pre>
+<pre class="r"><code>## Calcula a diferença média para todas as permutações possíveis
+xycor &lt;- future_apply(matrix(1:nrow(xyperm)), 1, function(i) {
+    cor(xyperm[i, 1:5], xyperm[i, 6:10], method = &quot;spearman&quot;)
+})
+str(xycor)</code></pre>
+<pre><code>#  num [1:3628800] 1 0.9 0.9 0.7 0.7 0.6 0.9 0.8 0.7 0.4 ...</code></pre>
+<pre class="r"><code>summary(xycor)</code></pre>
+<pre><code>#    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+#    -1.0    -0.4     0.0     0.0     0.4     1.0</code></pre>
+<pre class="r"><code>hist(xycor)
+abline(v = obscor, col = 2)</code></pre>
+<p><img src="figures/12_permutacao/unnamed-chunk-4-1.png" width="80%" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>## P-valor do teste.
+2 * sum(xycor &gt;= obscor)/length(xycor) # teste exato</code></pre>
+<pre><code># [1] 0.08333333</code></pre>
+<pre class="r"><code>cor.test(x, y,  method = &quot;pearson&quot;)$p.value</code></pre>
+<pre><code># [1] 0.02541591</code></pre>
+<pre class="r"><code>cor.test(x, y,  method = &quot;kendall&quot;)$p.value</code></pre>
+<pre><code># [1] 0.08333333</code></pre>
+<pre class="r"><code>cor.test(x, y,  method = &quot;spearman&quot;)$p.value</code></pre>
+<pre><code># [1] 0.08333333</code></pre>
+<pre class="r"><code>coin::spearman_test(x ~ y,
+              distribution = approximate(nresample = 10000))</code></pre>
+<pre><code># 
+#   Approximative Spearman Correlation Test
+# 
+# data:  x by y
+# Z = 1.8, p-value = 0.0826
+# alternative hypothesis: true rho is not equal to 0</code></pre>
+<pre class="r"><code>## Usa amostragem SEM REPOSIÇÃO
+N &lt;- 100000
+n &lt;- length(xy)
+xycor &lt;- future_replicate(N, {
+    ip &lt;- sample(1:n, size = n/2, replace = FALSE)
+    xp &lt;- xy[ip]
+    yp &lt;- xy[-ip]
+    cor(xp, yp, method = &quot;spearman&quot;)
+})
+str(xycor)</code></pre>
+<pre><code>#  num [1:100000] -0.3 0.1 0.3 0 0.6 0.9 -0.5 -0.2 0.2 -0.2 ...</code></pre>
+<pre class="r"><code>summary(xycor)</code></pre>
+<pre><code>#      Min.   1st Qu.    Median      Mean   3rd Qu.      Max. 
+# -1.000000 -0.400000  0.000000  0.001329  0.400000  1.000000</code></pre>
+<pre class="r"><code>hist(xycor)
+abline(v = obscor, col = 2)</code></pre>
+<p><img src="figures/12_permutacao/unnamed-chunk-4-2.png" width="80%" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>## P-valor do teste.
+2 * sum(xycor &gt;= obscor)/length(xycor) # teste aproximado</code></pre>
+<pre><code># [1] 0.0838</code></pre>
+<pre class="r"><code>cor.test(x, y,  method = &quot;pearson&quot;)$p.value</code></pre>
+<pre><code># [1] 0.02541591</code></pre>
+<pre class="r"><code>cor.test(x, y,  method = &quot;kendall&quot;)$p.value</code></pre>
+<pre><code># [1] 0.08333333</code></pre>
+<pre class="r"><code>cor.test(x, y,  method = &quot;spearman&quot;)$p.value</code></pre>
+<pre><code># [1] 0.08333333</code></pre>
+<pre class="r"><code>coin::spearman_test(x ~ y,
+              distribution = approximate(nresample = 10000))</code></pre>
+<pre><code># 
+#   Approximative Spearman Correlation Test
+# 
+# data:  x by y
+# Z = 1.8, p-value = 0.084
+# alternative hypothesis: true rho is not equal to 0</code></pre>
+</div>
+</div>
+<div id="exemplo-aplicado-correlação" class="section level2">
+<h2><span class="header-section-number">2.2</span> Exemplo aplicado: correlação</h2>
+<pre class="r"><code>data(law, package = &quot;bootstrap&quot;)
+str(law)</code></pre>
+<pre><code># &#39;data.frame&#39;: 15 obs. of  2 variables:
+#  $ LSAT: num  576 635 558 578 666 580 555 661 651 605 ...
+#  $ GPA : num  3.39 3.3 2.81 3.03 3.44 3.07 3 3.43 3.36 3.13 ...</code></pre>
+<pre class="r"><code>plot(law$LSAT, law$GPA)</code></pre>
+<p><img src="figures/12_permutacao/unnamed-chunk-5-1.png" width="80%" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>x &lt;- law$LSAT
+y &lt;- law$GPA
+(obscor &lt;- cor(x, y, method = &quot;spearman&quot;))</code></pre>
+<pre><code># [1] 0.7964286</code></pre>
+<pre class="r"><code>## Impossível fazer com todas as permutações
+factorial(nrow(law))</code></pre>
+<pre><code># [1] 1.307674e+12</code></pre>
+<pre class="r"><code>## Usa amostragem SEM REPOSIÇÃO
+N &lt;- 1000000
+xy &lt;- c(x, y)
+n &lt;- length(xy)
+xycor &lt;- future_replicate(N, {
+    ip &lt;- sample(1:n, size = n/2, replace = FALSE)
+    xp &lt;- xy[ip]
+    yp &lt;- xy[-ip]
+    cor(xp, yp, method = &quot;spearman&quot;)
+})
+str(xycor)</code></pre>
+<pre><code>#  num [1:1000000] 0.118 0.343 -0.261 -0.239 -0.489 ...</code></pre>
+<pre class="r"><code>summary(xycor)</code></pre>
+<pre><code>#       Min.    1st Qu.     Median       Mean    3rd Qu.       Max. 
+# -0.9392857 -0.1857143  0.0000000 -0.0001506  0.1857143  0.9571429</code></pre>
+<pre class="r"><code>hist(xycor)
+abline(v = obscor, col = 2)</code></pre>
+<p><img src="figures/12_permutacao/unnamed-chunk-5-2.png" width="80%" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>## P-valor do teste.
+2 * sum(xycor &gt;= obscor)/length(xycor) # teste aproximado</code></pre>
+<pre><code># [1] 0.000612</code></pre>
+<pre class="r"><code>cor.test(x, y,  method = &quot;pearson&quot;)$p.value</code></pre>
+<pre><code># [1] 0.000665102</code></pre>
+<pre class="r"><code>cor.test(x, y,  method = &quot;kendall&quot;)$p.value</code></pre>
+<pre><code># [1] 0.0005320216</code></pre>
+<pre class="r"><code>cor.test(x, y,  method = &quot;spearman&quot;)$p.value</code></pre>
+<pre><code># [1] 0.000607857</code></pre>
+<pre class="r"><code>coin::spearman_test(x ~ y,
+              distribution = approximate(nresample = 100000))</code></pre>
+<pre><code># 
+#   Approximative Spearman Correlation Test
+# 
+# data:  x by y
+# Z = 2.98, p-value = 0.00064
+# alternative hypothesis: true rho is not equal to 0</code></pre>
+</div>
+<div id="exemplo-das-aulas-anteriores" class="section level2">
+<h2><span class="header-section-number">2.3</span> Exemplo das aulas anteriores</h2>
+<pre class="r"><code>## Exemplo adaptado de Manly (1997)
+## Comparação do comprimento da mandíbula de chacais machos e fêmeas
+set.seed(2)
+machos &lt;- c(120, 107, 110, 116, 114, 111, 113, 117, 114, 112)
+## Simula diferença para as femeas
+femeas &lt;- rnorm(10, mean(machos) - 2, sd = sd(machos))
+da &lt;- data.frame(comp = c(machos, femeas),
+                 sexo = c(rep(&quot;M&quot;, 10), rep(&quot;F&quot;, 10)))
+densityplot(~comp, groups = sexo, data = da, auto.key = TRUE)</code></pre>
+<p><img src="figures/12_permutacao/unnamed-chunk-6-1.png" width="80%" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>## Média por sexo
+tapply(da$comp, da$sexo, mean)</code></pre>
+<pre><code>#       F       M 
+# 112.185 113.400</code></pre>
+<pre class="r"><code>## Diferença das médias
+diff(tapply(da$comp, da$sexo, mean))</code></pre>
+<pre><code>#        M 
+# 1.214975</code></pre>
+<pre class="r"><code>## Média de cada sexo
+(m1 &lt;- mean(machos))</code></pre>
+<pre><code># [1] 113.4</code></pre>
+<pre class="r"><code>(m2 &lt;- mean(femeas))</code></pre>
+<pre><code># [1] 112.185</code></pre>
+<pre class="r"><code>## Diferença entre as médias amostrais
+(med.amostral &lt;- m1 - m2)</code></pre>
+<pre><code># [1] 1.214975</code></pre>
+<pre class="r"><code>## Calcula o desvio padrão ponderado
+n1 &lt;- length(machos)
+v1 &lt;- var(machos)
+n2 &lt;- length(femeas)
+v2 &lt;- var(femeas)
+(s.pond &lt;- sqrt(((n1 - 1) * v1 + (n2 - 1) * v2)/(n1 + n2 - 2)))</code></pre>
+<pre><code># [1] 3.690024</code></pre>
+<pre class="r"><code>## Teste de hipótese para
+## H0: mu1 &lt;= mu2
+## Ha: mu1 &gt; mu2
+mu0 &lt;- 0
+t.test(x = machos, y = femeas, alternative = &quot;greater&quot;,
+       var.equal = TRUE, mu = mu0)</code></pre>
+<pre><code># 
+#   Two Sample t-test
+# 
+# data:  machos and femeas
+# t = 0.73625, df = 18, p-value = 0.2355
+# alternative hypothesis: true difference in means is greater than 0
+# 95 percent confidence interval:
+#  -1.646627       Inf
+# sample estimates:
+# mean of x mean of y 
+#   113.400   112.185</code></pre>
+<pre class="r"><code>## Estatística de teste
+(tcalc &lt;- (m1 - m2)/(s.pond * sqrt(1/n1 + 1/n2)))</code></pre>
+<pre><code># [1] 0.7362465</code></pre>
+<pre class="r"><code>## Valor crítico
+(tcrit &lt;- qt(.025, df = n1 + n2 - 2, lower.tail = FALSE))</code></pre>
+<pre><code># [1] 2.100922</code></pre>
+<pre class="r"><code>## p-valor
+pt(tcalc, df = n1 + n2 - 2, lower.tail = FALSE)</code></pre>
+<pre><code># [1] 0.2355338</code></pre>
+<pre class="r"><code>## Teste por simulação via _permutação_
+N &lt;- 10000
+## Se a hipótese nula é verdadeira, então o comprimento das mandíbulas
+## de machos e fêmeas são provenientes da mesma poplação, e portanto
+## podem ser pensados como uma única amostra.
+amostra &lt;- c(machos, femeas)
+## Amostra SEM REPOSIÇÃO os 20 valores, e atribui aleatoriamente 10 para
+## cada grupo (macho ou fêmea). Se forem de fato da mesma população,
+## então as diferenças entre as médias devem ser próximas de zero.
+am &lt;- replicate(
+    N, diff(tapply(sample(amostra, replace = FALSE), da$sexo, mean))
+)
+## Visualização
+hist(am, main = &quot;Distribuição amostral&quot;)
+abline(v = med.amostral, col = 2)</code></pre>
+<p><img src="figures/12_permutacao/unnamed-chunk-6-2.png" width="80%" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>## p-valor empírico
+sum(am &gt;= med.amostral)/N</code></pre>
+<pre><code># [1] 0.2309</code></pre>
+<pre class="r"><code>## Exemplo adaptado de Manly (1997)
+## Comparação do comprimento da mandíbula de chacais machos e fêmeas
+machos &lt;- c(120, 107, 110, 116, 114, 111, 113, 117, 114, 112)
+femeas &lt;- c(110, 111, 107, 108, 110, 105, 107, 106, 111, 111)
+da &lt;- data.frame(comp = c(machos, femeas),
+                 sexo = c(rep(&quot;M&quot;, 10), rep(&quot;F&quot;, 10)))
+densityplot(~comp, groups = sexo, data = da, auto.key = TRUE)</code></pre>
+<p><img src="figures/12_permutacao/unnamed-chunk-7-1.png" width="80%" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>## Média por sexo
+tapply(da$comp, da$sexo, mean)</code></pre>
+<pre><code>#     F     M 
+# 108.6 113.4</code></pre>
+<pre class="r"><code>## Diferença das médias
+diff(tapply(da$comp, da$sexo, mean))</code></pre>
+<pre><code>#   M 
+# 4.8</code></pre>
+<pre class="r"><code>## Média de cada sexo
+(m1 &lt;- mean(machos))</code></pre>
+<pre><code># [1] 113.4</code></pre>
+<pre class="r"><code>(m2 &lt;- mean(femeas))</code></pre>
+<pre><code># [1] 108.6</code></pre>
+<pre class="r"><code>## Diferença entre as médias amostrais
+(med.amostral &lt;- m1 - m2)</code></pre>
+<pre><code># [1] 4.8</code></pre>
+<pre class="r"><code>## Calcula o desvio padrão ponderado
+n1 &lt;- length(machos)
+v1 &lt;- var(machos)
+n2 &lt;- length(femeas)
+v2 &lt;- var(femeas)
+(s.pond &lt;- sqrt(((n1 - 1) * v1 + (n2 - 1) * v2)/(n1 + n2 - 2)))</code></pre>
+<pre><code># [1] 3.080404</code></pre>
+<pre class="r"><code>## Teste de hipótese para
+## H0: mu1 &lt;= mu2
+## Ha: mu1 &gt; mu2
+mu0 &lt;- 0
+t.test(x = machos, y = femeas, alternative = &quot;greater&quot;,
+       var.equal = TRUE, mu = mu0)</code></pre>
+<pre><code># 
+#   Two Sample t-test
+# 
+# data:  machos and femeas
+# t = 3.4843, df = 18, p-value = 0.001324
+# alternative hypothesis: true difference in means is greater than 0
+# 95 percent confidence interval:
+#  2.411156      Inf
+# sample estimates:
+# mean of x mean of y 
+#     113.4     108.6</code></pre>
+<pre class="r"><code>## Estatística de teste
+(tcalc &lt;- (m1 - m2)/(s.pond * sqrt(1/n1 + 1/n2)))</code></pre>
+<pre><code># [1] 3.484324</code></pre>
+<pre class="r"><code>## Valor crítico
+(tcrit &lt;- qt(.025, df = n1 + n2 - 2, lower.tail = FALSE))</code></pre>
+<pre><code># [1] 2.100922</code></pre>
+<pre class="r"><code>## p-valor
+pt(tcalc, df = n1 + n2 - 2, lower.tail = FALSE)</code></pre>
+<pre><code># [1] 0.001323634</code></pre>
+<pre class="r"><code>## Teste por simulação via _permutação_
+N &lt;- 10000
+## Se a hipótese nula é verdadeira, então o comprimento das mandíbulas
+## de machos e fêmeas são provenientes da mesma população, e portanto
+## podem ser pensados como uma única amostra.
+amostra &lt;- c(machos, femeas)
+## Amostra SEM REPOSIÇÃO os 20 valores, e atribui aleatoriamente 10 para
+## cada grupo (macho ou fêmea). Se forem de fato da mesma população,
+## então as diferenças entre as médias devem ser próximas de zero.
+am &lt;- replicate(
+    N, diff(tapply(sample(amostra, replace = FALSE), da$sexo, mean))
+)
+## Visualização
+hist(am, main = &quot;Distribuição amostral&quot;)
+abline(v = med.amostral, col = 2)</code></pre>
+<p><img src="figures/12_permutacao/unnamed-chunk-7-2.png" width="80%" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>## p-valor empírico
+sum(am &gt;= med.amostral)/N</code></pre>
+<pre><code># [1] 0.0015</code></pre>
+</div>
+<div id="índice-de-moran-correlação-espacial" class="section level2">
+<h2><span class="header-section-number">2.4</span> Índice de Moran (correlação espacial)</h2>
+<p>O índice de Moran é uma medida que avalia a dependência espacial entre observações, através de uma medida de correlção que considera os “pesos” entre observações vizinhas (mais próximas). Valores em locais mais próximos tendem a influenciar mais do que os valores de locais mais distantes.</p>
+<p>O índice (<span class="math inline">\(I\)</span>) de Moran é calculado por <span class="math display">\[
+I = \frac{n}{\sum_{i=1}^n (x_i - \bar{x})^2} \frac{\sum_{i=1}^n
+\sum_{j=1}^n w_{ij}(x_i - \bar{x})(x_j - \bar{x})}{\sum_{i=1}^n
+\sum_{j=1}^n w_{ij}}
+\]</span></p>
+<pre class="r"><code>## Índice de Moran para medir dependência espacial.
+
+## Coordenadas dos eventos em uma malha regular 8 x 8.
+x &lt;- 1:8
+y &lt;- 1:8
+
+## Construção da matriz de pesos que determina a vizinhança entre
+## observações.
+ind &lt;- expand.grid(i = 1:length(x),
+                   j = 1:length(y))
+plot(ind)</code></pre>
+<p><img src="figures/12_permutacao/unnamed-chunk-8-1.png" width="80%" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>##  Função que determina o peso entre duas localizações na malha.
+f &lt;- function(i, j) {
+    u &lt;- min(3, sum(abs(ind[i, ] - ind[j, ])))
+    w &lt;- c(0, 1, sqrt(1/2), 0)[u + 1]
+    return(w)
+}
+
+##  Cria os pesos, matriz (8^2) x (8^2) = 64 x 64.
+w &lt;- matrix(0, nrow = nrow(ind), ncol = nrow(ind))
+for (i in 1:nrow(ind)) {
+    for (j in 1:nrow(ind)) {
+        w[i, j] &lt;- f(i, j)
+    }
+}
+
+##  Normaliza.
+w &lt;- w/sum(w)
+
+## Gráfico. Valores claros indicam maior peso entre observações.
+image(w, asp = 1)</code></pre>
+<p><img src="figures/12_permutacao/unnamed-chunk-8-2.png" width="80%" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>## Lógica do índica de Moran: correlação entre valores observados e
+## média dos vizinhos. Exemplo com valores simulados.
+xx &lt;- rnorm(64)
+cor(cbind(&quot;Valores observados&quot; = xx,
+          &quot;Média dos vizinhos&quot; = as.vector(xx %*% w)))</code></pre>
+<pre><code>#                    Valores observados Média dos vizinhos
+# Valores observados          1.0000000         -0.2233522
+# Média dos vizinhos         -0.2233522          1.0000000</code></pre>
+<pre class="r"><code>## Índice de Moran
+moran &lt;- function(x, w) {
+    n &lt;- length(x)
+    xbar &lt;- mean(x)
+    dx &lt;- x - xbar
+    xi &lt;- rep(dx, each = n)
+    xj &lt;- rep(dx)
+    xixj &lt;- xi * xj
+    pm &lt;- matrix(xixj, ncol = n)
+    pmw &lt;- pm * w
+    spmw &lt;- sum(pmw)
+    smw &lt;- sum(w)
+    sw  &lt;- spmw / smw
+    vr &lt;- n / sum(dx^2)
+    MI &lt;- vr * sw
+    return(MI)
+}
+
+## Moran para os dados simulados
+moran(xx, w)</code></pre>
+<pre><code># [1] -0.05779878</code></pre>
+<pre class="r"><code>replicate(10, moran(sample(xx), w))</code></pre>
+<pre><code>#  [1]  0.034023631 -0.032555384 -0.041883483 -0.019790671  0.024932478
+#  [6] -0.005887561 -0.046625628  0.006277762  0.017167652  0.019192943</code></pre>
+<p>A ideia do teste de permutação, é trocar de lugar as observações e calcular o índice de Moran, mantendo a matriz de pesos fixa. Se não houver dependência espacial, então qualquer observação poderia estar em qualquer lugar. Com isso, o valor calculado do índice de Moran pode ser comparado com a distribuição dos índices de Moran calculados para observações permutadas. Se o valor observado for extremo, indica que deve haver correlação espacial. Se o observado estiver no centro (ou próximo do centro) da distribuição, então não há evidências de correlação espacial.</p>
+<pre class="r"><code>## Teste de permutação com saída gráfica.
+ppt &lt;- function(z, w, N = 10000, stat, ...) {
+    ## Índice de Moran por reamostragem.
+    sim &lt;- replicate(N, moran(sample(z), w))
+    ## Determina o p-valor.
+    p.value &lt;- mean((all &lt;- c(stat, sim)) &gt;= stat)
+    ## Histograma da distribuição empírica sob H_0.
+    hist(sim,
+         sub = paste(&quot;p =&quot;, round(p.value, 4)),
+         xlim = range(all), ...)
+    abline(v = stat, col = &quot;#903030&quot;, lty = 3, lwd = 2)
+    return(p.value)
+}
+
+## Observações simuladas.
+set.seed(17)
+par(mfrow = c(2, 3))
+
+## Dados com dependência espacial --------------------------------------
+## Indução de autocorrelação por meio de uma tendência.
+z &lt;- matrix(rexp(length(x) * length(y),
+                 outer(x, y^2)),
+            length(x))
+image(log(z), main = &quot;Com dependência&quot;)
+
+cor(cbind(&quot;Valores observados&quot; = as.vector(z),
+          &quot;Média dos vizinhos&quot; = as.vector(as.vector(z) %*% w)))</code></pre>
+<pre><code>#                    Valores observados Média dos vizinhos
+# Valores observados          1.0000000          0.1335676
+# Média dos vizinhos          0.1335676          1.0000000</code></pre>
+<pre class="r"><code>## Índice de Moran com dados originais.
+(stat &lt;- moran(z, w))</code></pre>
+<pre><code># [1] 0.06551254</code></pre>
+<pre class="r"><code>hist(z)
+ppt(z, w, stat = stat, main = &quot;I de Moran&quot;, xlab = &quot;I&quot;)</code></pre>
+<pre><code># [1] 0.01559844</code></pre>
+<pre class="r"><code>## Teste usando spdep
+spdep::moran.test(z, spdep::mat2listw(w))</code></pre>
+<pre><code># The legacy packages maptools, rgdal, and rgeos, underpinning the sp package,
+# which was just loaded, will retire in October 2023.
+# Please refer to R-spatial evolution reports for details, especially
+# https://r-spatial.org/r/2023/05/15/evolution4.html.
+# It may be desirable to make the sf package available;
+# package maintainers should consider adding sf to Suggests:.
+# The sp package is now running under evolution status 2
+#      (status 2 uses the sf package in place of rgdal)</code></pre>
+<pre><code># Warning in spdep::mat2listw(w): style is M (missing); style should be set to a
+# valid value</code></pre>
+<pre><code># 
+#   Moran I test under randomisation
+# 
+# data:  z  
+# weights: spdep::mat2listw(w)    
+# 
+# Moran I statistic standard deviate = 2.7152, p-value = 0.003312
+# alternative hypothesis: greater
+# sample estimates:
+# Moran I statistic       Expectation          Variance 
+#      0.0655125441     -0.0158730159      0.0008984441</code></pre>
+<pre class="r"><code>## De help(moran.test):
+## The assumptions underlying the test are sensitive to the form of the
+## graph of neighbour relationships and other factors, and results may
+## be checked against those of moran.mc permutations
+spdep::moran.mc(z, spdep::mat2listw(w), nsim = 10000)</code></pre>
+<pre><code># Warning in spdep::mat2listw(w): style is M (missing); style should be set to a
+# valid value</code></pre>
+<pre><code># 
+#   Monte-Carlo simulation of Moran I
+# 
+# data:  z 
+# weights: spdep::mat2listw(w)  
+# number of simulations + 1: 10001 
+# 
+# statistic = 0.065513, observed rank = 9837, p-value = 0.0164
+# alternative hypothesis: greater</code></pre>
+<pre class="r"><code>## Dados sem dependência espacial --------------------------------------
+## Geração de de um conjunto de dados sob hipótese nula.
+z &lt;- matrix(rnorm(length(x) * length(y), 0, 1/2), length(x))
+image(z, main = &quot;Sem dependência&quot;)
+
+cor(cbind(&quot;Valores observados&quot; = as.vector(z),
+          &quot;Média dos vizinhos&quot; = as.vector(as.vector(z) %*% w)))</code></pre>
+<pre><code>#                    Valores observados Média dos vizinhos
+# Valores observados         1.00000000        -0.04208797
+# Média dos vizinhos        -0.04208797         1.00000000</code></pre>
+<pre class="r"><code># Índice de Moran com dados originais.
+(stat &lt;- moran(z, w))</code></pre>
+<pre><code># [1] -0.008995086</code></pre>
+<pre class="r"><code>hist(z)
+ppt(z, w, stat = stat, main = &quot;I de Moran&quot;, xlab = &quot;I&quot;)</code></pre>
+<p><img src="figures/12_permutacao/unnamed-chunk-9-1.png" width="80%" style="display: block; margin: auto;" /></p>
+<pre><code># [1] 0.4111589</code></pre>
+<pre class="r"><code>par(mfrow = c(1, 1))
+
+## Teste usando spdep
+spdep::moran.test(z, spdep::mat2listw(w))</code></pre>
+<pre><code># Warning in spdep::mat2listw(w): style is M (missing); style should be set to a
+# valid value</code></pre>
+<pre><code># 
+#   Moran I test under randomisation
+# 
+# data:  z  
+# weights: spdep::mat2listw(w)    
+# 
+# Moran I statistic standard deviate = 0.12925, p-value = 0.4486
+# alternative hypothesis: greater
+# sample estimates:
+# Moran I statistic       Expectation          Variance 
+#      -0.008995086      -0.015873016       0.002831704</code></pre>
+<pre class="r"><code>spdep::moran.mc(z, spdep::mat2listw(w), nsim = 10000)</code></pre>
+<pre><code># Warning in spdep::mat2listw(w): style is M (missing); style should be set to a
+# valid value</code></pre>
+<pre><code># 
+#   Monte-Carlo simulation of Moran I
+# 
+# data:  z 
+# weights: spdep::mat2listw(w)  
+# number of simulations + 1: 10001 
+# 
+# statistic = -0.0089951, observed rank = 5846, p-value = 0.4155
+# alternative hypothesis: greater</code></pre>
+</div>
+</div>
+
+<center>
+  <hr width="100%" size="3px">
+  <p> <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.pt_BR">
+      <img src="https://i.creativecommons.org/l/by-nc-sa/4.0/80x15.png" alt="Licença Creative Commons 4.0"> </a>
+  </p>
+  <p> <font size="2"> Este conteúdo
+      está disponível por meio da Licença Creative Commons 4.0 </font>
+  </p>
+</center>
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+
+<script>
+$(document).ready(function ()  {
+
+    // temporarily add toc-ignore selector to headers for the consistency with Pandoc
+    $('.unlisted.unnumbered').addClass('toc-ignore')
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_');
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = false;
+    options.smoothScroll = false;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
