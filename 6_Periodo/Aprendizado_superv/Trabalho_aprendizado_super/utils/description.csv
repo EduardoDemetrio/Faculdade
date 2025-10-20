@@ -1,0 +1,30 @@
+TABELA PORTIFÓLIO:
+ - DESCRIÇÃO: metadados das ofertas:
+ - COLUNAS:
+    id,identificador da oferta.
+    offer_type, tipo da oferta (BOGO, desconto, informacional).
+    difficulty,gasto mínimo necessário para completar a oferta.
+    reward,recompensa oferecida.
+    duration,validade da oferta em dias.
+    channels,canais de envio (web, e-mail, celular, etc.).
+
+
+TABELA PROFILE:
+ - DESCRIÇÃO: dados demográficos dos usuários:
+ - COLUNAS:
+    age, idade do cliente.
+    became_member_on, data de entrada no aplicativo (AAAAMMDD).
+    gender, genero do cliente (M, F ou O).
+    id, identificador do cliente.
+    income, renda do cliente.
+
+        
+TABELA transcript:
+ - DESCRIÇÃO: dados demográficos dos usuários:
+ - COLUNAS:
+    age, idade do cliente.
+    became_member_on, data de entrada no aplicativo (AAAAMMDD).
+    gender, genero do cliente (M, F ou O).
+    id, identificador do cliente.
+    income, renda do cliente.
+
