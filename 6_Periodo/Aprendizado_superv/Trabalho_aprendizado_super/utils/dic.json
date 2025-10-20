@@ -1,0 +1,8 @@
+{
+    "eventos" : {
+        "offer received": ["offer_received"],
+        "offer viewed": ["offer_viewed"],
+        "offer completed": ["offer_completed"],
+        "transaction": ["transaction"]
+    }
+}

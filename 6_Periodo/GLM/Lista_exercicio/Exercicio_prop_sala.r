@@ -87,3 +87,7 @@ ggplot(lungcap, aes(x = Smoke, y = Age)) +
 ajuste <- lm(FEV ~ ., data=lungcap)
 coef(ajuste)
 summary(ajuste)
+
+ajuste_2 <- lm(FEV ~ Age+Ht+Gender+Smoke, data=lungcap)
+coef(ajuste_2)
+summary(ajuste_2)
