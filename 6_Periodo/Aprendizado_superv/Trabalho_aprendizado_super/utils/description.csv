@@ -20,11 +20,10 @@ TABELA PROFILE:
 
         
 TABELA transcript:
- - DESCRIÇÃO: dados demográficos dos usuários:
+ - DESCRIÇÃO: dados eventos usuário:
  - COLUNAS:
-    age, idade do cliente.
-    became_member_on, data de entrada no aplicativo (AAAAMMDD).
-    gender, genero do cliente (M, F ou O).
-    id, identificador do cliente.
-    income, renda do cliente.
+    event, tipo de evento (transação, oferta recebida, visualizada ou completada)..
+    person, identificador do cliente.
+    time, tempo em horas desde o inicio da observação.
+    value, dicinário com o valor gasto ou ID da oferta.
 
