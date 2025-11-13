@@ -4,12 +4,11 @@ from sklearn.base import BaseEstimator, TransformerMixin
 from pandas.api.types import is_integer_dtype, is_bool_dtype
  
 class FeatureBuilder(BaseEstimator, TransformerMixin):
-    def __init__(self, map_gender=True, drop_raw=True, max_age=100):
+    def __init__(self, map_gender=True, drop_raw=True):
         self.map_gender = map_gender
         self.drop_raw = drop_raw
-        self.max_age = max_age
         self.raw_cols_to_drop = [
-            "age","income","time_total"
+            "age","income","time_total",'became_member_on'
         ]
 
     def fit(self, X, y=None):
@@ -24,15 +23,9 @@ class FeatureBuilder(BaseEstimator, TransformerMixin):
             if str(data[c].dtype) == 'boolean' or is_bool_dtype(data[c].dtype):
                 data[c] = data[c].fillna(False).astype(bool)
 
-
-        if 'age' in data.columns:
-            data = data[data['age'] <= self.max_age].copy()
-
-
         if self.map_gender and 'gender' in data.columns:
             data['gender'] = data['gender'].map({'F': 0, 'M': 1, 'O':2})
 
-        
         if 'age' in data.columns:
             data['age_bin'] = pd.cut(
                 data['age'], bins=[0, 25, 40, 90, np.inf],
@@ -54,22 +47,21 @@ class FeatureBuilder(BaseEstimator, TransformerMixin):
                 include_lowest=True, right=False
             ).astype(str)
             
-        if 'became_member_on' in data.columns:
-            data['month'] = data['became_member_on'].dt.month
+        if 'month' in data.columns:
 
             def get_season(month):
                 if month in [12, 1, 2]:
-                    return 'Winter'
+                    return 'Inverno'
                 elif month in [3, 4, 5]:
-                    return 'Spring'
+                    return 'Primaveira'
                 elif month in [6, 7, 8]:
-                    return 'Summer'
+                    return 'Verao'
                 elif month in [9, 10, 11]:
-                    return 'Fall'
+                    return 'Outono'
                 else:
                     return np.nan
 
-            data['season'] = data['month'].apply(get_season).astype(str)
+            data['season'] = data['month'].apply(get_season)
 
         if self.drop_raw:
             data = data.drop(columns=self.raw_cols_to_drop, errors='ignore')
