@@ -1,0 +1,237 @@
+################################################################################
+### Comparação entre LDA, QDA e regressão logística
+### Base Sonar
+### Serão utilizadas apenas 10 preditores disponíveis, para fins de ilustração
+################################################################################
+
+################################################################################
+### Pacotes
+################################################################################
+
+library(mlbench)
+library(MASS)
+library(dplyr)
+library(caret)
+library(pROC)
+
+################################################################################
+### Base de dados e seleção de preditores para a análise
+################################################################################
+
+data(Sonar)
+
+dados <- Sonar[, c("V11", "V12", "V13", "V10", "V36",
+                   "V48", "V49", "V9",  "V51", "V35", "Class")]
+
+dados[,1:10] <- scale(dados[,1:10])
+### Padronização das variáveis numéricas
+
+################################################################################
+### Separação treino/teste
+################################################################################
+
+set.seed(123)
+
+id_treino <- sample(
+    1:nrow(dados),
+    size = round(0.7*nrow(dados))
+)
+
+dados_treino <- dados[id_treino, ]
+dados_teste  <- dados[-id_treino, ]
+
+
+################################################################################
+### Ajuste dos modelos
+################################################################################
+
+ajuste_lda <- lda(
+    Class ~ .,
+    data = dados_treino_pad
+)
+
+ajuste_qda <- qda(
+    Class ~ .,
+    data = dados_treino_pad
+)
+
+ajuste_log <- glm(
+    Class ~ .,
+    family = binomial,
+    data = dados_treino_pad
+)
+
+################################################################################
+### Predições
+################################################################################
+
+pred_lda <- predict(
+    ajuste_lda,
+    newdata = dados_teste_pad
+)
+
+pred_qda <- predict(
+    ajuste_qda,
+    newdata = dados_teste_pad
+)
+
+prob_log <- predict(
+    ajuste_log,
+    newdata = dados_teste_pad,
+    type = "response"
+)
+
+################################################################################
+### Classes preditas
+################################################################################
+
+classe_lda <- pred_lda$class
+
+classe_qda <- pred_qda$class
+
+classe_log <- factor(
+    ifelse(prob_log >= 0.5, "R", "M"),
+    levels = c("R", "M")
+)
+
+################################################################################
+### Matrizes de confusão
+################################################################################
+
+mc_lda <- confusionMatrix(
+    classe_lda,
+    dados_teste_pad$Class,
+    positive = "M"
+)
+mc_lda
+
+mc_qda <- confusionMatrix(
+    classe_qda,
+    dados_teste_pad$Class,
+    positive = "M"
+)
+mc_qda
+
+mc_log <- confusionMatrix(
+    classe_log,
+    dados_teste_pad$Class,
+    positive = "M"
+)
+mc_log
+
+################################################################################
+### Probabilidades para ROC
+################################################################################
+
+prob_lda <- pred_lda$posterior[, "M"]
+
+prob_qda <- pred_qda$posterior[, "M"]
+
+prob_log_M <- 1 - prob_log
+
+################################################################################
+### Curvas ROC
+################################################################################
+
+roc_lda <- roc(
+    dados_teste_pad$Class,
+    prob_lda,
+    levels = c("R", "M")
+)
+roc_lda
+
+roc_qda <- roc(
+    dados_teste_pad$Class,
+    prob_qda,
+    levels = c("R", "M")
+)
+roc_qda
+
+roc_log <- roc(
+    dados_teste_pad$Class,
+    prob_log_M,
+    levels = c("R", "M")
+)
+roc_log
+
+################################################################################
+### Tabela comparativa
+################################################################################
+
+desempenho <- data.frame(
+    Modelo = c(
+        "LDA",
+        "QDA",
+        "Regressão logística"
+    ),
+    Acuracia = c(
+        mc_lda$overall["Accuracy"],
+        mc_qda$overall["Accuracy"],
+        mc_log$overall["Accuracy"]
+    ),
+    Sensibilidade = c(
+        mc_lda$byClass["Sensitivity"],
+        mc_qda$byClass["Sensitivity"],
+        mc_log$byClass["Sensitivity"]
+    ),
+    Especificidade = c(
+        mc_lda$byClass["Specificity"],
+        mc_qda$byClass["Specificity"],
+        mc_log$byClass["Specificity"]
+    ),
+    AUC = c(
+        auc(roc_lda),
+        auc(roc_qda),
+        auc(roc_log)
+    )
+)
+
+desempenho
+
+################################################################################
+### Curvas ROC
+################################################################################
+
+plot(
+    roc_lda,
+    legacy.axes = TRUE,
+    lwd = 2
+)
+
+plot(
+    roc_qda,
+    add = TRUE,
+    lwd = 2,
+    col = 'red'
+)
+
+plot(
+    roc_log,
+    add = TRUE,
+    lwd = 2,
+    col = 'blue'
+)
+
+legend(
+    "bottomright",
+    legend = c(
+        paste0(
+            "LDA (AUC = ",
+            round(auc(roc_lda), 3),
+            ")"
+        ),
+        paste0(
+            "QDA (AUC = ",
+            round(auc(roc_qda), 3),
+            ")"
+        ),
+        paste0(
+            "Logística (AUC = ",
+            round(auc(roc_log), 3),
+            ")"
+        )
+    ),
+    col = c('black', 'red', 'blue'),
+    lwd = 2,
+    bty = "n"
+)

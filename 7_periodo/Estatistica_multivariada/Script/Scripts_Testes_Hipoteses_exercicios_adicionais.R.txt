@@ -1,0 +1,142 @@
+require(HSAUR)
+require(ggplot2)
+require(psych)
+require(mvShapiroTest)
+require(MVTests)
+require(GGally)
+
+data("USJudgeRatings")
+help("USJudgeRatings")
+USJudgeRatings
+summary(USJudgeRatings)
+
+### Vamos testar a hipótese de rating médio igual a oito para quatro critérios: 
+### INTG- Integridade
+### DILG- Diligência
+### PREP- Preparação
+### FAMI- Familiaridade com o direito
+
+summary(USJudgeRatings[,c(2, 4, 7, 8)])
+
+ggpairs(USJudgeRatings[,c(2, 4, 7, 8)])+
+    theme_bw(base_size = 14)
+
+### Teste da suposição de normalidade multivariada
+mvShapiro.Test(as.matrix(USJudgeRatings[,c(2, 4, 7, 8)]))
+### A hipótese de normalidade multivariada não é rejeitada
+
+OneSampleHT2(data = USJudgeRatings[,c(2, 4, 7, 8)], 
+             mu0 = rep(8, 4), alpha = 0.05)
+### A hipótese nula de que os quatro ratings médios são iguais a oito é rejeitada
+### (p<0.001)
+
+### Com base nos intervalos de confiança simultâneos, concluimos que as variáveis
+### PREP e FAMI são responsáveis pela rejeição (em ambos os casos, a pontuação 
+### média é inferior a oito)
+
+### Vamos comparar com os intervalos de Bonferroni
+
+alfa_linha <- 0.05/4 ### Alfa corrigido para os ICs simultâneos
+n <- nrow(USJudgeRatings)
+
+mean(USJudgeRatings$INTG) + c(-1,1) * qt(1-alfa_linha/2, n-1) * sd(USJudgeRatings$INTG)/sqrt(n)
+### IC Bonferroni para o rating médio de INTG
+
+mean(USJudgeRatings$DILG) + c(-1,1) * qt(1-alfa_linha/2, n-1) * sd(USJudgeRatings$DILG)/sqrt(n)
+### IC Bonferroni para o rating médio de DILG
+
+mean(USJudgeRatings$PREP) + c(-1,1) * qt(1-alfa_linha/2, n-1) * sd(USJudgeRatings$PREP)/sqrt(n)
+### IC Bonferroni para o rating médio de PREP
+
+mean(USJudgeRatings$FAMI) + c(-1,1) * qt(1-alfa_linha/2, n-1) * sd(USJudgeRatings$FAMI)/sqrt(n)
+### IC Bonferroni para o rating médio de FAMI
+
+### As conclusões são concordantes com as anteriores, para os ICs baseados na estatística T2
+
+
+################################################################################
+################################################################################
+################################################################################
+### Exemplo- MANOVA
+
+help(skulls) ### skulls: crânios
+data(skulls)
+headTail(skulls)
+
+ggplot(data = skulls, aes(x = epoch, y = mb))+
+    geom_boxplot(fill = '#00AFBB')+
+    theme_bw(base_size = 14)+
+    theme(legend.position = 'none')
+
+ggplot(data = skulls, aes(x = epoch, y = bh))+
+    geom_boxplot(fill = '#00AFBB')+
+    theme_bw(base_size = 14)+
+    theme(legend.position = 'none')
+
+ggplot(data = skulls, aes(x = epoch, y = bl))+
+    geom_boxplot(fill = '#00AFBB')+
+    theme_bw(base_size = 14)+
+    theme(legend.position = 'none')
+
+ggplot(data = skulls, aes(x = epoch, y = nh))+
+    geom_boxplot(fill = '#00AFBB')+
+    theme_bw(base_size = 14)+
+    theme(legend.position = 'none')
+
+### Teste da hipótese de igualdade de matrizes de covariâncias
+BoxM(skulls[, c('mb', 'bh', 'bl', 'nh')], group = skulls$epoch)
+### A hipótese nula de igualdade de matrizes de covariâncias não é rejeitada (p=0.248)
+
+### Análise de variância multivariada (manova)
+manova_skulls <- manova(cbind(mb, bh, bl, nh) ~ epoch, skulls)
+summary(manova_skulls, test="Pillai")
+summary(manova_skulls, test="Wilks")
+summary(manova_skulls, test="Roy")
+summary(manova_skulls, test="Hotelling-Lawley")
+### Os quatro testes sugerem a rejeição da hipótese nula de igualdade dos vetores 
+### de médias (p<0.001)
+
+### Agora vamos testar a hipótese de igualdade dos vetores de médias usando aleatorização.
+s1 <- summary(manova_skulls, test="Wilks")$stats[1,'approx F']
+s1 ### Estatística do teste calculada para a amostra original
+
+### Sob H0, os dados vêm de umja mesma distribuição, de forma que podemos aleatorizar
+### os vetores de dados nos cinco grupos.
+
+skulls_random <- skulls
+skulls_random$epoch <- sample(skulls_random$epoch)
+skulls_random
+
+### Vamos aplicar a manova na base aleatorizada
+manova_skulls_random <- manova(cbind(mb, bh, bl, nh) ~ epoch, skulls_random)
+s1_random <- summary(manova_skulls_random, test="Wilks")$stats[1,'approx F']
+s1_random ### Estatística do teste calculada para a amostra randomizada
+
+### Vamos repetir a randomização 1000 vezes e guardar os valores da estatística teste
+s1_random_vector <- numeric()
+
+for(i in 1:1000){
+    skulls_random$epoch <- sample(skulls_random$epoch)
+    manova_skulls_random <- manova(cbind(mb, bh, bl, nh) ~ epoch, skulls_random)
+    s1_random_vector[i] <- summary(manova_skulls_random, test="Wilks")$stats[1,'approx F']
+}
+
+### Plot da distribuição empírica da estatística teste sob H0
+
+hist(s1_random_vector, las = 1, xlab = 'Estatística de Wilks', xlim = c(0,4))
+abline(v = s1, col = 'red')
+### O valor da estatística teste na amostra é bastante extrema em relação à distribuição
+### simulada sob H0. Vamos calcular o p-valor simulado como a proporção de resultados
+### simulados que excedem a estatística na amostra original.
+
+### p-valor simulado
+mean(s1_random_vector > s1)
+
+### Teste da suposição de normalidade multivariada dos erros
+residuos <- rstudent(manova_skulls)
+mvShapiro.Test(residuos)
+### A hipótese nula de normalidade multivariada para os resíduos não é rejeitada (p=0.94)
+
+### Agora vamos proceder com as análises de variância (univariadas) para cada variável
+summary.aov(manova_skulls)
+### Ao nível de significância de 5%, há diferença nas médias para as variáveis mb, bh e bl

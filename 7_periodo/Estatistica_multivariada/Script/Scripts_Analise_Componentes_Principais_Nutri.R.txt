@@ -1,0 +1,279 @@
+################################################################################
+# PCA PARA DADOS DE CONSUMO ALIMENTAR
+
+library(ggplot2)
+library(pheatmap)
+library(psych)
+library(GGally)
+library(forestmodel)
+library(ggResidpanel)
+
+set.seed(123)
+
+################################################################################
+# IMPORTAÇÃO DOS DADOS
+################################################################################
+
+# Ajuste o caminho/arquivo conforme necessário
+load("data_nutri_revisado.Rdata")
+
+################################################################################
+# EXPLORAÇÃO INICIAL DA BASE
+################################################################################
+
+str(data_nutri)                    # Estrutura da base
+psych::headTail(data_nutri)        # Início e fim da base
+summary(data_nutri)                # Resumo descritivo
+
+################################################################################
+# SELEÇÃO DAS VARIÁVEIS DE CONSUMO ALIMENTAR
+################################################################################
+
+dados_pca <- data_nutri[, 2:41]
+# Base contendo apenas as variáveis de consumo alimentar
+
+# Matrizes básicas
+mat_cov <- var(dados_pca)
+mat_cor <- cor(dados_pca)
+
+mat_cov
+mat_cor
+
+################################################################################
+# AUTOVALORES E AUTOVETORES DA MATRIZ DE CORRELAÇÕES
+################################################################################
+
+aut_cor <- eigen(mat_cor)
+aut_cor
+
+# Desvios-padrão e variâncias dos componentes associados à PCA por correlações
+# lembrando que, em princomp(..., cor = TRUE), os autovalores são PCA$sdev^2
+
+################################################################################
+# AJUSTE DA PCA BASEADA NA MATRIZ DE CORRELAÇÕES
+################################################################################
+
+pca_cor <- princomp(dados_pca, scores = TRUE, cor = TRUE)
+pca_cor
+
+# Desvios-padrão dos componentes principais
+pca_cor$sdev
+
+# Variâncias dos componentes principais
+var_pcs <- pca_cor$sdev^2
+var_pcs
+
+# Critério de Kaiser: manter componentes com autovalor > 1
+var_pcs > 1
+
+################################################################################
+# SCREE PLOT
+################################################################################
+
+dados_scree <- data.frame(
+    PC = seq_along(var_pcs),
+    Variancia = var_pcs
+)
+
+ggplot(dados_scree, aes(x = PC, y = Variancia)) +
+    geom_point() +
+    geom_line() +
+    geom_hline(yintercept = 1, color = "red") +
+    theme_bw(base_size = 14) +
+    scale_x_continuous(breaks = seq_along(var_pcs)) +
+    scale_y_continuous(breaks = 0:20) +
+    labs(x = "Componente principal", y = "Autovalor")
+# Scree plot
+
+################################################################################
+# VARIÂNCIA EXPLICADA
+################################################################################
+
+summary(pca_cor)
+
+# Interpretação:
+# PC1 explica summary(pca_cor) -> Proportion of Variance da 1a linha
+# PC2 explica summary(pca_cor) -> Proportion of Variance da 2a linha
+# e assim por diante.
+
+################################################################################
+# CARGAS DOS COMPONENTES PRINCIPAIS
+################################################################################
+
+options(max.print = 100000)
+
+loadings(pca_cor)
+# Em PCA baseada na matriz de correlações, essas cargas podem ser interpretadas
+# como correlações entre as variáveis originais padronizadas e os PCs.
+
+cargas_4pcs <- loadings(pca_cor)[, 1:4]
+cargas_4pcs
+
+# Mapa de calor das cargas
+pheatmap(
+    cargas_4pcs,
+    cluster_rows = TRUE,
+    cluster_cols = FALSE,
+    color = colorRampPalette(c("navy", "white", "firebrick3"))(100)
+)
+
+################################################################################
+# ESCORES DOS INDIVÍDUOS
+################################################################################
+
+pca_cor$scores[, 1:4]
+psych::headTail(pca_cor$scores[, 1:4], top = 10, bottom = 10)
+
+# Verificação visual da ortogonalidade entre os PCs
+GGally::ggpairs(as.data.frame(pca_cor$scores[, 1:4])) +
+    theme_bw(base_size = 14)
+
+################################################################################
+# BASE COM ESCORES DOS QUATRO PRIMEIROS COMPONENTES
+################################################################################
+
+dados_escores <- data.frame(
+    ID = data_nutri$ID,
+    PC1 = pca_cor$scores[, 1],
+    PC2 = pca_cor$scores[, 2],
+    PC3 = pca_cor$scores[, 3],
+    PC4 = pca_cor$scores[, 4]
+)
+
+dados_escores
+
+################################################################################
+# RANQUEAMENTO DOS INDIVÍDUOS EM CADA COMPONENTE
+################################################################################
+
+# PC1
+ordem_pc1 <- order(dados_escores$PC1)
+dados_escores[ordem_pc1, ]
+psych::headTail(dados_escores[ordem_pc1, ], top = 10, bottom = 10)
+
+# PC2
+ordem_pc2 <- order(dados_escores$PC2)
+dados_escores[ordem_pc2, ]
+psych::headTail(dados_escores[ordem_pc2, ], top = 10, bottom = 10)
+
+# PC3
+ordem_pc3 <- order(dados_escores$PC3)
+dados_escores[ordem_pc3, ]
+psych::headTail(dados_escores[ordem_pc3, ], top = 10, bottom = 10)
+
+# PC4
+ordem_pc4 <- order(dados_escores$PC4)
+dados_escores[ordem_pc4, ]
+psych::headTail(dados_escores[ordem_pc4, ], top = 10, bottom = 10)
+
+################################################################################
+# GRÁFICOS DOS ESCORES
+################################################################################
+
+# PC1 versus PC2
+ggplot(dados_escores, aes(x = PC1, y = PC2, label = ID)) +
+    geom_text(size = 3, color = "grey30") +
+    geom_vline(xintercept = 0, color = "red", linetype = 2, linewidth = 1) +
+    geom_hline(yintercept = 0, color = "red", linetype = 2, linewidth = 1) +
+    theme_bw(base_size = 14) +
+    labs(x = "PC1", y = "PC2")
+
+# PC3 versus PC4
+ggplot(dados_escores, aes(x = PC3, y = PC4, label = ID)) +
+    geom_text(size = 3, color = "grey30") +
+    geom_vline(xintercept = 0, color = "red", linetype = 2, linewidth = 1) +
+    geom_hline(yintercept = 0, color = "red", linetype = 2, linewidth = 1) +
+    theme_bw(base_size = 14) +
+    labs(x = "PC3", y = "PC4")
+
+################################################################################
+# ASSOCIAÇÃO DOS ESCORES COM OUTRAS VARIÁVEIS DA BASE
+################################################################################
+
+dados_assoc <- data.frame(
+    dados_escores[, c("ID", "PC1", "PC2", "PC3", "PC4")],
+    data_nutri[, c("Sexo", "FaixaEtaria", "Escolaridade",
+                   "Renda", "Residencia", "AtividadeFisica")]
+)
+
+str(dados_assoc)
+summary(dados_assoc)
+
+# PC1 versus renda
+ggplot(dados_assoc, aes(x = Renda, y = PC1, fill = Renda)) +
+    geom_boxplot() +
+    geom_hline(yintercept = 0, color = "red", linetype = 2, linewidth = 1) +
+    theme_bw(base_size = 14) +
+    theme(legend.position = "none") +
+    labs(x = "Renda", y = "PC1")
+
+# PC2 versus escolaridade
+ggplot(dados_assoc, aes(x = Escolaridade, y = PC2, fill = Escolaridade)) +
+    geom_boxplot() +
+    geom_hline(yintercept = 0, color = "red", linetype = 2, linewidth = 1) +
+    theme_bw(base_size = 14) +
+    theme(legend.position = "none") +
+    labs(x = "Escolaridade", y = "PC2")
+
+# PC3 versus atividade física
+ggplot(dados_assoc, aes(x = AtividadeFisica, y = PC3, fill = AtividadeFisica)) +
+    geom_boxplot() +
+    geom_hline(yintercept = 0, color = "red", linetype = 2, linewidth = 1) +
+    theme_bw(base_size = 14) +
+    theme(legend.position = "none") +
+    labs(x = "Atividade física", y = "PC3")
+
+# PC4 versus residência
+ggplot(dados_assoc, aes(x = Residencia, y = PC4, fill = Residencia)) +
+    geom_boxplot() +
+    geom_hline(yintercept = 0, color = "red", linetype = 2, linewidth = 1) +
+    theme_bw(base_size = 14) +
+    theme(legend.position = "none") +
+    labs(x = "Residência", y = "PC4")
+
+################################################################################
+# MODELOS DE REGRESSÃO LINEAR PARA OS ESCORES
+################################################################################
+
+# PC1
+fit_pc1 <- lm(
+    PC1 ~ Sexo + FaixaEtaria + Escolaridade + Renda + Residencia + AtividadeFisica,
+    data = dados_assoc
+)
+
+summary(fit_pc1)
+forest_model(fit_pc1)
+resid_panel(fit_pc1, type = "standardized")
+
+# PC2
+fit_pc2 <- lm(
+    PC2 ~ Sexo + FaixaEtaria + Escolaridade + Renda + Residencia + AtividadeFisica,
+    data = dados_assoc
+)
+
+summary(fit_pc2)
+forest_model(fit_pc2)
+resid_panel(fit_pc2, type = "standardized")
+
+# PC3
+# Mantive sua recodificação original, invertendo o sinal para facilitar interpretação
+dados_assoc$PC3 <- -dados_assoc$PC3
+
+fit_pc3 <- lm(
+    PC3 ~ Sexo + FaixaEtaria + Escolaridade + Renda + Residencia + AtividadeFisica,
+    data = dados_assoc
+)
+
+summary(fit_pc3)
+forest_model(fit_pc3)
+resid_panel(fit_pc3, type = "standardized")
+
+# PC4
+fit_pc4 <- lm(
+    PC4 ~ Sexo + FaixaEtaria + Escolaridade + Renda + Residencia + AtividadeFisica,
+    data = dados_assoc
+)
+
+summary(fit_pc4)
+forest_model(fit_pc4)
+resid_panel(fit_pc4, type = "standardized")

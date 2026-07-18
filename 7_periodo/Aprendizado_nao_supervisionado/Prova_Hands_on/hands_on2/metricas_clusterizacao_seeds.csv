@@ -1,0 +1,5 @@
+"Metodo","Clusters","Ruidos","Silhouette","Silhouette_sem_ruido","Calinski_Harabasz","Davies_Bouldin","ARI","Rand"
+"K-médias",3,0,0.4007,0.4007,249.7842,0.9279,0.7733,0.8997
+"Hierárquico Ward",3,0,0.3926,0.3926,238.3612,0.9445,0.797,0.9102
+"DBSCAN",2,72,0.1685,0.5412,196.6494,0.5725,0.2584,0.6579
+"GMM",3,0,0.3794,0.3794,231.8643,0.9487,0.8905,0.9516
