@@ -1,0 +1,33 @@
+# =============================================================================
+# PCA PASSO A PASSO - Dados iris
+# =============================================================================
+rm(list = objects())
+par(mfrow=c(1,1))
+# 1) Dados e padronização (recomendado quando variáveis em escalas diferentes)
+head(iris, n = 2)
+X <- scale(iris[, 1:4], center = TRUE, scale = TRUE)
+
+# 2) Ajuste do PCA (dados já padronizados; center/scale desativados)
+pca <- prcomp(X, center = FALSE, scale. = FALSE)
+
+# 3) Variância explicada por componente
+vari <- pca$sdev^2
+prop <- vari / sum(vari)
+cum  <- cumsum(prop)
+round(cbind(prop, cum), 3)
+
+# 4) Scree plot (proporção e acumulada)
+plot(prop, type = "b", pch = 19, xlab = "Componente",
+     ylab = "Proporção da variância", main = " ")
+lines(cum, type = "b", pch = 1, lty = 2)
+legend("topright", c("Proporção", "Acumulada"),
+       pch = c(19, 1), lty = c(1, 2), bty = "n")
+
+# 5) Biplot (PC1 x PC2)
+biplot(pca, main = "Biplot: PC1 x PC2")
+
+# 6) Escores e loadings
+scores   <- pca$x         # coordenadas das observações nos PCs (n x p)
+loadings <- pca$rotation  # pesos das variáveis em cada PC (p x p)
+head(scores, 3)
+round(loadings, 3)

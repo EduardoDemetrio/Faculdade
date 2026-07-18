@@ -1,0 +1,40 @@
+# Seja a matriz A
+A <- matrix(c(3, 2, 2,
+              2, 3, -2),
+            nrow = 2, byrow = TRUE)
+
+# DecomposiC'C#o SVD via funC'C#o svd
+svd_decomp <- svd(A)
+
+A1 <- svd_decomp$u%*%diag(svd_decomp$d)%*%t(svd_decomp$v)
+
+# DecomposiC'C#o SVD via AAt e AtA
+AAt <- A %*% t(A)
+AtA <- t(A) %*% A
+
+# AAt 
+eigen_AAt <- eigen(AAt, symmetric = TRUE)
+UU <- eigen_AAt$vectors
+dd <- eigen_AAt$values
+
+# AtA 
+eigen_AtA <- eigen(AtA, symmetric = TRUE)
+VV <- eigen_AtA$vectors
+
+DD <- matrix(0, nrow = nrow(UU), ncol = ncol(VV))
+dim_D <- min(length(dd), nrow(DD), ncol(DD))
+diag(DD)[1:dim_D] <- sqrt(dd)
+
+A1 <- UU[2:1,]%*%DD%*%t(VV)
+
+# ReconstruC'C#o de A a partir de U, D e Vt
+A2 <- svd_decomp$u %*% diag(svd_decomp$d) %*% t(svd_decomp$v)
+
+
+#Verificar
+
+A
+
+A1
+
+A2

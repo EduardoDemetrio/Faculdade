@@ -1,0 +1,53 @@
+require(mvtnorm)
+
+mu_1 <- c(0,0)
+Sigma_1 <- matrix(c(1, 0.75, 0.75, 1), nrow = 2, ncol = 2)
+### Parâmetros da população 1
+
+mu_2 <- c(1,1)
+Sigma_2 <- matrix(c(1.5, 0.5, 0.5, 1.5), nrow = 2, ncol = 2)
+### Parâmetros da população 2
+
+### Classificação da primeira observação
+y <- c(0.2,0.3)
+ratio <- dmvnorm(x = y, mean = mu_1, sigma = Sigma_1)/dmvnorm(x = y, mean = mu_2, sigma = Sigma_2)
+ratio
+
+### Regra 1
+ifelse(ratio>=1, 'População 1', 'População 2')
+
+### Regra 2
+ifelse(ratio>=3, 'População 1', 'População 2')
+
+### Regra 3
+ifelse(ratio>=12, 'População 1', 'População 2')
+
+
+### Classificação da segunda observação
+y <- c(0.2,0)
+ratio <- dmvnorm(x = y, mean = mu_1, sigma = Sigma_1)/dmvnorm(x = y, mean = mu_2, sigma = Sigma_2)
+ratio
+
+### Regra 1
+ifelse(ratio>=1, 'População 1', 'População 2')
+
+### Regra 2
+ifelse(ratio>=3, 'População 1', 'População 2')
+
+### Regra 3
+ifelse(ratio>=12, 'População 1', 'População 2')
+
+
+### Classificação da terceira observação
+y <- c(1.5,0.8)
+ratio <- dmvnorm(x = y, mean = mu_1, sigma = Sigma_1)/dmvnorm(x = y, mean = mu_2, sigma = Sigma_2)
+ratio
+
+### Regra 1
+ifelse(ratio>=1, 'População 1', 'População 2')
+
+### Regra 2
+ifelse(ratio>=3, 'População 1', 'População 2')
+
+### Regra 3
+ifelse(ratio>=12, 'População 1', 'População 2')

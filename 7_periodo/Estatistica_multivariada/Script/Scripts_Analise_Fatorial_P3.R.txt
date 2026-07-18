@@ -1,0 +1,836 @@
+################################################################################
+### Análise Fatorial Exploratória
+### Parte 3: métodos de extração, rotações e escores fatoriais
+################################################################################
+
+################################################################################
+### Pacotes
+################################################################################
+
+require(psych)
+require(corrplot)
+require(ggplot2)
+require(ggpubr)
+
+################################################################################
+### Configurações iniciais
+################################################################################
+
+options(device = "x11")
+
+setwd(this.path::here())
+
+################################################################################
+### Base de dados
+################################################################################
+### A base bfi contém 25 itens de autorrelato de personalidade retirados do
+### International Personality Item Pool.
+###
+### Os itens fazem parte do projeto SAPA, com informações de aproximadamente
+### 2.800 indivíduos. Há também variáveis demográficas, como sexo,
+### escolaridade e idade.
+################################################################################
+
+data(bfi)
+
+help(bfi)
+
+################################################################################
+### Organização dos dados
+################################################################################
+
+dados_af <- na.omit(
+    bfi[, c(1:25, 26, 28)]
+)
+
+################################################################################
+### Separação das variáveis
+################################################################################
+### As 25 primeiras variáveis serão usadas na análise fatorial.
+### Sexo e idade serão usadas posteriormente para interpretar os escores.
+################################################################################
+
+dados <- dados_af[, 1:25]
+
+################################################################################
+### Matriz de correlações
+################################################################################
+
+matcor <- round(
+    cor(dados),
+    3
+)
+
+corrplot(
+    matcor,
+    method = "color"
+)
+
+################################################################################
+### Avaliação da adequação da análise fatorial
+################################################################################
+
+cortest.bartlett(
+    matcor,
+    n = nrow(dados)
+)
+
+################################################################################
+### Interpretação
+################################################################################
+### O teste de Bartlett avalia a hipótese nula de que a matriz de correlações
+### é igual à matriz identidade.
+###
+### Rejeitar essa hipótese indica que há correlações suficientes entre as
+### variáveis para justificar uma análise fatorial.
+################################################################################
+
+KMO(matcor)$MSA
+
+################################################################################
+### Interpretação
+################################################################################
+### O índice KMO avalia a adequação global da matriz de correlações para
+### análise fatorial.
+###
+### Valores mais próximos de 1 indicam maior adequação.
+################################################################################
+
+KMO(matcor)$MSAi
+
+################################################################################
+### Interpretação
+################################################################################
+### Os valores individuais de MSA indicam a adequação de cada variável à
+### análise fatorial.
+###
+### Variáveis com valores baixos podem prejudicar a solução fatorial.
+################################################################################
+
+
+################################################################################
+### Escolha do número de fatores
+################################################################################
+
+fa.parallel(
+    matcor,
+    n.obs = nrow(dados),
+    fa = "pc"
+)
+
+################################################################################
+### Interpretação
+################################################################################
+### A análise paralela sugere uma solução com cinco fatores.
+###
+### Essa escolha também é coerente com o contexto da base, construída para
+### representar dimensões clássicas de personalidade.
+################################################################################
+
+
+################################################################################
+### Solução inicial por componentes principais
+################################################################################
+
+f_pca <- principal(
+    dados,
+    nfactors = 5,
+    rotate = "none"
+)
+
+################################################################################
+### Principais resultados
+################################################################################
+
+f_pca$communality
+f_pca$loadings
+f_pca$fit
+f_pca$uniquenesses
+f_pca$residual
+f_pca$rms
+
+################################################################################
+### Interpretação
+################################################################################
+### A solução por componentes principais é usada aqui.
+###
+################################################################################
+
+corrplot.mixed(
+    f_pca$residual,
+    upper = "ellipse"
+)
+
+################################################################################
+### Interpretação
+################################################################################
+### A matriz residual mostra as correlações que não foram bem reproduzidas
+### pela solução com cinco fatores.
+###
+### Resíduos pequenos indicam que a estrutura fatorial reproduz bem a matriz
+### de correlações observada.
+################################################################################
+
+
+################################################################################
+### Comparação entre métodos de extração
+################################################################################
+### Nesta seção, mantemos fixo o número de fatores em cinco e não aplicamos
+### rotação.
+###
+### O objetivo é comparar diferentes métodos de extração das cargas fatoriais.
+################################################################################
+
+
+################################################################################
+### Método dos componentes principais
+################################################################################
+
+f_pca <- principal(
+    dados,
+    nfactors = 5,
+    rotate = "none"
+)
+
+fa.diagram(f_pca)
+
+f_pca$fit
+f_pca$rms
+
+
+################################################################################
+### Método da máxima verossimilhança
+################################################################################
+
+f_ml <- fa(
+    dados,
+    nfactors = 5,
+    rotate = "none",
+    fm = "ml"
+)
+
+fa.diagram(f_ml)
+
+f_ml$fit
+f_ml$rms
+
+
+################################################################################
+### Método dos fatores principais
+################################################################################
+
+f_pa <- fa(
+    dados,
+    nfactors = 5,
+    rotate = "none",
+    fm = "pa"
+)
+
+fa.diagram(f_pa)
+
+f_pa$fit
+f_pa$rms
+
+
+################################################################################
+### Método MINRES
+################################################################################
+### O método MINRES busca minimizar os resíduos entre a matriz de correlações
+### observada e a matriz de correlações reproduzida pelo modelo fatorial.
+################################################################################
+
+f_mr <- fa(
+    dados,
+    nfactors = 5,
+    rotate = "none",
+    fm = "minres"
+)
+
+fa.diagram(f_mr)
+
+f_mr$fit
+f_mr$rms
+
+
+################################################################################
+### Método de mínimos quadrados ponderados
+################################################################################
+
+f_wls <- fa(
+    dados,
+    nfactors = 5,
+    rotate = "none",
+    fm = "wls"
+)
+
+fa.diagram(f_wls)
+
+f_wls$fit
+f_wls$rms
+
+################################################################################
+### Interpretação
+################################################################################
+### Diferentes métodos podem produzir soluções semelhantes, mas não
+### necessariamente idênticas.
+################################################################################
+
+
+################################################################################
+### Comparação entre métodos de rotação
+################################################################################
+### A partir daqui, fixamos o método de extração como MINRES.
+###
+### O objetivo é mostrar como diferentes rotações modificam a estrutura das
+### cargas fatoriais e, portanto, a interpretação dos fatores.
+################################################################################
+
+
+################################################################################
+### Solução sem rotação
+################################################################################
+
+f_sem_rot <- fa(
+    dados,
+    nfactors = 5,
+    rotate = "none",
+    fm = "minres"
+)
+
+fa.diagram(f_sem_rot)
+
+f_sem_rot$loadings
+
+
+################################################################################
+### Rotação ortogonal: varimax
+################################################################################
+
+f_var <- fa(
+    dados,
+    nfactors = 5,
+    rotate = "varimax",
+    fm = "minres"
+)
+
+fa.diagram(f_var)
+
+f_var$loadings
+f_var$fit
+f_var$rms
+
+
+################################################################################
+### Rotação ortogonal: quartimax
+################################################################################
+
+f_quart <- fa(
+    dados,
+    nfactors = 5,
+    rotate = "quartimax",
+    fm = "minres"
+)
+
+fa.diagram(f_quart)
+
+f_quart$loadings
+f_quart$fit
+f_quart$rms
+
+
+################################################################################
+### Rotação ortogonal: bentlerT
+################################################################################
+
+f_bent <- fa(
+    dados,
+    nfactors = 5,
+    rotate = "bentlerT",
+    fm = "minres"
+)
+
+fa.diagram(f_bent)
+
+f_bent$loadings
+
+
+################################################################################
+### Rotação bifactor
+################################################################################
+
+f_bif <- fa(
+    dados,
+    nfactors = 5,
+    rotate = "bifactor",
+    fm = "minres"
+)
+
+fa.diagram(f_bif)
+
+f_bif$loadings
+
+
+################################################################################
+### Interpretação das rotações ortogonais
+################################################################################
+### Nas rotações ortogonais, os fatores permanecem não correlacionados.
+###
+### O objetivo da rotação é obter uma estrutura mais simples de cargas:
+### idealmente, cada variável deve apresentar carga alta em poucos fatores
+### e cargas baixas nos demais.
+################################################################################
+
+
+################################################################################
+### Rotação oblíqua: promax
+################################################################################
+
+f_pro <- fa(
+    dados,
+    nfactors = 5,
+    rotate = "promax",
+    fm = "minres"
+)
+
+fa.diagram(f_pro)
+
+f_pro$loadings
+f_pro$Phi
+f_pro$r.scores
+
+
+################################################################################
+### Rotação oblíqua: oblimin
+################################################################################
+
+f_obl <- fa(
+    dados,
+    nfactors = 5,
+    rotate = "oblimin",
+    fm = "minres"
+)
+
+fa.diagram(f_obl)
+
+f_obl$loadings
+f_obl$Phi
+
+
+################################################################################
+### Rotação oblíqua: simplimax
+################################################################################
+
+f_simp <- fa(
+    dados,
+    nfactors = 5,
+    rotate = "simplimax",
+    fm = "minres"
+)
+
+fa.diagram(f_simp)
+
+f_simp$loadings
+f_simp$Phi
+
+################################################################################
+### Interpretação das rotações oblíquas
+################################################################################
+### Nas rotações oblíquas, os fatores podem ser correlacionados.
+###
+### Isso pode ser mais realista em muitas aplicações, especialmente quando
+### os construtos latentes não são teoricamente independentes.
+###
+### A matriz Phi apresenta as correlações entre os fatores.
+################################################################################
+
+
+################################################################################
+### Extração dos escores fatoriais
+################################################################################
+### Agora fixamos:
+###
+### - método de extração: MINRES;
+### - rotação: varimax;
+### - número de fatores: cinco.
+###
+### Vamos comparar diferentes métodos de obtenção dos escores fatoriais.
+################################################################################
+
+
+################################################################################
+### Escores pelo método da regressão
+################################################################################
+
+f_reg <- fa(
+    dados,
+    nfactors = 5,
+    rotate = "varimax",
+    fm = "minres",
+    scores = "regression"
+)
+
+f_reg$scores
+f_reg$r.scores
+summary(f_reg$scores)
+
+
+################################################################################
+### Escores de Thurstone
+################################################################################
+
+f_thu <- fa(
+    dados,
+    nfactors = 5,
+    rotate = "varimax",
+    fm = "minres",
+    scores = "Thurstone"
+)
+
+f_thu$scores
+f_thu$r.scores
+summary(f_thu$scores)
+
+
+################################################################################
+### Escores de Bartlett
+################################################################################
+
+f_bart <- fa(
+    dados,
+    nfactors = 5,
+    rotate = "varimax",
+    fm = "minres",
+    scores = "Bartlett"
+)
+
+f_bart$scores
+f_bart$r.scores
+summary(f_bart$scores)
+
+
+################################################################################
+### Escores de ten Berge
+################################################################################
+
+f_tenberge <- fa(
+    dados,
+    nfactors = 5,
+    rotate = "varimax",
+    fm = "minres",
+    scores = "tenBerge"
+)
+
+f_tenberge$scores
+f_tenberge$r.scores
+summary(f_tenberge$scores)
+
+################################################################################
+### Interpretação
+################################################################################
+### Escores fatoriais são estimativas dos valores individuais dos fatores
+### latentes.
+###
+### Eles podem ser usados em análises posteriores, como comparações entre
+### grupos, regressões ou visualizações exploratórias.
+###
+### Como os fatores não são observados diretamente, diferentes métodos podem
+### produzir escores ligeiramente diferentes.
+################################################################################
+
+
+################################################################################
+### Biplots fatoriais
+################################################################################
+
+biplot.psych(
+    f_reg,
+    choose = c(1, 2),
+    pch = 21,
+    col = c("grey80", "black")
+)
+
+################################################################################
+### Fatores 1 e 2
+################################################################################
+
+biplot.psych(
+    f_reg,
+    choose = c(3, 4),
+    pch = 21,
+    col = c("grey80", "black")
+)
+
+################################################################################
+### Fatores 3 e 4
+################################################################################
+
+biplot.psych(
+    f_reg,
+    choose = c(1, 5),
+    pch = 21,
+    col = c("grey80", "black")
+)
+
+################################################################################
+### Fatores 1 e 5
+################################################################################
+
+
+################################################################################
+### Análise complementar dos escores fatoriais
+################################################################################
+### A seguir, os escores fatoriais são relacionados com sexo e idade.
+###
+### Esta etapa não faz parte da estimação da análise fatorial, mas ajuda na
+### interpretação substantiva dos fatores.
+################################################################################
+
+data_escores <- data.frame(
+    f_reg$scores,
+    Sexo = dados_af$gender,
+    Idade = dados_af$age
+)
+
+data_escores$Sexo <- factor(
+    data_escores$Sexo,
+    labels = c("Masculino", "Feminino")
+)
+
+################################################################################
+### Fator 1
+################################################################################
+
+g1 <- ggplot(
+    data = data_escores,
+    aes(
+        x = Sexo,
+        y = MR1,
+        fill = Sexo
+    )
+) +
+    geom_boxplot() +
+    theme_bw(base_size = 14) +
+    theme(
+        legend.position = "none"
+    ) +
+    labs(
+        x = NULL,
+        y = "Fator 1"
+    )
+
+g2 <- ggplot(
+    data = data_escores,
+    aes(
+        x = Idade,
+        y = MR1
+    )
+) +
+    geom_point(alpha = 0.35) +
+    geom_smooth(
+        method = "lm",
+        se = TRUE
+    ) +
+    theme_bw(base_size = 14) +
+    labs(
+        x = "Idade",
+        y = "Fator 1"
+    )
+
+ggarrange(
+    g1,
+    g2,
+    nrow = 1,
+    ncol = 2
+)
+
+
+################################################################################
+### Fator 2
+################################################################################
+
+g3 <- ggplot(
+    data = data_escores,
+    aes(
+        x = Sexo,
+        y = MR2,
+        fill = Sexo
+    )
+) +
+    geom_boxplot() +
+    theme_bw(base_size = 14) +
+    theme(
+        legend.position = "none"
+    ) +
+    labs(
+        x = NULL,
+        y = "Fator 2"
+    )
+
+g4 <- ggplot(
+    data = data_escores,
+    aes(
+        x = Idade,
+        y = MR2
+    )
+) +
+    geom_point(alpha = 0.35) +
+    geom_smooth(
+        method = "lm",
+        se = TRUE
+    ) +
+    theme_bw(base_size = 14) +
+    labs(
+        x = "Idade",
+        y = "Fator 2"
+    )
+
+ggarrange(
+    g3,
+    g4,
+    nrow = 1,
+    ncol = 2
+)
+
+
+################################################################################
+### Fator 3
+################################################################################
+
+g5 <- ggplot(
+    data = data_escores,
+    aes(
+        x = Sexo,
+        y = MR3,
+        fill = Sexo
+    )
+) +
+    geom_boxplot() +
+    theme_bw(base_size = 14) +
+    theme(
+        legend.position = "none"
+    ) +
+    labs(
+        x = NULL,
+        y = "Fator 3"
+    )
+
+g6 <- ggplot(
+    data = data_escores,
+    aes(
+        x = Idade,
+        y = MR3
+    )
+) +
+    geom_point(alpha = 0.35) +
+    geom_smooth(
+        method = "lm",
+        se = TRUE
+    ) +
+    theme_bw(base_size = 14) +
+    labs(
+        x = "Idade",
+        y = "Fator 3"
+    )
+
+ggarrange(
+    g5,
+    g6,
+    nrow = 1,
+    ncol = 2
+)
+
+
+################################################################################
+### Fator 4
+################################################################################
+
+g7 <- ggplot(
+    data = data_escores,
+    aes(
+        x = Sexo,
+        y = MR4,
+        fill = Sexo
+    )
+) +
+    geom_boxplot() +
+    theme_bw(base_size = 14) +
+    theme(
+        legend.position = "none"
+    ) +
+    labs(
+        x = NULL,
+        y = "Fator 4"
+    )
+
+g8 <- ggplot(
+    data = data_escores,
+    aes(
+        x = Idade,
+        y = MR4
+    )
+) +
+    geom_point(alpha = 0.35) +
+    geom_smooth(
+        method = "lm",
+        se = TRUE
+    ) +
+    theme_bw(base_size = 14) +
+    labs(
+        x = "Idade",
+        y = "Fator 4"
+    )
+
+ggarrange(
+    g7,
+    g8,
+    nrow = 1,
+    ncol = 2
+)
+
+
+################################################################################
+### Fator 5
+################################################################################
+
+g9 <- ggplot(
+    data = data_escores,
+    aes(
+        x = Sexo,
+        y = MR5,
+        fill = Sexo
+    )
+) +
+    geom_boxplot() +
+    theme_bw(base_size = 14) +
+    theme(
+        legend.position = "none"
+    ) +
+    labs(
+        x = NULL,
+        y = "Fator 5"
+    )
+
+g10 <- ggplot(
+    data = data_escores,
+    aes(
+        x = Idade,
+        y = MR5
+    )
+) +
+    geom_point(alpha = 0.35) +
+    geom_smooth(
+        method = "lm",
+        se = TRUE
+    ) +
+    theme_bw(base_size = 14) +
+    labs(
+        x = "Idade",
+        y = "Fator 5"
+    )
+
+ggarrange(
+    g9,
+    g10,
+    nrow = 1,
+    ncol = 2
+)

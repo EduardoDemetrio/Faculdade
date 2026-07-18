@@ -1,0 +1,373 @@
+################################################################################
+### Análise Fatorial Exploratória
+### Parte 2: extração de fatores a partir da matriz de correlações
+################################################################################
+
+################################################################################
+### Pacotes
+################################################################################
+
+require(psych)
+require(corrplot)
+
+################################################################################
+### Configurações iniciais
+################################################################################
+
+options(device = "x11")
+
+setwd(this.path::here())
+
+################################################################################
+### Contexto do exemplo
+################################################################################
+### Em um estudo sobre preferência de consumo, uma amostra aleatória de n = 120
+### potenciais consumidores foi solicitada a dar notas aos seguintes atributos
+### de uma marca de biscoitos salgados:
+###
+###     Sabor
+###     Custo
+###     Consistência
+###     Saudabilidade
+###     Praticidade
+###
+### As respostas foram dadas em uma escala de 1 a 7.
+### A matriz de correlações entre os atributos é apresentada abaixo.
+################################################################################
+
+R <- matrix(
+    c(
+        1.00, 0.02, 0.96, 0.42, 0.01,
+        0.02, 1.00, 0.13, 0.71, 0.85,
+        0.96, 0.13, 1.00, 0.50, 0.11,
+        0.42, 0.71, 0.50, 1.00, 0.79,
+        0.01, 0.85, 0.11, 0.79, 1.00
+    ),
+    nrow = 5,
+    byrow = TRUE
+)
+
+nomes_variaveis <- c(
+    "Sabor",
+    "Custo",
+    "Consistência",
+    "Saudabilidade",
+    "Praticidade"
+)
+
+colnames(R) <- nomes_variaveis
+rownames(R) <- nomes_variaveis
+
+################################################################################
+### Visualização da matriz de correlações
+################################################################################
+
+corrplot(
+    R,
+    type = "upper",
+    order = "hclust",
+    method = "color",
+    addCoef.col = "black"
+)
+
+################################################################################
+### Interpretação inicial
+################################################################################
+### A matriz de correlações sugere dois blocos principais de associação:
+###
+### 1. Sabor e Consistência apresentam correlação muito alta.
+###
+### 2. Custo, Saudabilidade e Praticidade apresentam correlações moderadas
+###    a altas entre si.
+###
+### Isso sugere a existência de fatores latentes associados a dimensões
+### diferentes da percepção do produto.
+################################################################################
+
+
+################################################################################
+### Escolha do número de fatores
+################################################################################
+
+fa.parallel(
+    R,
+    n.obs = 120,
+    fa = "pc"
+)
+
+################################################################################
+### Interpretação
+################################################################################
+### A análise paralela, o critério de Kaiser e a inspeção do screeplot sugerem
+### uma solução com dois fatores.
+###
+### Nesta aula, vamos usar m = 2 fatores comuns.
+################################################################################
+
+
+################################################################################
+### Solução por componentes principais: cálculo "à mão"
+################################################################################
+
+decomp_R <- eigen(R)
+
+autovalores  <- decomp_R$values
+autovetores  <- decomp_R$vectors
+
+P_2 <- autovetores[, 1:2]
+Lambda_2 <- diag(autovalores[1:2])
+
+rownames(P_2) <- rownames(R)
+
+P_2
+Lambda_2
+
+################################################################################
+### Matriz de cargas fatoriais
+################################################################################
+
+L_2 <- P_2 %*% sqrt(Lambda_2)
+
+rownames(L_2) <- rownames(R)
+colnames(L_2) <- c("Fator 1", "Fator 2")
+
+L_2
+
+################################################################################
+### Interpretação das cargas fatoriais
+################################################################################
+### Cada carga fatorial representa a associação entre uma variável observada
+### e um fator extraído.
+###
+### Cargas altas em módulo indicam que a variável está fortemente associada
+### ao fator.
+###
+### O sinal das cargas deve ser interpretado com cuidado, pois a orientação
+### dos fatores é arbitrária. Multiplicar um fator por -1 não altera a solução.
+################################################################################
+
+
+################################################################################
+### Comunalidades
+################################################################################
+
+comunalidade_2 <- rowSums(L_2^2)
+comunalidade_2
+
+################################################################################
+### Interpretação
+################################################################################
+### A comunalidade indica a proporção da variância de cada variável explicada
+### pelos dois fatores extraídos.
+###
+### Valores elevados indicam que a variável está bem representada pela solução
+### fatorial.
+################################################################################
+
+
+################################################################################
+### Especificidades
+################################################################################
+
+especificidade_2 <- 1 - comunalidade_2
+especificidade_2
+
+################################################################################
+### Interpretação
+################################################################################
+### A especificidade representa a parte da variância da variável que não é
+### explicada pelos fatores comuns.
+###
+### Como estamos trabalhando com matriz de correlações:
+###
+###     comunalidade + especificidade = 1
+################################################################################
+
+
+################################################################################
+### Matriz de correlações reproduzida pelos fatores
+################################################################################
+
+R_comum_2 <- L_2 %*% t(L_2)
+R_comum_2
+
+################################################################################
+### Resíduos
+################################################################################
+
+residuos_2 <- R - R_comum_2
+residuos_2
+
+################################################################################
+### Interpretação
+################################################################################
+### A matriz L L' aproxima a matriz de correlações original usando apenas
+### os dois fatores extraídos.
+###
+### Os resíduos indicam a diferença entre as correlações observadas e as
+### correlações reproduzidas pela solução fatorial.
+################################################################################
+
+
+################################################################################
+### Variância explicada pelos fatores
+################################################################################
+
+p <- 5
+
+prop_var_fator1 <- sum(L_2[,1]^2)/p; prop_var_fator1
+prop_var_fator2 <- sum(L_2[,2]^2)/p; prop_var_fator2
+
+prop_var_acumulada <- prop_var_fator1 + prop_var_fator2
+prop_var_acumulada
+
+
+################################################################################
+### Interpretação
+################################################################################
+### Essas quantidades indicam a proporção da variância total explicada por
+### cada fator e pelos dois fatores conjuntamente.
+################################################################################
+
+
+################################################################################
+### Solução por componentes principais usando a função principal()
+################################################################################
+
+p1 <- principal(
+    R,
+    nfactors = 2,
+    rotate = "none"
+)
+
+print(p1)
+
+p1$loadings
+p1$communality
+p1$uniquenesses
+p1$residual
+
+################################################################################
+### Gráfico das cargas fatoriais
+################################################################################
+
+plot(
+    p1,
+    xlim = c(-1, 1),
+    ylim = c(-1, 1),
+    main = 'Factor analysis',
+    xlab = 'Factor 1',
+    ylab = 'Factor 2'
+)
+
+arrows(
+    x0 = 0,
+    y0 = 0,
+    x1 = p1$loadings[,1],
+    y1 = p1$loadings[,2],
+    length = 0.08,
+    angle = 20,
+    col = "red",
+    lwd = 1.5
+)
+
+################################################################################
+### Interpretação
+################################################################################
+### A função principal() automatiza o procedimento anterior.
+###
+### A solução sem rotação permite visualizar diretamente os fatores extraídos
+### a partir da decomposição espectral da matriz de correlações.
+################################################################################
+
+
+################################################################################
+### Solução com três fatores por componentes principais
+################################################################################
+
+p2 <- principal(
+    R,
+    nfactors = 3,
+    rotate = "none"
+)
+
+print(p2)
+
+################################################################################
+### Interpretação
+################################################################################
+### A inclusão de um terceiro fator tende a aumentar a explicação total.
+### Porém, o ganho deve ser avaliado em relação à perda de simplicidade e
+### interpretabilidade.
+###
+### Em aplicações reais, mais fatores nem sempre significam uma solução
+### mais útil do ponto de vista substantivo.
+################################################################################
+
+
+################################################################################
+### Método de fatores principais
+################################################################################
+
+f2 <- fa(
+    R,
+    nfactors = 2,
+    fm = "pa",
+    rotate = "none"
+)
+
+f2
+summary(f2)
+
+################################################################################
+### Interpretação
+################################################################################
+### O método de fatores principais é diferente da solução por componentes
+### principais.
+###
+### Na análise por componentes principais, trabalha-se inicialmente com a
+### variância total das variáveis.
+###
+### No método de fatores principais, busca-se explicar a parte comum da
+### variância.
+################################################################################
+
+
+################################################################################
+### Tentativa de solução com três fatores pelo método de fatores principais
+################################################################################
+
+f3 <- fa(
+    R,
+    nfactors = 3,
+    fm = "pa",
+    rotate = "none"
+)
+
+################################################################################
+### Investigação do problema
+################################################################################
+### Vamos examinar manualmente uma das etapas iniciais do método.
+################################################################################
+
+h2_inicial <- 1 - 1 / diag(solve(R))
+
+R_reduzida <- R
+diag(R_reduzida) <- h2_inicial
+
+R_reduzida
+
+eigen(R_reduzida)
+
+################################################################################
+### Interpretação
+################################################################################
+### A matriz reduzida, obtida após substituir a diagonal pelas comunalidades
+### iniciais, apresenta autovalores negativos.
+###
+### Isso indica que a solução com três fatores pelo método de fatores principais
+### pode não ser admissível ou pode apresentar problemas numéricos.
+###
+### Portanto, neste exemplo, a solução com dois fatores é mais estável e mais
+### adequada para fins didáticos.
+################################################################################

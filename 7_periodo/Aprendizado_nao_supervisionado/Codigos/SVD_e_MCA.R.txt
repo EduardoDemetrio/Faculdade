@@ -1,0 +1,172 @@
+### SVD para Compressão de Imagem
+
+library(jpeg)
+library(ggplot2)
+
+compress_image <- function(image_path, k) {
+  # Carregar a imagem e converter para tons de cinza
+  image <- readJPEG(image_path)
+  image_gray <- 0.2989 * image[,,1] + 0.5870 * image[,,2] + 0.1140 * image[,,3]
+  
+  # Aplicar SVD
+  svd_res <- svd(image_gray)
+  
+  # Reconstruir a imagem com k componentes
+  compressed_image <- svd_res$u[, 1:k] %*% diag(svd_res$d[1:k]) %*% t(svd_res$v[, 1:k])
+  
+  # Normalizar a imagem reconstruída para ficar no intervalo [0,1]
+  compressed_image <- pmax(pmin(compressed_image, 1), 0)
+  
+  list(original = image_gray, compressed = compressed_image)
+}
+
+# Caminho da imagem (substitua pelo caminho correto)
+image_path <- "C:/Users/Bruno Melo/Downloads/aracaju-passarela-do-caranguejo.jpg"
+k <- 1467  # Número de componentes singulares a manter
+
+# Aplicar compressão
+result <- compress_image(image_path, k)
+
+# Exibir resultados
+par(mfrow = c(1, 2))
+
+# Imagem original
+image(
+  t(result$original)[, nrow(result$original):1], 
+  col = gray.colors(255), 
+  main = 'Imagem Original',
+  useRaster = TRUE
+)
+
+# Imagem comprimida
+image(
+  t(result$compressed)[, nrow(result$compressed):1], 
+  col = gray.colors(255), 
+  main = paste('Imagem Comprimida (k=', k, ')'),
+  useRaster = TRUE
+)
+
+# ============================================================
+#  Análise de Correspondência Múltipla (MCA)
+#  Exemplo: Perfil de Estudantes de Pós-Graduação
+#  CE318 – Aprendizado Não Supervisionado · UFPR
+# ============================================================
+
+pacotes <- c("plotly", "tidyverse", "ggrepel", "knitr", "kableExtra",
+             "sjPlot", "FactoMineR", "amap", "ade4", "readxl", "factoextra",
+             "DescTools")
+
+instalar_pacotes <- pacotes[!pacotes %in% installed.packages()[,"Package"]]
+if (length(instalar_pacotes) > 0) {
+  install.packages(instalar_pacotes, dependencies = TRUE)
+}
+sapply(pacotes, require, character.only = TRUE)
+
+
+# ------------------------------------------------------------
+# 1. Dados
+# ------------------------------------------------------------
+# 20 estudantes de pós-graduação.
+# Variáveis: Período, Trabalha, Transporte, Biblioteca
+
+dados_estudantes <- data.frame(
+  estudante  = LETTERS[1:20],
+  Periodo    = c(rep("Noturno", 10), rep("Diurno", 10)),
+  Trabalha   = c("Sim","Sim","Sim","Sim","Sim","Sim","Sim","Sim","Nao","Nao",
+                 "Nao","Nao","Nao","Nao","Nao","Nao","Nao","Nao","Sim","Sim"),
+  Transporte = c("Onibus","Onibus","Onibus","Onibus","Onibus","Onibus","Onibus",
+                 "Carro","Metro","Metro",
+                 "Carro","Carro","Carro","Carro","Carro","Metro","Metro","Metro",
+                 "Onibus","Onibus"),
+  Biblioteca = c("Nao","Nao","Nao","Nao","Nao","Nao","Nao","Nao","Sim","Sim",
+                 "Sim","Sim","Sim","Sim","Sim","Sim","Sim","Sim","Nao","Nao")
+)
+
+dados_estudantes
+
+
+# ------------------------------------------------------------
+# 2. Tabela de contingência: Período × Trabalha
+# ------------------------------------------------------------
+sjt.xtab(var.row = dados_estudantes$Periodo,
+         var.col = dados_estudantes$Trabalha,
+         show.exp  = TRUE,
+         encoding  = "UTF-8")
+
+tab_periodo_trabalha <- table(dados_estudantes$Periodo,
+                              dados_estudantes$Trabalha)
+
+
+# ------------------------------------------------------------
+# 3. Teste qui-quadrado: Período × Trabalha
+# ------------------------------------------------------------
+# H₀: Período e hábito de trabalho são independentes
+# H₁: Há associação entre Período e hábito de trabalho
+
+qui2 <- chisq.test(x = tab_periodo_trabalha, correct = FALSE)
+qui2
+
+# V de Cramér — intensidade da associação
+CramerV(tab_periodo_trabalha)
+
+
+# ------------------------------------------------------------
+# 4. Todos os pares: qui-quadrado + V de Cramér
+# ------------------------------------------------------------
+variaveis  <- colnames(dados_estudantes)[-1]  # exclui 'estudante'
+resultados <- list()
+
+for (i in 1:(length(variaveis) - 1)) {
+  for (j in (i + 1):length(variaveis)) {
+    tab <- table(dados_estudantes[[ variaveis[i] ]],
+                 dados_estudantes[[ variaveis[j] ]])
+    resultados[[ paste(variaveis[i], "vs", variaveis[j]) ]] <- list(
+      V_Cramer      = round(CramerV(tab), 3),
+      Qui_Quadrado  = round(chisq.test(tab, correct = FALSE)$statistic, 3),
+      p_valor       = round(chisq.test(tab, correct = FALSE)$p.value,   4)
+    )
+  }
+}
+
+# Exibir como tabela
+do.call(rbind, lapply(resultados, as.data.frame)) |>
+  tibble::rownames_to_column("Par") |>
+  kable(digits = 3, caption = "Associações entre pares de variáveis")
+
+
+# ------------------------------------------------------------
+# 5. MCA
+# ------------------------------------------------------------
+mca_result <- MCA(dados_estudantes[, -1], graph = FALSE)
+
+# Variância explicada por dimensão
+print(mca_result$eig)
+
+# Coordenadas das categorias
+print(mca_result$var$coord)
+
+# Coordenadas dos indivíduos
+print(mca_result$ind$coord)
+
+
+# ------------------------------------------------------------
+# 6. Biplot da MCA
+# ------------------------------------------------------------
+fviz_mca_biplot(mca_result,
+                repel   = TRUE,
+                ggtheme = theme_minimal()) +
+  labs(
+    title    = "Biplot da MCA — Perfil de Estudantes",
+    subtitle = "Categorias próximas coocorrem nos mesmos estudantes"
+  )
+
+# ------------------------------------------------------------
+# Padrões esperados no biplot:
+#
+#   Noturno · Trabalha:Sim · Onibus · Biblioteca:Nao
+#     → estudantes que trabalham, vão de ônibus e não usam biblioteca
+#
+#   Diurno · Trabalha:Nao · Carro/Metro · Biblioteca:Sim
+#     → estudantes dedicados em tempo integral, com mais acesso a transporte
+#       próprio ou metrô e presença frequente na biblioteca
+# ------------------------------------------------------------

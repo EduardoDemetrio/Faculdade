@@ -1,0 +1,241 @@
+################################################################################
+# CE319 - Estatística Multivariada
+# Módulo: Inferência sobre vetores de médias e MANOVA
+################################################################################
+
+rm(list = ls())
+
+#===============================================================================
+# Pacotes e configuração inicial
+#===============================================================================
+
+library(MVTests)
+library(car)
+library(ellipse)
+library(emmeans)
+library(multcomp)
+library(this.path)
+
+setwd(this.path::here())
+
+#===============================================================================
+# Importação das bases de dados
+#===============================================================================
+
+data_T2_uni <- read.csv2("UD04_Base_T2_Uma_Populacao.csv",
+                         fileEncoding = "CP1252",
+                         stringsAsFactors = TRUE,
+                         dec = ".")
+### Base de dados para o teste de hipóteses para um vetor de médias.
+
+
+data_T2_pareado <- read.csv2("UD04_Base_T2_Duas_Populacoes_Amostras_Pareadas.csv",
+                             fileEncoding = "CP1252",
+                             stringsAsFactors = TRUE,
+                             dec = ".")
+### Base de dados para o teste de hipóteses para dois vetores de médias no caso
+### pareado.
+
+
+data_T2_npar_igual <- read.csv2("UD04_Base_T2_Duas_Populacoes_Independente_Variancias_Iguais.csv",
+                                fileEncoding = "CP1252",
+                                stringsAsFactors = TRUE,
+                                dec = ".")
+### Base de dados para o teste de hipóteses para dois vetores de médias no caso
+### não pareado, com matrizes de covariâncias homogêneas.
+
+
+data_T2_npar_diferente <- read.csv2("UD04_Base_T2_Duas_Populacoes_Independente_Variancias_Diferentes.csv",
+                                    fileEncoding = "CP1252",
+                                    stringsAsFactors = TRUE,
+                                    dec = ".")
+### Base de dados para o teste de hipóteses para dois vetores de médias no caso
+### não pareado, com matrizes de covariâncias não homogêneas.
+
+
+data_Manova <- read.csv2("UD04_Base_Manova.csv",
+                         fileEncoding = "CP1252",
+                         stringsAsFactors = TRUE,
+                         dec = ".")
+### Base de dados para a análise de variância multivariada (MANOVA).
+
+#===============================================================================
+# Exercício 1 - Teste de hipóteses para um vetor de médias
+#===============================================================================
+
+OneSampleHT2(data = data_T2_uni[, c("Areia", "Argila")],
+             mu0 = c(14, 42),
+             alpha = 0.05)
+### Teste T2 de Hotelling para uma amostra.
+### Avalia se o vetor médio populacional difere do vetor (14, 42).
+
+### Vamos obter a região de confiança conjunta e os intervalos de confiança.
+S <- cov(data_T2_uni[, c("Areia", "Argila")])
+### Matriz de covariâncias amostral.
+
+ybar <- c(mean(data_T2_uni$Areia), mean(data_T2_uni$Argila))
+### Vetor de médias amostrais.
+
+n <- nrow(data_T2_uni)
+p <- 2
+
+### Região de confiança conjunta para o vetor de médias.
+plot(ellipse(x = S,
+             centre = ybar,
+             t = sqrt(((n - 1) * p / (n - p)) / n *
+                          qf(0.05, p, n - p, lower.tail = FALSE))),
+     type = "l",
+     xlim = c(13, 32),
+     ylim = c(30, 42),
+     xlab = "Areia",
+     ylab = "Argila",
+     main = "Região de confiança conjunta para o vetor de médias")
+
+points(t(ybar), pch = 19)
+
+### Intervalos de confiança (95%) individuais.
+li_ind <- ybar - qt(1 - 0.05 / 2, df = n - 1) * sqrt(diag(S) / n)
+ls_ind <- ybar + qt(1 - 0.05 / 2, df = n - 1) * sqrt(diag(S) / n)
+IC_ind <- cbind(li_ind, ls_ind)
+IC_ind
+
+### Intervalos de confiança (95%) simultâneos baseados na estatística T2.
+c2 <- (n - 1) * p / (n - p) * qf(0.95, p, n - p)
+li_T2 <- ybar - sqrt(c2 * diag(S) / n)
+ls_T2 <- ybar + sqrt(c2 * diag(S) / n)
+IC_T2 <- cbind(li_T2, ls_T2)
+IC_T2
+
+### Intervalos de confiança (95%) simultâneos baseados no método de Bonferroni.
+li_B <- ybar - qt(1 - 0.05 / (2 * p), df = n - 1) * sqrt(diag(S) / n)
+ls_B <- ybar + qt(1 - 0.05 / (2 * p), df = n - 1) * sqrt(diag(S) / n)
+IC_B <- cbind(li_B, ls_B)
+IC_B
+
+### Vamos adicionar ao gráfico os intervalos de confiança.
+
+### ICs (95%) individuais.
+abline(v = li_ind[1], col = "darkgreen")
+abline(v = ls_ind[1], col = "darkgreen")
+abline(h = li_ind[2], col = "darkgreen")
+abline(h = ls_ind[2], col = "darkgreen")
+
+### ICs (95%) simultâneos baseados na estatística T2.
+abline(v = li_T2[1], col = "slateblue3")
+abline(v = ls_T2[1], col = "slateblue3")
+abline(h = li_T2[2], col = "slateblue3")
+abline(h = ls_T2[2], col = "slateblue3")
+
+### ICs (95%) simultâneos baseados no método de Bonferroni.
+abline(v = li_B[1], col = "chocolate3")
+abline(v = ls_B[1], col = "chocolate3")
+abline(h = li_B[2], col = "chocolate3")
+abline(h = ls_B[2], col = "chocolate3")
+
+legend(x = 12.3,
+       y = 35,
+       lty = 1,
+       col = c("black", "darkgreen", "slateblue3", "chocolate3"),
+       legend = c("Região de confiança",
+                  "Intervalos individuais",
+                  "Intervalos T2",
+                  "Intervalos Bonferroni"),
+       bty = "n")
+
+#===============================================================================
+# Exercício 2 - Teste de hipóteses para dois vetores de médias no caso pareado
+#===============================================================================
+
+T_Antes <- data_T2_pareado[data_T2_pareado$Tempo == "Antes", 3:4]
+### Matriz de dados para as respostas antes da intervenção.
+
+T_Depois <- data_T2_pareado[data_T2_pareado$Tempo == "Depois", 3:4]
+### Matriz de dados para as respostas depois da intervenção.
+
+OneSampleHT2(data = T_Depois - T_Antes,
+             mu0 = c(0, 0),
+             alpha = 0.05)
+### Repare que estamos aplicando o teste T2 de Hotelling ao vetor de diferenças.
+
+#===============================================================================
+# Exercício 3 - Teste de hipóteses para dois vetores de médias no caso não
+# pareado, com matrizes de covariâncias homogêneas
+#===============================================================================
+
+BoxM(data_T2_npar_igual[, c("Gramática", "Audição", "Conversação")],
+     group = data_T2_npar_igual$Curso)
+### Teste da igualdade das matrizes de covariâncias.
+
+grupo <- ifelse(data_T2_npar_igual$Curso == "Antigo", 1, 2)
+
+TwoSamplesHT2(data_T2_npar_igual[, c("Gramática", "Audição", "Conversação")],
+              group = grupo,
+              alpha = 0.05,
+              Homogenity = TRUE)
+### Teste da igualdade dos vetores de médias.
+
+#===============================================================================
+# Exercício 4 - Teste de hipóteses para dois vetores de médias no caso não
+# pareado, com matrizes de covariâncias não homogêneas
+#===============================================================================
+
+BoxM(data_T2_npar_diferente[, c("Ca", "Mg", "SB")],
+     group = data_T2_npar_diferente$Tipo)
+### Teste da igualdade das matrizes de covariâncias.
+
+grupo <- ifelse(data_T2_npar_diferente$Tipo == "Capoeira Nova", 1, 2)
+
+TwoSamplesHT2(data_T2_npar_diferente[, c("Ca", "Mg", "SB")],
+              group = grupo,
+              alpha = 0.05,
+              Homogenity = FALSE)
+### Teste da igualdade dos vetores de médias.
+
+#===============================================================================
+# Exercício 5 - Análise de variância multivariada (MANOVA)
+#===============================================================================
+
+BoxM(data_Manova[, c("Produtividade", "Graos")],
+     group = data_Manova$Cultivar)
+### Teste da igualdade das matrizes de covariâncias.
+
+ajuste <- manova(cbind(Produtividade, Graos) ~ Cultivar,
+                 data = data_Manova)
+### Ajuste do modelo linear multivariado.
+
+summary(ajuste, test = "Pillai")
+### MANOVA usando o critério de Pillai.
+
+summary(ajuste, test = "Wilks")
+### MANOVA usando o critério de Wilks.
+
+summary(ajuste, test = "Hotelling-Lawley")
+### MANOVA usando o critério de Hotelling-Lawley.
+
+summary(ajuste, test = "Roy")
+### MANOVA usando o critério de Roy.
+
+### Vamos seguir com as análises univariadas e comparações múltiplas.
+
+ajuste_Prod <- lm(Produtividade ~ Cultivar, data = data_Manova)
+car::Anova(ajuste_Prod)
+### Resultado do teste F da ANOVA para o efeito de cultivar na produtividade.
+
+emm_Prod <- emmeans(ajuste_Prod, ~ Cultivar)
+emm_Prod
+### Produtividade média e ICs (95%) segundo tipo de cultivar.
+
+multcomp::cld(emm_Prod)
+### Resultados das comparações múltiplas.
+
+ajuste_Graos <- lm(Graos ~ Cultivar, data = data_Manova)
+car::Anova(ajuste_Graos)
+### Resultado do teste F da ANOVA para o efeito de cultivar no número médio de
+### grãos.
+
+emm_Graos <- emmeans(ajuste_Graos, ~ Cultivar)
+emm_Graos
+### Número médio de grãos por vagem e ICs (95%) segundo tipo de cultivar.
+
+multcomp::cld(emm_Graos)
+### Resultados das comparações múltiplas.

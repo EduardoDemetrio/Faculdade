@@ -1,0 +1,208 @@
+################################################################################
+### Análise Fatorial Exploratória
+### Aula introdutória: interpretação dos principais objetos
+################################################################################
+
+################################################################################
+### Pacotes
+################################################################################
+
+require(corrplot)
+
+################################################################################
+### Base de dados
+################################################################################
+
+data(mtcars)
+
+dadosfat <- mtcars[, c("mpg", "disp", "hp", "drat", "wt", "qsec")]
+
+################################################################################
+### Matriz de correlações
+################################################################################
+
+R <- cor(dadosfat)
+
+corrplot.mixed(
+    R,
+    upper = "ellipse"
+)
+
+################################################################################
+### Interpretação inicial
+################################################################################
+### A análise fatorial busca explicar o padrão de correlações entre as variáveis
+### observadas por meio de um número menor de fatores latentes.
+###
+### Ideia central:
+###
+###     variáveis observadas
+###             =
+###     parte comum explicada pelos fatores
+###             +
+###     parte específica de cada variável
+################################################################################
+
+
+################################################################################
+### Ajuste com dois fatores comuns
+################################################################################
+
+af_2 <- factanal(
+    x = dadosfat,
+    factors = 2
+)
+
+af_2
+
+################################################################################
+### Cargas fatoriais
+################################################################################
+
+L_2 <- af_2$loadings[]
+L_2
+
+################################################################################
+### Interpretação
+################################################################################
+### As cargas fatoriais indicam a associação entre cada variável observada
+### e cada fator comum.
+###
+### Cargas altas em módulo sugerem que a variável é fortemente relacionada
+### ao fator.
+################################################################################
+
+
+################################################################################
+### Comunalidades
+################################################################################
+
+comunalidade_2 <- rowSums(L_2^2)
+comunalidade_2
+
+################################################################################
+### Interpretação
+################################################################################
+### A comunalidade mede a proporção da variância de cada variável explicada
+### pelos fatores comuns.
+###
+### Valores próximos de 1 indicam que os fatores explicam bem a variável.
+### Valores próximos de 0 indicam que a variável é pouco explicada pelos fatores.
+################################################################################
+
+
+################################################################################
+### Especificidades
+################################################################################
+
+psi_2 <- 1 - comunalidade_2
+psi_2
+
+################################################################################
+### Interpretação
+################################################################################
+### A especificidade é a parte da variância da variável que não é explicada
+### pelos fatores comuns.
+###
+### Como as variáveis foram tratadas pela matriz de correlação:
+###
+###     comunalidade + especificidade = 1
+################################################################################
+
+
+################################################################################
+### Matriz de correlações reproduzida pelos fatores
+################################################################################
+
+R_comum_2 <- L_2 %*% t(L_2)
+R_comum_2
+
+################################################################################
+### A matriz L L' reproduz a parte comum das correlações.
+### Na diagonal, ela contém as comunalidades, não necessariamente 1.
+###
+### Para reconstruir a matriz de correlações completa, somamos Psi na diagonal.
+################################################################################
+
+R_ajustada_2 <- R_comum_2 + diag(psi_2)
+R_ajustada_2
+
+################################################################################
+### Resíduos
+################################################################################
+
+residuos_2 <- R - R_ajustada_2
+residuos_2
+
+################################################################################
+### Interpretação
+################################################################################
+### Os resíduos indicam diferenças entre as correlações observadas e as
+### correlações aproximadas pelo modelo fatorial.
+###
+### Resíduos pequenos sugerem bom ajuste do modelo fatorial à matriz de
+### correlações observada.
+################################################################################
+
+
+################################################################################
+### Ajuste com três fatores comuns
+################################################################################
+
+af_3 <- factanal(
+    x = dadosfat,
+    factors = 3
+)
+
+af_3
+
+################################################################################
+### Cargas fatoriais
+################################################################################
+
+L_3 <- af_3$loadings[]
+L_3
+
+################################################################################
+### Comunalidades e especificidades
+################################################################################
+
+comunalidade_3 <- rowSums(L_3^2)
+comunalidade_3
+
+psi_3 <- 1 - comunalidade_3
+psi_3
+
+################################################################################
+### Matriz reproduzida e resíduos
+################################################################################
+
+R_comum_3 <- L_3 %*% t(L_3)
+
+R_ajustada_3 <- R_comum_3 + diag(psi_3)
+
+residuos_3 <- R - R_ajustada_3
+residuos_3
+
+################################################################################
+### Comparação didática: dois versus três fatores
+################################################################################
+
+round(residuos_2, 3)
+round(residuos_3, 3)
+
+################################################################################
+### Interpretação final
+################################################################################
+### Ao aumentar o número de fatores, esperamos reduzir os resíduos e aumentar
+### as comunalidades.
+###
+### Porém, mais fatores nem sempre significam uma solução melhor do ponto de
+### vista interpretativo.
+###
+### A análise fatorial envolve sempre um equilíbrio entre:
+###
+###     simplicidade do modelo
+###     qualidade do ajuste
+###     interpretabilidade dos fatores
+################################################################################

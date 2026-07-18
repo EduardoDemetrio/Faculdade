@@ -1,0 +1,30 @@
+require(FactoMineR)
+require(factoextra)
+require(datasets)
+
+
+Titanic2 <- as.data.frame(Titanic)
+titanic_dados<- Titanic2[rep(1:nrow(Titanic2), Titanic2$Freq), 1:4]
+row.names(titanic_dados) <- 1:nrow(titanic_dados) 
+mca_res <- MCA(titanic_dados,graph=F)
+
+summary(mca_res)
+
+fviz_mca_ind(mca_res, 
+             addEllipses = TRUE, 
+             legend.title = "Passageiros", 
+             axes = c(1, 2))
+
+
+fviz_mca_var(mca_res, 
+             addEllipses = TRUE, 
+             legend.title = "Categorias", 
+             axes = c(1, 2))
+
+fviz_screeplot(mca_res, 
+               addlabels = TRUE, 
+               ylim = c(0, 50))
+
+
+
+

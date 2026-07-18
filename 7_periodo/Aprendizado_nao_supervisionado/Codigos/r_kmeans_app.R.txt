@@ -1,0 +1,44 @@
+require(dplyr)
+require(factoextra)
+
+## IMPORTANDO ARQUIVO EXTERNO .CSV
+URL = "https://raw.githubusercontent.com/"
+pathGithub = "andersonara/datasets/master/"
+arquivo = "capitais_br.csv"
+
+
+dados <- read.csv(paste0(URL,pathGithub,arquivo),
+                  header=T,dec=',',sep=';',encoding = "latin1")
+
+#SELECIONANDO VARIÁVEIS
+variaveis <- dados %>% select(lat, lng) %>% 
+  scale() %>% data.frame()
+
+#APLICANDO K-MEANS
+k <- 5
+grupos <- variaveis %>% kmeans(k)
+print(grupos)
+
+
+#VISUALIZAR CLUSTER
+fviz_cluster(grupos, labelsize = 8, 
+             geom = "point", data = variaveis) +
+  ggtitle (paste("K =",k))+
+  annotate("text",
+           x=variaveis$lat,
+           y=variaveis$lng,
+           label=dados$cidade,size=3)+
+  theme_bw()
+
+
+#PLOT MAPS COM GRUPOS
+require(maps)
+require(mapdata)
+par(mar=c(1,1,1,1))
+map("worldHires","Brazil")
+points(dados$lng,dados$lat,
+       col=grupos$cluster,pch=19,cex=2)
+# 
+# #MÉTODO ELBOW
+# fviz_nbclust(variaveis,kmeans, method="wss")
+#     

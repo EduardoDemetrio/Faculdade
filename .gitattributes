@@ -1,0 +1,4 @@
+7_periodo/**/*.mp4 filter=lfs diff=lfs merge=lfs -text
+7_periodo/**/*.mov filter=lfs diff=lfs merge=lfs -text
+7_periodo/**/*.zip filter=lfs diff=lfs merge=lfs -text
+7_periodo/**/*.rar filter=lfs diff=lfs merge=lfs -text
